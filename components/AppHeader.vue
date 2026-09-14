@@ -29,13 +29,17 @@ onMounted(() => {
 <template>
   <header ref="headerRef" class="app-header">
     <div class="header-brand">
-      <span class="header-text">Franklin&Co.</span>
+      <NuxtLink to="/" class="header-text nav-link brand-link">
+        Franklin&Co.
+      </NuxtLink>
     </div>
     <div class="header-nav">
-      <span class="header-text">Products, Solutions, Stories</span>
+      <NuxtLink to="/product" class="header-text nav-link">
+        Products, Solutions, Stories
+      </NuxtLink>
     </div>
     <div class="header-action">
-      <span class="header-text">Menu</span>
+      <span class="header-text nav-link">Menu</span>
     </div>
   </header>
 </template>
@@ -54,6 +58,16 @@ onMounted(() => {
 
 .header-text {
   opacity: 0; /* Animated by GSAP */
+}
+
+.nav-link {
+  color: #000000;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.7;
 }
 
 .header-brand {
