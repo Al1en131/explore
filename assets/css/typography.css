@@ -1,0 +1,194 @@
+/* Centralized Typography System - PP Neue Montreal Spec */
+
+/* Fallback Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* @font-face declarations for local PP Neue Montreal OTF font files */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --font-family-base: 'PP Neue Montreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Layout Spacing */
+  --section-px: 58.75px;
+
+  /* Color System */
+  --color-bg: #ffffff;
+  --color-text-main: #000000;
+
+  /* Typography Variables */
+  /* h1 */
+  --h1-font-size: clamp(3rem, 11vw, 187.9555px);
+  --h1-line-height: 187.9555px;
+  --h1-letter-spacing: -0.04em;
+  --h1-font-weight: 500;
+
+  /* h2 */
+  --h2-font-size: clamp(2.25rem, 4.8vw, 74.7463px);
+  --h2-line-height: 77.8608px;
+  --h2-letter-spacing: -0.02em;
+  --h2-font-weight: 500;
+
+  /* h3 */
+  --h3-font-size: clamp(1.75rem, 4vw, 60.0568px);
+  --h3-line-height: 62.5592px;
+  --h3-letter-spacing: -0.02em;
+  --h3-font-weight: 500;
+
+  /* heading (Hero Display Heading 358px) */
+  --heading-font-size: clamp(3rem, 18.2vw, 358px);
+  --heading-line-height: 1;
+  --heading-letter-spacing: -0.02em;
+  --heading-font-weight: 500;
+
+  /* p */
+  --p-font-size: 20px;
+  --p-line-height: 30px;
+  --p-letter-spacing: -0.005em;
+  --p-font-weight: 400;
+
+  /* header-text */
+  --header-font-size: 16px;
+  --header-line-height: 14px;
+  --header-letter-spacing: -0.01em;
+  --header-font-weight: 500;
+
+  /* label */
+  --label-font-size: 16.067px;
+  --label-line-height: 16.067px;
+  --label-letter-spacing: -0.005em;
+  --label-font-weight: 500;
+}
+
+/* Global Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Ready-to-use Typography Classes & HTML Tags */
+
+/* 1. Large Display Heading (358px) */
+.heading {
+  font-family: var(--font-family-base);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--heading-font-size);
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  text-box-trim: both;
+  leading-trim: both;
+  text-edge: cap;
+  margin-block: 0;
+  display: block;
+}
+
+/* 2. H1 Heading (187.9555px) */
+h1, .h1 {
+  font-family: var(--font-family-base);
+  font-weight: var(--h1-font-weight);
+  font-size: var(--h1-font-size);
+  line-height: clamp(1em, var(--h1-font-size), var(--h1-line-height));
+  letter-spacing: var(--h1-letter-spacing);
+  margin-block: 0;
+}
+
+/* 3. H2 Heading (74.7463px) */
+h2, .h2 {
+  font-family: var(--font-family-base);
+  font-weight: var(--h2-font-weight);
+  font-size: var(--h2-font-size);
+  line-height: clamp(1.04em, var(--h2-font-size), var(--h2-line-height));
+  letter-spacing: var(--h2-letter-spacing);
+  margin-block: 0;
+}
+
+/* 4. H3 Heading (60.0568px) */
+h3, .h3 {
+  font-family: var(--font-family-base);
+  font-weight: var(--h3-font-weight);
+  font-size: var(--h3-font-size);
+  line-height: clamp(1.04em, var(--h3-font-size), var(--h3-line-height));
+  letter-spacing: var(--h3-letter-spacing);
+  margin-block: 0;
+}
+
+/* 5. Paragraph Body (20px) */
+p, .body-text {
+  font-family: var(--font-family-base);
+  font-weight: var(--p-font-weight);
+  font-size: var(--p-font-size);
+  line-height: var(--p-line-height);
+  letter-spacing: var(--p-letter-spacing);
+  margin-block: 0;
+}
+
+/* 6. Header Nav Item (16px) */
+.header-text {
+  font-family: var(--font-family-base);
+  font-weight: var(--header-font-weight);
+  font-size: var(--header-font-size);
+  line-height: var(--header-line-height);
+  letter-spacing: var(--header-letter-spacing);
+  text-transform: none;
+  font-variant: normal;
+  display: inline-block;
+}
+
+/* 7. Label (16.067px UPPERCASE) */
+label, .label {
+  font-family: var(--font-family-base);
+  font-weight: var(--label-font-weight);
+  font-size: var(--label-font-size);
+  line-height: var(--label-line-height);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: uppercase;
+  display: inline-block;
+}

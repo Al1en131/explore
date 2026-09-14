@@ -1,0 +1,171 @@
+/* Centralized Typography System - PP Neue Montreal Exact Spec */
+
+/* Fallback Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* @font-face declarations for local PP Neue Montreal OTF font files */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('~/assets/pp-neue-montreal-cufonfonts/ppneuemontreal-italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --font-family-base: 'PP Neue Montreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Layout Spacing */
+  --section-px: 58.75px;
+
+  /* Color System */
+  --color-bg: #ffffff;
+  --color-text-main: #000000;
+}
+
+/* Global Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Ready-to-use Typography Classes & HTML Tags (Exact Specifications) */
+
+/* 1. Large Display Heading (358px) */
+.heading {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 358px;
+  line-height: 358px;
+  letter-spacing: -0.02em;
+  text-box-trim: both;
+  leading-trim: both;
+  text-edge: cap;
+  margin-block: 0;
+  display: block;
+}
+
+/* 2. H1 Heading (187.9555px) */
+h1, .h1 {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 187.9555px;
+  line-height: 187.9555px;
+  letter-spacing: -0.04em;
+  margin-block: 0;
+}
+
+/* 3. H2 Heading (74.7463px) */
+h2, .h2 {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 74.7463px;
+  line-height: 77.8608px;
+  letter-spacing: -0.02em;
+  margin-block: 0;
+}
+
+/* 4. H3 Heading (60.0568px) */
+h3, .h3 {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 60.0568px;
+  line-height: 62.5592px;
+  letter-spacing: -0.02em;
+  margin-block: 0;
+}
+
+/* 5. Paragraph Body (20px) */
+p, .body-text {
+  font-family: var(--font-family-base);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: -0.005em;
+  margin-block: 0;
+}
+
+/* 6. Header Nav Item (16px) */
+.header-text {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 14px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  font-variant: normal;
+  display: inline-block;
+}
+
+/* 7. Label (16.067px UPPERCASE) */
+label, .label {
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 16.067px;
+  line-height: 16.067px;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* Fluid responsive scaling only on smaller screens */
+@media (max-width: 1200px) {
+  .heading {
+    font-size: clamp(3rem, 18vw, 358px);
+    line-height: 1;
+  }
+  h1, .h1 {
+    font-size: clamp(3rem, 11vw, 187.9555px);
+    line-height: 1;
+  }
+  h2, .h2 {
+    font-size: clamp(2rem, 4.8vw, 74.7463px);
+    line-height: 1.05;
+  }
+  h3, .h3 {
+    font-size: clamp(1.5rem, 4vw, 60.0568px);
+    line-height: 1.05;
+  }
+}
