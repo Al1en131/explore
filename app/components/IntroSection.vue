@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 const props = defineProps({
   indent: {
     type: String,
-    default: '250px'
+    default: '16.6667vw'
   }
 })
 
@@ -96,8 +96,8 @@ onMounted(() => {
 <style scoped>
 .intro-section {
   width: 100%;
-  padding-top: 120px;
-  padding-bottom: 120px;
+  padding-top: 8vw;
+  padding-bottom: 8vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: #ffffff;
@@ -108,14 +108,14 @@ onMounted(() => {
 
 .intro-container {
   width: 100%;
-  max-width: 1089.74658203125px;
+  max-width: 72.6498vw;
   display: flex;
   flex-direction: column;
 }
 
 .heading-wrapper {
   width: 100%;
-  margin-bottom: 60px;
+  margin-bottom: 4vw;
 }
 
 .intro-h2 {
@@ -138,14 +138,14 @@ onMounted(() => {
   display: inline;
   font-size: 0.65em;
   vertical-align: middle;
-  margin-left: 8px;
+  margin-left: 0.5333vw;
 }
 
 .underline-line {
   width: 100%;
   height: 1px;
   background-color: #000000;
-  margin-bottom: 24px;
+  margin-bottom: 1.6vw;
   transform-origin: left center;
   will-change: transform;
 }
@@ -155,7 +155,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 40px;
+  gap: 2.6667vw;
 }
 
 .bottom-left {
@@ -164,7 +164,7 @@ onMounted(() => {
 }
 
 .bottom-right {
-  max-width: 496px;
+  max-width: 33.0667vw;
   will-change: transform, opacity;
 }
 

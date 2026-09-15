@@ -246,8 +246,8 @@ onUnmounted(() => {
 <style scoped>
 .gallery-section {
   width: 100%;
-  padding-top: 40px;
-  padding-bottom: 120px;
+  padding-top: 2.6667vw;
+  padding-bottom: 8vw;
   background-color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -265,7 +265,7 @@ onUnmounted(() => {
 .gallery-track {
   display: flex;
   align-items: flex-start;
-  gap: 30px;
+  gap: 2vw;
   width: max-content;
   will-change: transform;
 }
@@ -278,37 +278,37 @@ onUnmounted(() => {
 
 /* Item Type Dimensions matching reference image */
 .type-square {
-  width: 439px;
+  width: 29.2667vw;
 }
 
 .type-square .image-wrapper {
   width: 100%;
-  height: 466px;
+  height: 31.0667vw;
 }
 
 .type-landscape {
-  width: 357.5885009765625px;
+  width: 23.8392vw;
 }
 
 .type-landscape .image-wrapper {
   width: 100%;
-  height: 259.1978454589844px;
+  height: 17.2799vw;
 }
 
 .type-portrait {
-  width: 927.3353881835938px;
+  width: 61.8224vw;
 }
 
 .type-portrait .image-wrapper {
   width: 100%;
-  height: 579.5845947265625px;
+  height: 38.639vw;
 }
 
 .image-wrapper {
   position: relative;
   overflow: hidden;
   background-color: #f5f5f5;
-  margin-bottom: 16px;
+  margin-bottom: 1.0667vw;
 }
 
 .gallery-img {
@@ -326,8 +326,8 @@ onUnmounted(() => {
 .item-title {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 16.067px;
-  line-height: 16.067px;
+  font-size: 1.0711vw;
+  line-height: 1.0711vw;
   letter-spacing: -0.005em;
   text-transform: uppercase;
   color: #000000;
@@ -340,13 +340,13 @@ onUnmounted(() => {
   padding-right: var(--section-px);
   display: flex;
   justify-content: flex-end;
-  margin-top: 48px;
+  margin-top: 3.2vw;
 }
 
 /* Light Gray Line Track matching reference screenshot */
 .progress-bar-track {
-  width: 506.99929809570506px;
-  height: 20px;
+  width: 33.7999vw;
+  height: 1.3333vw;
   position: relative;
   cursor: pointer;
   display: flex;

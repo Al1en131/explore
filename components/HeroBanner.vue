@@ -65,9 +65,9 @@ onMounted(() => {
 
 <template>
   <section ref="heroSectionRef" class="hero-section">
-    <!-- Big Title in hero banner using H1 class -->
+    <!-- Big Title in hero banner using exact spec -->
     <div class="heading-wrapper">
-      <h1 ref="titleRef" class="h1">Maréchal Verchetti</h1>
+      <h1 ref="titleRef" class="hero-title">Maréchal Verchetti</h1>
     </div>
 
     <!-- Hero Image Banner -->
@@ -85,8 +85,8 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
-  padding-top: 127px;
-  padding-bottom: 48px;
+  padding-top: 8.4667vw;
+  padding-bottom: 3.2vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   display: flex;
@@ -97,15 +97,21 @@ onMounted(() => {
 .heading-wrapper {
   width: 100%;
   overflow: hidden;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 1.6vw;
+  margin-bottom: 1.6vw;
   text-align: left;
 }
 
-.h1 {
+.hero-title {
+  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-weight: 500;
+  font-size: 12.5307vw; /* 187.96px / 15 */
+  line-height: 12.5307vw; /* 187.96px / 15 */
+  letter-spacing: -0.04em; /* -4% letter spacing */
   white-space: nowrap;
   width: 100%;
   display: block;
+  margin: 0;
   opacity: 0; /* Animated by GSAP */
   will-change: transform, opacity;
 }

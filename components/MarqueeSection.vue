@@ -84,8 +84,8 @@ onUnmounted(() => {
 <style scoped>
 .marquee-section {
   width: 100%;
-  padding-top: 80px;
-  padding-bottom: 120px;
+  padding-top: 5.3333vw;
+  padding-bottom: 8vw;
   background-color: #ffffff;
   overflow: hidden;
 }
@@ -94,7 +94,7 @@ onUnmounted(() => {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  margin-bottom: 60px;
+  margin-bottom: 4vw;
 }
 
 .marquee-track {
@@ -106,7 +106,7 @@ onUnmounted(() => {
 .marquee-text {
   display: inline-block;
   white-space: nowrap;
-  padding-right: 48px; /* Gap between marquee phrases */
+  padding-right: 3.2vw; /* Gap between marquee phrases */
   user-select: none;
 }
 
@@ -118,7 +118,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 40px;
+  gap: 2.6667vw;
 }
 
 .bottom-left {
@@ -126,8 +126,8 @@ onUnmounted(() => {
 }
 
 .bottom-right {
-  max-width: 377px;
-  margin-right: 170px;
+  max-width: 25.1333vw;
+  margin-right: 11.3333vw;
 }
 
 @media (max-width: 1024px) {

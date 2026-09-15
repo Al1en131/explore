@@ -154,7 +154,11 @@ onUnmounted(() => {
         <!-- Panel 3: Distinctive Craft (Fine Forms, — Refined) -->
         <div class="story-panel panel-craft">
           <div class="craft-bg-illustration">
-            <img src="/images/stories-craft-bg.png" alt="Blueprint Illustration" class="craft-bg-img" />
+            <img
+              src="/images/stories-craft-bg.png"
+              alt="Blueprint Illustration"
+              class="craft-bg-img"
+            />
           </div>
           <div class="panel-inner craft-inner">
             <!-- Left Group: Quote & 2 Paragraphs -->
@@ -166,10 +170,14 @@ onUnmounted(() => {
               </div>
               <div class="craft-paragraphs">
                 <p class="craft-p">
-                  These chairs can be upholstered in just about any fabric you like. When upholstered, the chair's back and seat have exposed veneer on the back sides. Veneers are available in six wood.
+                  These chairs can be upholstered in just about any fabric you
+                  like. When upholstered, the chair's back and seat have exposed
+                  veneer on the back sides. Veneers are available in six wood.
                 </p>
                 <p class="craft-p">
-                  These chairs can be upholstered in just about any fabric you like. When upholstered, the chair's back and seat have exposed veneer on the back sides. Veneers are available in six wood.
+                  These chairs can be upholstered in just about any fabric you
+                  like. When upholstered, the chair's back and seat have exposed
+                  veneer on the back sides. Veneers are available in six wood.
                 </p>
               </div>
             </div>
@@ -183,7 +191,7 @@ onUnmounted(() => {
                     :key="'c1-' + i"
                     class="char-span"
                   >
-                    {{ char === ' ' ? '\u00A0' : char }}
+                    {{ char === " " ? "\u00A0" : char }}
                   </span>
                 </span>
                 <span class="title-line">
@@ -192,7 +200,7 @@ onUnmounted(() => {
                     :key="'c2-' + i"
                     class="char-span"
                   >
-                    {{ char === ' ' ? '\u00A0' : char }}
+                    {{ char === " " ? "\u00A0" : char }}
                   </span>
                   <span class="char-span orange-dot">.</span>
                 </span>
@@ -207,7 +215,11 @@ onUnmounted(() => {
             <!-- Left Group: Charles & Ray Eames Portrait with Black Quote Badge -->
             <div class="gallery-left-col">
               <div class="portrait-card">
-                <img src="/images/stories-eames-portrait.jpg" alt="Charles & Ray Eames Portrait" class="portrait-img" />
+                <img
+                  src="/images/stories-eames-portrait.jpg"
+                  alt="Charles & Ray Eames Portrait"
+                  class="portrait-img"
+                />
                 <div class="gallery-quote-badge">
                   “Recognising the need<br />
                   is the primary<br />
@@ -219,7 +231,11 @@ onUnmounted(() => {
             <!-- Right Group: Chair Photo, Herman Miller Quote, 1946 & Paragraph -->
             <div class="gallery-right-col">
               <div class="chair-card">
-                <img src="/images/stories-chair-orange.jpg" alt="Eames Chair Orange Highlight" class="chair-img" />
+                <img
+                  src="/images/stories-chair-orange.jpg"
+                  alt="Eames Chair Orange Highlight"
+                  class="chair-img"
+                />
               </div>
               <div class="gallery-text-block">
                 <h2 class="herman-quote">
@@ -230,7 +246,10 @@ onUnmounted(() => {
                 <div class="gallery-year-block">
                   <span class="gallery-year">1946</span>
                   <p class="gallery-p">
-                    These chairs can be upholstered in just about any fabric you like. When upholstered, the chair's back and seat have exposed veneer on the back sides. Veneers are available in six wood.
+                    These chairs can be upholstered in just about any fabric you
+                    like. When upholstered, the chair's back and seat have
+                    exposed veneer on the back sides. Veneers are available in
+                    six wood.
                   </p>
                 </div>
               </div>
@@ -254,8 +273,8 @@ onUnmounted(() => {
             </div>
             <p class="feature-p">
               Their discoveries led to a commission from the US Navy to develop
-              plywood splints, stretchers and glider shells, moulded under heat and
-              pressure, that were used successfully in World War II.
+              plywood splints, stretchers and glider shells, moulded under heat
+              and pressure, that were used successfully in World War II.
             </p>
           </div>
 
@@ -273,8 +292,8 @@ onUnmounted(() => {
             </div>
             <p class="feature-p">
               Their discoveries led to a commission from the US Navy to develop
-              plywood splints, stretchers and glider shells, moulded under heat and
-              pressure, that were used successfully in World War II.
+              plywood splints, stretchers and glider shells, moulded under heat
+              and pressure, that were used successfully in World War II.
             </p>
           </div>
 
@@ -292,8 +311,8 @@ onUnmounted(() => {
             </div>
             <p class="feature-p">
               Their discoveries led to a commission from the US Navy to develop
-              plywood splints, stretchers and glider shells, moulded under heat and
-              pressure, that were used successfully in World War II.
+              plywood splints, stretchers and glider shells, moulded under heat
+              and pressure, that were used successfully in World War II.
             </p>
           </div>
         </div>
@@ -418,10 +437,10 @@ onUnmounted(() => {
 /* Align left edge of title dynamically with middle menu (Products link) in AppHeader */
 .hero-content {
   position: absolute;
-  bottom: 80px;
-  left: calc(var(--section-px) + 97px + 376.25px);
-  width: 938.0000000000035px;
-  max-width: calc(100vw - var(--section-px) - 40px);
+  bottom: 5.3333vw;
+  left: calc(var(--section-px) + 6.4667vw + 25.0833vw);
+  width: 62.5333vw;
+  max-width: calc(100vw - var(--section-px) - 2.6667vw);
   z-index: 2;
   text-align: left;
 }
@@ -429,20 +448,20 @@ onUnmounted(() => {
 .hero-tag {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 0.9333vw;
+  line-height: 1.2vw;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #e0e0e0;
-  margin-bottom: 24px;
+  margin-bottom: 1.6vw;
   display: block;
 }
 
 .hero-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 128px;
-  line-height: 114px;
+  font-size: 8.5333vw;
+  line-height: 7.6vw;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #ffffff;
   margin: 0;
@@ -450,14 +469,14 @@ onUnmounted(() => {
 
 /* ================= PANEL 2: LEGACY (FINE - FORMS) ================= */
 .panel-legacy {
-  width: 1640px;
-  min-width: 1640px;
+  width: 109.3333vw;
+  min-width: 109.3333vw;
   flex-shrink: 0;
   height: 100vh;
-  padding-top: 118px;
-  padding-bottom: 118px;
-  padding-left: 187px;
-  padding-right: 68px;
+  padding-top: 7.8667vw;
+  padding-bottom: 7.8667vw;
+  padding-left: 12.4667vw;
+  padding-right: 4.5333vw;
   background-color: #191919;
   box-sizing: border-box;
 }
@@ -472,7 +491,7 @@ onUnmounted(() => {
 }
 
 .legacy-text-col {
-  width: 380px;
+  width: 25.3333vw;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -481,11 +500,11 @@ onUnmounted(() => {
 .legacy-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 128px;
-  line-height: 128px;
+  font-size: 8.5333vw;
+  line-height: 8.5333vw;
   letter-spacing: -0.04em;
   color: #ffffff;
-  margin: 0 0 54px 0;
+  margin: 0 0 3.6vw 0;
   text-transform: none;
   text-align: left;
 }
@@ -493,24 +512,24 @@ onUnmounted(() => {
 .legacy-paragraphs {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.6vw;
   width: 100%;
 }
 
 .legacy-p {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 1.3333vw;
+  line-height: 2vw;
   letter-spacing: -0.005em;
   color: #cccccc;
   margin: 0;
   text-align: left;
-  text-indent: 48px;
+  text-indent: 3.2vw;
 }
 
 .legacy-img-col {
-  width: 764px;
+  width: 50.9333vw;
   height: 100%;
   flex-shrink: 0;
   display: flex;
@@ -519,12 +538,12 @@ onUnmounted(() => {
 }
 
 .legacy-img-col .img-card {
-  width: 764px;
+  width: 50.9333vw;
   height: 100%;
 }
 
 .legacy-img-col .img-card img {
-  width: 764px;
+  width: 50.9333vw;
   height: 100%;
   object-fit: cover;
   display: block;
@@ -537,34 +556,33 @@ onUnmounted(() => {
 
 .img-card img {
   width: 100%;
-  height: 480px;
+  height: 32vw;
   object-fit: cover;
   display: block;
-  background-color: #222222;
 }
 
 .card-caption {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 0.8vw;
+  line-height: 0.9333vw;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #888888;
-  margin-top: 12px;
+  margin-top: 0.8vw;
 }
 
 /* ================= PANEL 3: CRAFT (FINE FORMS, REFINED) ================= */
 .panel-craft {
-  width: 3570px;
-  min-width: 3570px;
+  width: 238vw;
+  min-width: 238vw;
   flex-shrink: 0;
   height: 100vh;
   background-color: #ffffff;
   color: #000000;
   position: relative;
   box-sizing: border-box;
-  padding: 80px 120px;
+  padding: 5.3333vw 8vw;
   overflow: hidden;
 }
 
@@ -599,28 +617,28 @@ onUnmounted(() => {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 120px;
+  gap: 8vw;
 }
 
 .craft-left-col {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 60px;
+  gap: 4vw;
   flex-shrink: 0;
-  width: 823.65234375px;
+  width: 54.9102vw;
 }
 
 .quote-badge {
-  width: 823.65234375px;
-  max-width: 823.65234375px;
+  width: 54.9102vw;
+  max-width: 54.9102vw;
   background-color: #000000;
   color: #ffffff;
-  padding: 24px 28px;
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  padding: 1.6vw 1.8667vw;
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 80.96px;
-  line-height: 80.96px;
+  font-size: 5.3973vw;
+  line-height: 5.3973vw;
   letter-spacing: -0.02em;
   box-sizing: border-box;
   display: block;
@@ -634,12 +652,12 @@ onUnmounted(() => {
 }
 
 .craft-p {
-  width: 360px;
+  width: 24vw;
   flex-shrink: 0;
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 1.3333vw;
+  line-height: 2vw;
   letter-spacing: -0.005em;
   color: #666666;
   margin: 0;
@@ -654,9 +672,9 @@ onUnmounted(() => {
 }
 
 .craft-giant-title {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 358px;
+  font-size: 23.8667vw;
   line-height: 0.88;
   letter-spacing: -0.04em;
   color: #000000;
@@ -685,8 +703,8 @@ onUnmounted(() => {
 
 /* ================= PANEL 4: GALLERY (HERMAN MILLER LEGACY) ================= */
 .panel-gallery {
-  width: 3400px;
-  min-width: 3400px;
+  width: 226.6667vw;
+  min-width: 226.6667vw;
   flex-shrink: 0;
   height: 100vh;
   background-color: #ffffff;
@@ -702,14 +720,14 @@ onUnmounted(() => {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 120px;
-  padding-right: 120px;
+  gap: 8vw;
+  padding-right: 8vw;
   box-sizing: border-box;
 }
 
 .gallery-left-col {
   height: 100vh;
-  width: 1594px;
+  width: 106.2667vw;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -717,7 +735,7 @@ onUnmounted(() => {
 
 .portrait-card {
   position: relative;
-  width: 1594px;
+  width: 106.2667vw;
   height: 100vh;
   flex-shrink: 0;
   display: flex;
@@ -733,19 +751,19 @@ onUnmounted(() => {
 
 .gallery-quote-badge {
   position: absolute;
-  bottom: 150px;
-  right: -340px;
+  bottom: 10vw;
+  right: -22.6667vw;
   background-color: #000000;
   color: #ffffff;
-  padding: 24px 28px;
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  padding: 1.6vw 1.8667vw;
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 80.96px;
-  line-height: 80.96px;
+  font-size: 5.3973vw;
+  line-height: 5.3973vw;
   letter-spacing: -0.02em;
   box-sizing: border-box;
   z-index: 3;
-  width: 823.65234375px;
+  width: 54.9102vw;
 }
 
 .gallery-right-col {
@@ -759,7 +777,7 @@ onUnmounted(() => {
 
 .chair-card {
   height: 100vh;
-  padding: 70px 0 70px 386px;
+  padding: 4.6667vw 0 4.6667vw 25.7333vw;
   box-sizing: border-box;
   flex-shrink: 0;
   position: relative;
@@ -778,25 +796,25 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  padding: 120px 0;
+  padding: 8vw 0;
   box-sizing: border-box;
   flex-shrink: 0;
-  width: 647.44140625px;
+  width: 43.1628vw;
   position: relative;
   z-index: 2;
 }
 
 .herman-quote {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 82px;
-  line-height: 82px;
+  font-size: 5.4667vw;
+  line-height: 5.4667vw;
   letter-spacing: -0.03em;
   color: #000000;
   margin: 0;
   text-align: left;
-  width: 777.44140625px;
-  margin-left: -130px;
+  width: 51.8294vw;
+  margin-left: -8.6667vw;
   position: relative;
   z-index: 2;
 }
@@ -804,35 +822,35 @@ onUnmounted(() => {
 .gallery-year-block {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-left: 150px;
+  gap: 1.0667vw;
+  padding-left: 10vw;
 }
 
 .gallery-year {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 96px;
-  line-height: 100.58px;
+  font-size: 6.4vw;
+  line-height: 6.7053vw;
   letter-spacing: -0.02em;
   color: #f05a24;
   display: block;
 }
 
 .gallery-p {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 1.3333vw;
+  line-height: 2vw;
   letter-spacing: -0.005em;
   color: #777777;
   margin: 0;
-  width: 360px;
+  width: 24vw;
 }
 
 /* ================= PANEL 5: FEATURES ================= */
 .panel-features {
-  width: 1790px;
-  min-width: 1790px;
+  width: 119.3333vw;
+  min-width: 119.3333vw;
   flex-shrink: 0;
   height: 100vh;
   display: flex;
@@ -841,11 +859,11 @@ onUnmounted(() => {
 }
 
 .feature-col {
-  width: 596.66666667px;
+  width: 39.7778vw;
   height: 100vh;
   flex-shrink: 0;
   box-sizing: border-box;
-  padding: 80px 86px 80px 128px;
+  padding: 5.3333vw 5.7333vw 5.3333vw 8.5333vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -865,20 +883,20 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 36px;
+  gap: 2.4vw;
 }
 
 .feature-num {
-  width: 72px;
-  height: 72px;
+  width: 4.8vw;
+  height: 4.8vw;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 36px;
-  line-height: 64px;
+  font-size: 2.4vw;
+  line-height: 4.2667vw;
   letter-spacing: -0.02em;
 }
 
@@ -895,8 +913,8 @@ onUnmounted(() => {
 .feature-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 64px;
-  line-height: 64px;
+  font-size: 4.2667vw;
+  line-height: 4.2667vw;
   letter-spacing: -0.02em;
   text-transform: capitalize;
   margin: 0;
@@ -912,7 +930,7 @@ onUnmounted(() => {
 
 .feature-img-box {
   width: 100%;
-  height: 310px;
+  height: 20.6667vw;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -927,8 +945,8 @@ onUnmounted(() => {
 .feature-p {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 1.3333vw;
+  line-height: 2vw;
   letter-spacing: -0.005em;
   margin: 0;
 }
@@ -939,8 +957,8 @@ onUnmounted(() => {
 
 /* ================= PANEL 6: COLLAGE ================= */
 .panel-collage {
-  width: 1963px;
-  min-width: 1963px;
+  width: 130.8667vw;
+  min-width: 130.8667vw;
   flex-shrink: 0;
   height: 100vh;
   background-color: #ffffff;
@@ -954,24 +972,24 @@ onUnmounted(() => {
 }
 
 .collage-card.card-1 {
-  width: 260px;
-  height: 290px;
-  left: 120px;
-  bottom: 100px;
+  width: 17.3333vw;
+  height: 19.3333vw;
+  left: 8vw;
+  bottom: 6.6667vw;
 }
 
 .collage-card.card-2 {
-  width: 350px;
-  height: 430px;
-  left: 610px;
-  top: 120px;
+  width: 23.3333vw;
+  height: 28.6667vw;
+  left: 40.6667vw;
+  top: 8vw;
 }
 
 .collage-card.card-3 {
-  width: 850px;
-  height: 570px;
-  right: 120px;
-  top: 120px;
+  width: 56.6667vw;
+  height: 38vw;
+  right: 8vw;
+  top: 8vw;
 }
 
 .collage-img {
@@ -983,8 +1001,8 @@ onUnmounted(() => {
 
 /* ================= PANEL 7: END ================= */
 .panel-end {
-  width: 2316px;
-  min-width: 2316px;
+  width: 154.4vw;
+  min-width: 154.4vw;
   flex-shrink: 0;
   height: 100vh;
   background-color: #000000;
@@ -1022,7 +1040,7 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 80px 140px;
+  padding: 5.3333vw 9.3333vw;
   box-sizing: border-box;
 }
 
@@ -1032,14 +1050,14 @@ onUnmounted(() => {
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  padding: 40px 0;
+  padding: 2.6667vw 0;
   box-sizing: border-box;
 }
 
 .end-giant-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 320px;
+  font-size: 21.3333vw;
   line-height: 0.88;
   letter-spacing: -0.04em;
   color: #ffffff;
@@ -1057,7 +1075,7 @@ onUnmounted(() => {
 }
 
 .end-title-line.line-2 {
-  padding-left: 440px;
+  padding-left: 29.3333vw;
 }
 
 .end-action {
@@ -1066,13 +1084,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 2.6667vw;
 }
 
 .end-subtitle {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.9333vw;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #888888;
@@ -1082,14 +1100,14 @@ onUnmounted(() => {
   display: inline-block;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 15px;
+  font-size: 1vw;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #ffffff;
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 14px 28px;
-  border-radius: 40px;
+  padding: 0.9333vw 1.8667vw;
+  border-radius: 2.6667vw;
   text-decoration: none;
   transition: all 0.3s ease;
 }
@@ -1109,7 +1127,7 @@ onUnmounted(() => {
     max-width: 100%;
   }
   .hero-title {
-    font-size: clamp(3.5rem, 10vw, 128px);
+    font-size: clamp(3.5rem, 10vw, 8.5333vw);
     line-height: 1;
   }
   .panel-legacy,
@@ -1119,11 +1137,11 @@ onUnmounted(() => {
     padding: 0 40px;
   }
   .legacy-year {
-    font-size: clamp(6rem, 15vw, 194px);
+    font-size: clamp(6rem, 15vw, 12.9333vw);
     line-height: 1;
   }
   .end-title {
-    font-size: clamp(2.5rem, 6vw, 72px);
+    font-size: clamp(2.5rem, 6vw, 4.8vw);
     line-height: 1;
   }
 }

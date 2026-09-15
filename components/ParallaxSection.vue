@@ -94,14 +94,14 @@ onMounted(() => {
   width: 100%;
   padding-left: 0px;
   padding-right: 0px;
-  padding-bottom: 120px;
+  padding-bottom: 8vw;
   background-color: #ffffff;
   box-sizing: border-box;
 }
 
 .parallax-viewport {
   width: 100%;
-  height: 1395px; /* Exact height requested by user */
+  height: 93vw; /* Exact height requested by user */
   position: relative;
   overflow: hidden;
 }
@@ -119,7 +119,7 @@ onMounted(() => {
 .overlay-content {
   position: absolute;
   inset: 0;
-  padding: 80px var(--section-px);
+  padding: 5.3333vw var(--section-px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -129,8 +129,8 @@ onMounted(() => {
 }
 
 .heading-container {
-  width: 875.58447265625px;
-  max-width: 875.58447265625px;
+  width: 58.3723vw;
+  max-width: 58.3723vw;
   text-align: left;
 }
 
@@ -142,7 +142,7 @@ onMounted(() => {
 
 .indent-space {
   display: inline-block;
-  width: 200px;
+  width: 13.3333vw;
 }
 
 .nowrap-phrase {
@@ -154,19 +154,19 @@ onMounted(() => {
   display: inline;
   font-size: 0.65em;
   vertical-align: middle;
-  margin-left: 6px;
+  margin-left: 0.4vw;
 }
 
 .bottom-container {
-  width: 200px;
-  max-width: 200px;
+  width: 13.3333vw;
+  max-width: 13.3333vw;
   text-align: left;
 }
 
 .parallax-text {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1.0667vw;
+  line-height: 1.6vw;
   margin: 0;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }

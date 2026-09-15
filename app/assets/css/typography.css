@@ -81,7 +81,7 @@
   --font-family-base: 'PP Neue Montreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   
   /* Layout Spacing */
-  --section-px: 58.75px;
+  --section-px: 3.9167vw;
 
   /* Color System */
   --color-bg: #ffffff;
@@ -110,8 +110,8 @@ body {
 .heading {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 358px;
-  line-height: 358px;
+  font-size: 23.8667vw;
+  line-height: 23.8667vw;
   letter-spacing: -0.02em;
   text-box-trim: both;
   leading-trim: both;
@@ -124,8 +124,8 @@ body {
 h1, .h1 {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 187.9555px;
-  line-height: 187.9555px;
+  font-size: 12.5304vw;
+  line-height: 12.5304vw;
   letter-spacing: -0.04em;
   margin-block: 0;
 }
@@ -134,8 +134,8 @@ h1, .h1 {
 h2, .h2 {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 74.7463px;
-  line-height: 77.8608px;
+  font-size: 4.9831vw;
+  line-height: 5.1907vw;
   letter-spacing: -0.02em;
   margin-block: 0;
 }
@@ -144,8 +144,8 @@ h2, .h2 {
 h3, .h3 {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 60.0568px;
-  line-height: 62.5592px;
+  font-size: 4.0038vw;
+  line-height: 4.1706vw;
   letter-spacing: -0.02em;
   margin-block: 0;
 }
@@ -154,8 +154,8 @@ h3, .h3 {
 p, .body-text {
   font-family: var(--font-family-base);
   font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 1.3333vw;
+  line-height: 2vw;
   letter-spacing: -0.005em;
   margin-block: 0;
 }
@@ -164,8 +164,8 @@ p, .body-text {
 .header-text {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 16px;
-  line-height: 14px;
+  font-size: 1.0667vw;
+  line-height: 0.9333vw;
   letter-spacing: -0.01em;
   text-transform: none;
   font-variant: normal;
@@ -176,8 +176,8 @@ p, .body-text {
 label, .label {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 16.067px;
-  line-height: 16.067px;
+  font-size: 1.0711vw;
+  line-height: 1.0711vw;
   letter-spacing: -0.005em;
   text-transform: uppercase;
   display: inline-block;
@@ -186,19 +186,19 @@ label, .label {
 /* Fluid responsive scaling only on smaller screens */
 @media (max-width: 1200px) {
   .heading {
-    font-size: clamp(3rem, 18vw, 358px);
+    font-size: clamp(3rem, 18vw, 23.8667vw);
     line-height: 1;
   }
   h1, .h1 {
-    font-size: clamp(3rem, 11vw, 187.9555px);
+    font-size: clamp(3rem, 11vw, 12.5307vw);
     line-height: 1;
   }
   h2, .h2 {
-    font-size: clamp(2rem, 4.8vw, 74.7463px);
+    font-size: clamp(2rem, 4.8vw, 4.9831vw);
     line-height: 1.05;
   }
   h3, .h3 {
-    font-size: clamp(1.5rem, 4vw, 60.0568px);
+    font-size: clamp(1.5rem, 4vw, 4.0038vw);
     line-height: 1.05;
   }
 }

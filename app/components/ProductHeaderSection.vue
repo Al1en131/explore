@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 
 const router = useRouter()
 const sectionRef = ref<HTMLElement | null>(null)
 const numberRef = ref<HTMLElement | null>(null)
+const rightColRef = ref<HTMLElement | null>(null)
 const titleRef = ref<HTMLElement | null>(null)
 const lineRef = ref<HTMLElement | null>(null)
 const tabsRef = ref<HTMLElement | null>(null)
@@ -20,8 +21,31 @@ const handleTabClick = (tab: string) => {
   }
 }
 
+const alignRightCol = () => {
+  if (import.meta.client && rightColRef.value && sectionRef.value) {
+    const navItem = document.querySelector(
+      '.app-header .header-nav .nav-link'
+    ) as HTMLElement
+    if (navItem) {
+      const navRect = navItem.getBoundingClientRect()
+      const sectionRect = sectionRef.value.getBoundingClientRect()
+      const sectionPaddingLeft = parseFloat(getComputedStyle(sectionRef.value).paddingLeft) || 0
+      const offsetLeft = navRect.left - sectionRect.left - sectionPaddingLeft
+      if (offsetLeft > 0) {
+        rightColRef.value.style.marginLeft = `${offsetLeft}px`
+      }
+    }
+  }
+}
+
 onMounted(() => {
   if (import.meta.client) {
+    alignRightCol()
+    window.addEventListener('resize', alignRightCol)
+    setTimeout(alignRightCol, 100)
+    setTimeout(alignRightCol, 300)
+    setTimeout(alignRightCol, 600)
+
     const tl = gsap.timeline({ delay: 0.1 })
 
     // 1. Entrance animation for Number 18
@@ -65,19 +89,25 @@ onMounted(() => {
     }
   }
 })
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('resize', alignRightCol)
+  }
+})
 </script>
 
 <template>
   <section ref="sectionRef" class="product-header-section">
     <div class="product-header-container">
-      <!-- Left Column: Number 18 aligned left -->
+      <!-- Left Column: Number 18 positioned absolute left -->
       <div class="left-col">
         <span ref="numberRef" class="product-number">18</span>
       </div>
 
-      <!-- Right Column: Title (Width 938.0000000000035px aligned right) + Line + Sub Navigation -->
-      <div class="right-col">
-        <!-- Main Title with PP Neue Montreal exact spec & requested width 938.0000000000035px -->
+      <!-- Right Column: Title + Line + Sub Navigation aligned left edge with middle navbar menu -->
+      <div ref="rightColRef" class="right-col">
+        <!-- Main Title with PP Neue Montreal exact spec -->
         <h1 ref="titleRef" class="product-title">
           Eames Moulded<br />Plywood
         </h1>
@@ -105,8 +135,8 @@ onMounted(() => {
 <style scoped>
 .product-header-section {
   width: 100%;
-  padding-top: 100px;
-  padding-bottom: 80px;
+  padding-top: 13.7333vw; /* 206px / 15 */
+  padding-bottom: 5.3333vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: #ffffff;
@@ -115,12 +145,14 @@ onMounted(() => {
 
 .product-header-container {
   width: 100%;
-  display: flex;
-  justify-content: space-between; /* Flex justify between to push right-col to right */
-  align-items: flex-start;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .left-col {
+  position: absolute;
+  top: 0;
+  left: 0;
   flex-shrink: 0;
   text-align: left;
 }
@@ -129,8 +161,8 @@ onMounted(() => {
   font-family: 'Test Manuka', 'Test Manuka Condensed', 'Bebas Neue', 'Impact', sans-serif-condensed, sans-serif;
   font-weight: 500;
   font-style: normal;
-  font-size: 194px;
-  line-height: 194px;
+  font-size: 12.9333vw;
+  line-height: 12.9333vw;
   letter-spacing: 0em;
   color: #000000;
   display: inline-block;
@@ -140,33 +172,31 @@ onMounted(() => {
 }
 
 .right-col {
-  width: 938.0000000000035px;
-  max-width: 938.0000000000035px;
-  flex-shrink: 0;
-  margin-left: auto; /* Aligned right */
+  width: auto;
+  max-width: calc(100vw - var(--section-px) - 35.4667vw);
+  margin-left: 31.55vw; /* Initial fallback margin-left matching middle menu position */
   display: flex;
   flex-direction: column;
 }
 
 .product-title {
-  width: 938.0000000000035px;
-  max-width: 938.0000000000035px;
+  width: 100%;
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500;
   font-style: normal;
-  font-size: 128px;
-  line-height: 114px;
+  font-size: 8.5333vw;
+  line-height: 7.6vw;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #000000;
   margin: 0;
-  margin-bottom: 70px;
+  margin-bottom: 4.6667vw;
 }
 
 .divider-line {
   width: 100%;
   height: 1px;
   background-color: #b0b0b0;
-  margin-bottom: 24px;
+  margin-bottom: 1.6vw;
   transform-origin: left center;
   will-change: transform;
 }
@@ -174,7 +204,7 @@ onMounted(() => {
 .sub-nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 2.1333vw;
 }
 
 .nav-tab {
@@ -183,8 +213,8 @@ onMounted(() => {
   padding: 0;
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 1.0667vw;
+  line-height: 1.2vw;
   letter-spacing: -0.005em; /* -0.5% */
   color: #a0a0a0;
   cursor: pointer;
@@ -198,8 +228,8 @@ onMounted(() => {
 .nav-tab.active {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500; /* Medium weight */
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 1.0667vw;
+  line-height: 1.2vw;
   letter-spacing: -0.005em; /* -0.5% */
   color: #000000;
 }
@@ -226,15 +256,13 @@ onMounted(() => {
     padding-top: 40px;
     padding-bottom: 40px;
   }
-  .product-header-container {
-    flex-direction: column;
-    gap: 30px;
-  }
   .left-col {
+    position: relative;
     width: 100%;
+    margin-bottom: 20px;
   }
   .right-col {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
   .product-title {
     margin-bottom: 30px;

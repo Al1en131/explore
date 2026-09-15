@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { onMounted, ref } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const heroSectionRef = ref<HTMLElement | null>(null);
-const titleRef = ref<HTMLElement | null>(null);
-const imageRef = ref<HTMLElement | null>(null);
+const heroSectionRef = ref<HTMLElement | null>(null)
+const titleRef = ref<HTMLElement | null>(null)
+const imageRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger)
 
-    const timeline = gsap.timeline({ defaults: { ease: "power4.out" } });
+    const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } })
 
     // 1. Hero Title Reveal
     if (titleRef.value) {
@@ -19,15 +19,15 @@ onMounted(() => {
         titleRef.value,
         {
           y: 60,
-          opacity: 0,
+          opacity: 0
         },
         {
           y: 0,
           opacity: 1,
           duration: 1.3,
-          delay: 0.35,
-        },
-      );
+          delay: 0.35
+        }
+      )
     }
 
     // 2. Hero Image Entrance Reveal
@@ -36,38 +36,38 @@ onMounted(() => {
         imageRef.value,
         {
           scale: 1.12,
-          opacity: 0,
+          opacity: 0
         },
         {
           scale: 1.0,
           opacity: 1,
           duration: 1.4,
-          ease: "power3.out",
+          ease: 'power3.out'
         },
-        "-=0.9",
-      );
+        '-=0.9'
+      )
 
       // 3. Scroll Parallax Effect on Hero Image
       gsap.to(imageRef.value, {
         yPercent: 10,
-        ease: "none",
+        ease: 'none',
         scrollTrigger: {
           trigger: heroSectionRef.value,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      })
     }
   }
-});
+})
 </script>
 
 <template>
   <section ref="heroSectionRef" class="hero-section">
-    <!-- Big Title in hero banner using H1 class -->
+    <!-- Big Title in hero banner using exact spec -->
     <div class="heading-wrapper">
-      <h1 ref="titleRef" class="h1">Maréchal Verchetti</h1>
+      <h1 ref="titleRef" class="hero-title">Maréchal Verchetti</h1>
     </div>
 
     <!-- Hero Image Banner -->
@@ -85,8 +85,8 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
-  padding-top: 127px;
-  padding-bottom: 48px;
+  padding-top: 8.4667vw;
+  padding-bottom: 3.2vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   display: flex;
@@ -97,15 +97,21 @@ onMounted(() => {
 .heading-wrapper {
   width: 100%;
   overflow: hidden;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 1.6vw;
+  margin-bottom: 1.6vw;
   text-align: left;
 }
 
-.h1 {
+.hero-title {
+  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-weight: 500;
+  font-size: 12.5307vw; /* 187.96px / 15 */
+  line-height: 12.5307vw; /* 187.96px / 15 */
+  letter-spacing: -0.04em; /* -4% letter spacing */
   white-space: nowrap;
   width: 100%;
   display: block;
+  margin: 0;
   opacity: 0; /* Animated by GSAP */
   will-change: transform, opacity;
 }
@@ -131,7 +137,7 @@ onMounted(() => {
     padding-right: 20px;
     padding-bottom: 24px;
   }
-
+  
   .heading-wrapper {
     margin-top: 12px;
     margin-bottom: 16px;

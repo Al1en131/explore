@@ -61,8 +61,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  padding-top: 40px;
-  padding-bottom: 16px;
+  padding-top: 2.6667vw;
+  padding-bottom: 1.0667vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: transparent;
@@ -79,8 +79,8 @@ onMounted(() => {
   transition: opacity 0.2s ease, color 0.3s ease;
   pointer-events: auto; /* Active links clickable */
   font-family: 'PP Neue Montreal', var(--font-family-base);
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 1.0667vw;
+  line-height: 1.2vw;
 }
 
 .nav-link:hover {
@@ -90,7 +90,7 @@ onMounted(() => {
 .nav-sep {
   color: #000000;
   font-family: 'PP Neue Montreal', var(--font-family-base);
-  font-size: 16px;
+  font-size: 1.0667vw;
   transition: color 0.3s ease;
 }
 
@@ -106,7 +106,7 @@ onMounted(() => {
 }
 
 .header-nav {
-  padding-left: 376.25px;
+  padding-left: 25.0833vw;
   flex-grow: 1;
   text-align: left;
   pointer-events: auto;
@@ -126,16 +126,16 @@ onMounted(() => {
 
 @media (max-width: 1024px) {
   .header-nav {
-    padding-left: clamp(20px, 8vw, 376.25px);
+    padding-left: clamp(1.3333vw, 8vw, 25.0833vw);
   }
 }
 
 @media (max-width: 768px) {
   .app-header {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 24px;
-    padding-bottom: 12px;
+    padding-left: 1.3333vw;
+    padding-right: 1.3333vw;
+    padding-top: 1.6vw;
+    padding-bottom: 0.8vw;
   }
   .header-nav {
     display: none;

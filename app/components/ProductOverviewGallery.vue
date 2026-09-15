@@ -251,8 +251,8 @@ onMounted(() => {
 <style scoped>
 .overview-gallery-section {
   width: 100%;
-  padding-top: 60px;
-  padding-bottom: 140px;
+  padding-top: 4vw;
+  padding-bottom: 9.3333vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: #ffffff;
@@ -263,7 +263,7 @@ onMounted(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 120px;
+  gap: 8vw;
 }
 
 .gallery-row {
@@ -275,12 +275,12 @@ onMounted(() => {
 /* Row 1 & Row 2 Sizing */
 .row-1 {
   align-items: flex-end;
-  gap: 80px;
+  gap: 5.3333vw;
 }
 
 .row-2 {
   align-items: flex-start;
-  gap: 80px;
+  gap: 5.3333vw;
 }
 
 .gallery-card {
@@ -294,7 +294,7 @@ onMounted(() => {
   overflow: hidden;
   background-color: #e5e7e9;
   position: relative;
-  margin-bottom: 14px;
+  margin-bottom: 0.9333vw;
 }
 
 .card-img {
@@ -312,8 +312,8 @@ onMounted(() => {
 .card-label {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 13px;
-  line-height: 14px;
+  font-size: 0.8667vw;
+  line-height: 0.9333vw;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #333333;
@@ -321,37 +321,37 @@ onMounted(() => {
 
 /* Part 1 Card Sizing */
 .card-small-left {
-  width: 220px;
+  width: 14.6667vw;
   flex-shrink: 0;
 }
 .card-small-left .image-box {
-  height: 240px;
+  height: 16vw;
 }
 
 .card-wide-right {
   flex-grow: 1;
-  max-width: 980px;
+  max-width: 65.3333vw;
 }
 .card-wide-right .image-box {
-  height: 420px;
+  height: 28vw;
 }
 
 .card-wide-left {
   width: 65%;
-  max-width: 780px;
+  max-width: 52vw;
   flex-shrink: 0;
 }
 .card-wide-left .image-box {
-  height: 450px;
+  height: 30vw;
 }
 
 .card-small-right {
-  width: 250px;
+  width: 16.6667vw;
   flex-shrink: 0;
-  margin-top: 40px;
+  margin-top: 2.6667vw;
 }
 .card-small-right .image-box {
-  height: 310px;
+  height: 20.6667vw;
 }
 
 /* ================= PART 2 STYLES ================= */
@@ -363,17 +363,17 @@ onMounted(() => {
 .text-block {
   display: flex;
   flex-direction: column;
-  width: 420px;
+  width: 28vw;
   flex-shrink: 0;
-  margin-left: 157px; /* Exact requested margin-left: 157px */
+  margin-left: 10.4667vw; /* Exact requested margin-left: 157px */
   will-change: transform, opacity;
 }
 
 .year-text {
   font-family: 'Test Manuka', 'Test Manuka Condensed', 'Bebas Neue', 'Impact', sans-serif-condensed, sans-serif;
   font-weight: 500; /* Medium weight */
-  font-size: 194px;
-  line-height: 194px;
+  font-size: 12.9333vw;
+  line-height: 12.9333vw;
   letter-spacing: -0.02em; /* -2% letter spacing */
   color: #000000;
   margin: 0;
@@ -385,13 +385,13 @@ onMounted(() => {
 .distinctive-title {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500; /* Medium weight */
-  font-size: 32px;
-  line-height: 32px;
+  font-size: 2.1333vw;
+  line-height: 2.1333vw;
   letter-spacing: -0.05em; /* -5% letter spacing */
   text-transform: uppercase;
   color: #000000;
-  margin-top: 10px;
-  margin-bottom: 24px;
+  margin-top: 0.6667vw;
+  margin-bottom: 1.6vw;
 }
 
 .text-list {
@@ -400,14 +400,14 @@ onMounted(() => {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.2667vw;
 }
 
 .text-list li {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 400; /* Book weight */
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 0.9333vw;
+  line-height: 1.2vw;
   letter-spacing: -0.005em; /* -0.5% letter spacing */
   text-transform: uppercase;
   color: #777777;
@@ -416,84 +416,84 @@ onMounted(() => {
 .row-3-cards {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
+  gap: 2.6667vw;
   margin-left: auto;
 }
 
 .card-5 {
-  width: 260px;
+  width: 17.3333vw;
   flex-shrink: 0;
 }
 .card-5 .image-box {
-  height: 380px;
+  height: 25.3333vw;
 }
 
 .card-6 {
-  width: 240px;
+  width: 16vw;
   flex-shrink: 0;
 }
 .card-6 .image-box {
-  height: 300px;
+  height: 20vw;
 }
 
 /* Row 4 Styles */
 .row-4 {
   align-items: flex-end;
-  gap: 60px;
+  gap: 4vw;
 }
 
 .row-4-left {
   display: flex;
   align-items: flex-end;
-  gap: 40px;
+  gap: 2.6667vw;
   flex-shrink: 0;
 }
 
 .card-7 {
-  width: 180px;
+  width: 12vw;
   flex-shrink: 0;
 }
 .card-7 .image-box {
-  height: 195px;
+  height: 13vw;
 }
 
 .card-8 {
-  width: 260px;
+  width: 17.3333vw;
   flex-shrink: 0;
 }
 .card-8 .image-box {
-  height: 340px;
+  height: 22.6667vw;
 }
 
 .card-9 {
   flex-grow: 1;
-  max-width: 680px;
+  max-width: 45.3333vw;
 }
 .card-9 .image-box {
-  height: 440px;
+  height: 29.3333vw;
 }
 
 /* ================= PART 3 STYLES ================= */
 .row-5 {
   align-items: flex-start;
-  gap: 80px;
+  gap: 5.3333vw;
 }
 
 .card-10 {
   width: 62%;
-  max-width: 720px;
+  max-width: 48vw;
   flex-shrink: 0;
 }
 .card-10 .image-box {
-  height: 410px;
+  height: 27.3333vw;
 }
 
 .card-11 {
-  width: 240px;
+  width: 16vw;
   flex-shrink: 0;
 }
 .card-11 .image-box {
-  height: 290px;
+  height: 19.3333vw;
 }
 
 .row-6 {
@@ -503,30 +503,30 @@ onMounted(() => {
 .row-6-center {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
-  margin-left: 260px; /* Offset to center-left area as shown in reference */
+  gap: 2.6667vw;
+  margin-left: 17.3333vw; /* Offset to center-left area as shown in reference */
 }
 
 .card-12 {
-  width: 360px;
+  width: 24vw;
   flex-shrink: 0;
 }
 .card-12 .image-box {
-  height: 370px;
+  height: 24.6667vw;
 }
 
 .card-13 {
-  width: 260px;
+  width: 17.3333vw;
   flex-shrink: 0;
 }
 .card-13 .image-box {
-  height: 320px;
+  height: 21.3333vw;
 }
 
 /* ================= PART 4 STYLES ================= */
 .row-7-text {
   align-items: flex-start;
-  margin-left: 260px;
+  margin-left: 17.3333vw;
 }
 
 .ultrices-text-block {
@@ -538,35 +538,35 @@ onMounted(() => {
 .ultrices-title {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500;
-  font-size: 32px;
-  line-height: 32px;
+  font-size: 2.1333vw;
+  line-height: 2.1333vw;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   color: #000000;
-  margin: 0 0 24px 0;
+  margin: 0 0 1.6vw 0;
 }
 
 .row-7-images {
   align-items: flex-end;
   justify-content: space-between;
-  gap: 80px;
+  gap: 5.3333vw;
 }
 
 .card-14 {
-  width: 220px;
+  width: 14.6667vw;
   flex-shrink: 0;
 }
 .card-14 .image-box {
-  height: 260px;
+  height: 17.3333vw;
 }
 
 .card-15 {
   width: 58%;
-  max-width: 680px;
+  max-width: 45.3333vw;
   flex-shrink: 0;
 }
 .card-15 .image-box {
-  height: 440px;
+  height: 29.3333vw;
 }
 
 @media (max-width: 1024px) {
