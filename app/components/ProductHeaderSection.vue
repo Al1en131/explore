@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 
+const router = useRouter()
 const sectionRef = ref<HTMLElement | null>(null)
 const numberRef = ref<HTMLElement | null>(null)
 const titleRef = ref<HTMLElement | null>(null)
@@ -9,7 +11,14 @@ const lineRef = ref<HTMLElement | null>(null)
 const tabsRef = ref<HTMLElement | null>(null)
 
 const activeTab = ref('Overview')
-const tabs = ['Overview', 'Design', 'Specification', 'Images', '3D Model']
+const tabs = ['Overview', 'Design', 'Specification', 'Images', '3D Model', 'Stories']
+
+const handleTabClick = (tab: string) => {
+  activeTab.value = tab
+  if (tab === 'Stories') {
+    router.push('/stories')
+  }
+}
 
 onMounted(() => {
   if (import.meta.client) {
@@ -83,7 +92,7 @@ onMounted(() => {
             :key="tab"
             class="nav-tab"
             :class="{ active: activeTab === tab }"
-            @click="activeTab = tab"
+            @click="handleTabClick(tab)"
           >
             {{ tab }}
           </button>

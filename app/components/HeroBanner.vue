@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const heroSectionRef = ref<HTMLElement | null>(null)
-const titleRef = ref<HTMLElement | null>(null)
-const imageRef = ref<HTMLElement | null>(null)
+const heroSectionRef = ref<HTMLElement | null>(null);
+const titleRef = ref<HTMLElement | null>(null);
+const imageRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
-    const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } })
+    const timeline = gsap.timeline({ defaults: { ease: "power4.out" } });
 
     // 1. Hero Title Reveal
     if (titleRef.value) {
@@ -19,15 +19,15 @@ onMounted(() => {
         titleRef.value,
         {
           y: 60,
-          opacity: 0
+          opacity: 0,
         },
         {
           y: 0,
           opacity: 1,
           duration: 1.3,
-          delay: 0.35
-        }
-      )
+          delay: 0.35,
+        },
+      );
     }
 
     // 2. Hero Image Entrance Reveal
@@ -36,31 +36,31 @@ onMounted(() => {
         imageRef.value,
         {
           scale: 1.12,
-          opacity: 0
+          opacity: 0,
         },
         {
           scale: 1.0,
           opacity: 1,
           duration: 1.4,
-          ease: 'power3.out'
+          ease: "power3.out",
         },
-        '-=0.9'
-      )
+        "-=0.9",
+      );
 
       // 3. Scroll Parallax Effect on Hero Image
       gsap.to(imageRef.value, {
         yPercent: 10,
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: heroSectionRef.value,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true
-        }
-      })
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }
   }
-})
+});
 </script>
 
 <template>
@@ -85,7 +85,7 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
-  padding-top: 0px;
+  padding-top: 127px;
   padding-bottom: 48px;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
@@ -131,7 +131,7 @@ onMounted(() => {
     padding-right: 20px;
     padding-bottom: 24px;
   }
-  
+
   .heading-wrapper {
     margin-top: 12px;
     margin-bottom: 16px;

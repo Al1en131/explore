@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { gsap } from 'gsap'
 
+const route = useRoute()
 const headerRef = ref<HTMLElement | null>(null)
+
+// Check if current page is /stories to apply white text styling
+const isWhiteHeader = computed(() => route.path === '/stories')
 
 onMounted(() => {
   if (headerRef.value) {
@@ -27,16 +32,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <header ref="headerRef" class="app-header">
+  <header ref="headerRef" class="app-header" :class="{ 'is-white-header': isWhiteHeader }">
     <div class="header-brand">
       <NuxtLink to="/" class="header-text nav-link brand-link">
         Franklin&Co.
       </NuxtLink>
     </div>
     <div class="header-nav">
-      <NuxtLink to="/product" class="header-text nav-link">
-        Products, Solutions, Stories
-      </NuxtLink>
+      <NuxtLink to="/product" class="header-text nav-link">Products</NuxtLink>
+      <span class="header-text nav-sep">, </span>
+      <span class="header-text nav-link static-item">Solutions</span>
+      <span class="header-text nav-sep">, </span>
+      <NuxtLink to="/stories" class="header-text nav-link">Stories</NuxtLink>
     </div>
     <div class="header-action">
       <span class="header-text nav-link">Menu</span>
@@ -46,6 +53,11 @@ onMounted(() => {
 
 <style scoped>
 .app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   display: flex;
   align-items: center;
   width: 100%;
@@ -54,6 +66,7 @@ onMounted(() => {
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: transparent;
+  pointer-events: none; /* Header container lets scroll pass through */
 }
 
 .header-text {
@@ -63,27 +76,52 @@ onMounted(() => {
 .nav-link {
   color: #000000;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, color 0.3s ease;
+  pointer-events: auto; /* Active links clickable */
+  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .nav-link:hover {
   opacity: 0.7;
 }
 
+.nav-sep {
+  color: #000000;
+  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+/* White theme styling for /stories page */
+.app-header.is-white-header .nav-link,
+.app-header.is-white-header .nav-sep {
+  color: #ffffff;
+}
+
 .header-brand {
   flex-shrink: 0;
+  pointer-events: auto;
 }
 
 .header-nav {
   padding-left: 376.25px;
   flex-grow: 1;
   text-align: left;
+  pointer-events: auto;
 }
 
 .header-action {
   margin-left: auto;
   flex-shrink: 0;
   text-align: right;
+  pointer-events: auto;
+}
+
+/* Active route styling */
+:deep(.router-link-active) {
+  font-weight: 500;
 }
 
 @media (max-width: 1024px) {
