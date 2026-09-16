@@ -251,8 +251,8 @@ onMounted(() => {
 <style scoped>
 .overview-gallery-section {
   width: 100%;
-  padding-top: 4vw;
-  padding-bottom: 9.3333vw;
+  padding-top: 4.876vw;
+  padding-bottom: 5.4vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: #ffffff;
@@ -263,7 +263,7 @@ onMounted(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8vw;
+  gap: 13.485vw;
 }
 
 .gallery-row {
@@ -294,7 +294,7 @@ onMounted(() => {
   overflow: hidden;
   background-color: #e5e7e9;
   position: relative;
-  margin-bottom: 0.9333vw;
+  margin-bottom: 1.6vw;
 }
 
 .card-img {
@@ -330,8 +330,10 @@ onMounted(() => {
 
 .card-wide-right {
   flex-grow: 1;
-  max-width: 65.3333vw;
+  width: auto;
+  max-width: calc(100vw - var(--section-px) - 35.4667vw);
 }
+
 .card-wide-right .image-box {
   height: 28vw;
 }
@@ -370,12 +372,14 @@ onMounted(() => {
 }
 
 .year-text {
-  font-family: 'Test Manuka', 'Test Manuka Condensed', 'Bebas Neue', 'Impact', sans-serif-condensed, sans-serif;
+  font-family:
+    "Test Manuka", "Test Manuka Condensed", "Bebas Neue", "Impact",
+    sans-serif-condensed, sans-serif;
   font-weight: 500; /* Medium weight */
-  font-size: 12.9333vw;
-  line-height: 12.9333vw;
+  font-size: 12vw;
+  line-height: 12vw;
   letter-spacing: -0.02em; /* -2% letter spacing */
-  color: #000000;
+  color: #333333;
   margin: 0;
   display: inline-block;
   -webkit-font-smoothing: antialiased;
@@ -383,15 +387,15 @@ onMounted(() => {
 }
 
 .distinctive-title {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500; /* Medium weight */
-  font-size: 2.1333vw;
-  line-height: 2.1333vw;
+  font-size: 2vw;
+  line-height: 2vw;
   letter-spacing: -0.05em; /* -5% letter spacing */
   text-transform: uppercase;
   color: #000000;
   margin-top: 0.6667vw;
-  margin-bottom: 1.6vw;
+  margin-bottom: 3.233vw;
 }
 
 .text-list {
@@ -403,13 +407,14 @@ onMounted(() => {
   gap: 0.2667vw;
 }
 
-.text-list li {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+.text-list {
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400; /* Book weight */
   font-size: 0.9333vw;
   line-height: 1.2vw;
   letter-spacing: -0.005em; /* -0.5% letter spacing */
   text-transform: uppercase;
+  width: 11.338vw;
   color: #777777;
 }
 
@@ -421,19 +426,19 @@ onMounted(() => {
 }
 
 .card-5 {
-  width: 17.3333vw;
+  width: 20.8vw;
   flex-shrink: 0;
 }
 .card-5 .image-box {
-  height: 25.3333vw;
+  height: 29.4vw;
 }
 
 .card-6 {
-  width: 16vw;
+  width: 18.776vw;
   flex-shrink: 0;
 }
 .card-6 .image-box {
-  height: 20vw;
+  height: 22.985vw;
 }
 
 /* Row 4 Styles */
@@ -444,33 +449,34 @@ onMounted(() => {
 
 .row-4-left {
   display: flex;
-  align-items: flex-end;
-  gap: 2.6667vw;
+  align-items: flex-start;
+  gap: 2.133vw;
   flex-shrink: 0;
 }
 
 .card-7 {
-  width: 12vw;
+  width: 10.641vw;
   flex-shrink: 0;
 }
 .card-7 .image-box {
-  height: 13vw;
+  height: 11.986vw;
 }
 
 .card-8 {
-  width: 17.3333vw;
+  width: 18.657vw;
   flex-shrink: 0;
 }
 .card-8 .image-box {
-  height: 22.6667vw;
+  height: 22.838vw;
 }
 
 .card-9 {
   flex-grow: 1;
-  max-width: 45.3333vw;
+  max-width: 50.324vw;
 }
+
 .card-9 .image-box {
-  height: 29.3333vw;
+  height: 34.083vw;
 }
 
 /* ================= PART 3 STYLES ================= */
@@ -481,19 +487,19 @@ onMounted(() => {
 
 .card-10 {
   width: 62%;
-  max-width: 48vw;
+  max-width: 50.067vw;
   flex-shrink: 0;
 }
 .card-10 .image-box {
-  height: 27.3333vw;
+  height: 31.022vw;
 }
 
 .card-11 {
-  width: 16vw;
+  width: 18.776vw;
   flex-shrink: 0;
 }
 .card-11 .image-box {
-  height: 19.3333vw;
+  height: 22.985vw;
 }
 
 .row-6 {
@@ -503,24 +509,24 @@ onMounted(() => {
 .row-6-center {
   display: flex;
   align-items: flex-start;
-  gap: 2.6667vw;
+  gap: 2vw;
   margin-left: 17.3333vw; /* Offset to center-left area as shown in reference */
 }
 
 .card-12 {
-  width: 24vw;
+  width: 28.431vw;
   flex-shrink: 0;
 }
 .card-12 .image-box {
-  height: 24.6667vw;
+  height: 33.813vw;
 }
 
 .card-13 {
-  width: 17.3333vw;
+  width: 20.964vw;
   flex-shrink: 0;
 }
 .card-13 .image-box {
-  height: 21.3333vw;
+  height: 25.663vw;
 }
 
 /* ================= PART 4 STYLES ================= */
@@ -536,14 +542,14 @@ onMounted(() => {
 }
 
 .ultrices-title {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
   font-size: 2.1333vw;
   line-height: 2.1333vw;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   color: #000000;
-  margin: 0 0 1.6vw 0;
+  margin: 0 0 2.267vw 0;
 }
 
 .row-7-images {
@@ -553,33 +559,40 @@ onMounted(() => {
 }
 
 .card-14 {
-  width: 14.6667vw;
+  width: 18.733vw;
   flex-shrink: 0;
 }
 .card-14 .image-box {
-  height: 17.3333vw;
+  height: 21.102vw;
 }
 
 .card-15 {
   width: 58%;
-  max-width: 45.3333vw;
+  max-width: 50.324vw;
   flex-shrink: 0;
 }
 .card-15 .image-box {
-  height: 29.3333vw;
+  height: 34.083vw;
 }
 
 @media (max-width: 1024px) {
   .gallery-container {
     gap: 60px;
   }
-  .row-top, .row-bottom, .row-3, .row-4, .row-5, .row-6, .row-7-images {
+  .row-top,
+  .row-bottom,
+  .row-3,
+  .row-4,
+  .row-5,
+  .row-6,
+  .row-7-images {
     gap: 40px;
   }
   .text-block {
     margin-left: 40px;
   }
-  .row-6-center, .row-7-text {
+  .row-6-center,
+  .row-7-text {
     margin-left: 80px;
   }
   .card-wide-right .image-box,
@@ -589,7 +602,8 @@ onMounted(() => {
   .card-15 .image-box {
     height: 320px;
   }
-  .row-3-cards, .row-4-left {
+  .row-3-cards,
+  .row-4-left {
     gap: 24px;
   }
 }
@@ -602,11 +616,16 @@ onMounted(() => {
   .gallery-container {
     gap: 40px;
   }
-  .gallery-row, .row-3-cards, .row-4-left, .row-6-center, .row-7-images {
+  .gallery-row,
+  .row-3-cards,
+  .row-4-left,
+  .row-6-center,
+  .row-7-images {
     flex-direction: column;
     gap: 40px;
   }
-  .text-block, .row-7-text {
+  .text-block,
+  .row-7-text {
     width: 100%;
     margin-left: 0;
   }

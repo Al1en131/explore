@@ -135,8 +135,8 @@ onUnmounted(() => {
 <style scoped>
 .product-header-section {
   width: 100%;
-  padding-top: 13.7333vw; /* 206px / 15 */
-  padding-bottom: 5.3333vw;
+  padding-top: 18vw; /* 206px / 15 */
+  padding-bottom: 4.876vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: #ffffff;
@@ -164,7 +164,7 @@ onUnmounted(() => {
   font-size: 12.9333vw;
   line-height: 12.9333vw;
   letter-spacing: 0em;
-  color: #000000;
+  color: #333333;
   display: inline-block;
   user-select: none;
   -webkit-font-smoothing: antialiased;
@@ -187,7 +187,7 @@ onUnmounted(() => {
   font-size: 8.5333vw;
   line-height: 7.6vw;
   letter-spacing: -0.04em; /* -4% letter spacing */
-  color: #000000;
+  color: #333333;
   margin: 0;
   margin-bottom: 4.6667vw;
 }

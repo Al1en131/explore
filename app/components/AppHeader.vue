@@ -61,7 +61,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  padding-top: 2.6667vw;
+  padding-top: 4.333vw;
   padding-bottom: 1.0667vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);

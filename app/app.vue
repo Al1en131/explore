@@ -19,7 +19,8 @@ import AppPreloader from './components/AppPreloader.vue'
 
 <style scoped>
 .page-root {
-  min-height: 100vh;
+  width: 100%;
+  min-height: 982px;
   background-color: #ffffff;
   color: #000000;
   display: flex;

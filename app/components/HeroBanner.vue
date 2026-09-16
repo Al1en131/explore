@@ -85,7 +85,7 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
-  padding-top: 8.4667vw;
+  padding-top: 13vw;
   padding-bottom: 3.6305vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
