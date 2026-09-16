@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 const props = defineProps({
   indent: {
     type: String,
-    default: '16.6667vw'
+    default: '19vw'
   }
 })
 
@@ -96,7 +96,7 @@ onMounted(() => {
 <style scoped>
 .intro-section {
   width: 100%;
-  padding-top: 8vw;
+  padding-top: 3.6305vw;
   padding-bottom: 8vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
@@ -135,10 +135,11 @@ onMounted(() => {
 }
 
 .dot-symbol {
-  display: inline;
-  font-size: 0.65em;
+  display: inline-block;
+  font-size: 0.9em;
   vertical-align: middle;
-  margin-left: 0.5333vw;
+  transform: translateY(-0.1em);
+  margin-left: 0.1vw;
 }
 
 .underline-line {

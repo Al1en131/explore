@@ -121,8 +121,8 @@ onMounted(() => {
   width: 100%;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
-  padding-top: 9.3333vw;
-  padding-bottom: 8vw;
+  padding-top: 1.5vw;
+  padding-bottom: 4vw;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -133,24 +133,24 @@ onMounted(() => {
   width: 100%;
   display: flex;
   justify-content: flex-start; /* Aligned left as requested */
-  margin-bottom: 6vw;
+  margin-bottom: 12.067vw;
 }
 
 .collective-h2 {
-  width: 73.1333vw;
-  max-width: 73.1333vw; /* Exact requested width 1097px */
+  width: 71vw;
+  max-width: 71vw; /* Exact requested width 1097px */
   color: #000000;
   text-align: left;
 }
 
 .indent-space {
   display: inline-block;
-  width: 18.6667vw;
+  width: 22.067vw;
 }
 
 .banner-container {
   width: 100%;
-  margin-bottom: 3.3333vw;
+  margin-bottom: 4vw;
   overflow: hidden;
   border-radius: 0px;
 }
@@ -181,8 +181,8 @@ onMounted(() => {
 .collective-title {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500;
-  font-size: 12.714vw;
-  line-height: 12.714vw;
+  font-size: 12.465vw;
+  line-height: 12.465vw;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #000000;
   margin: 0;

@@ -86,7 +86,7 @@ onMounted(() => {
 .hero-section {
   width: 100%;
   padding-top: 8.4667vw;
-  padding-bottom: 3.2vw;
+  padding-bottom: 3.6305vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   display: flex;
@@ -105,8 +105,8 @@ onMounted(() => {
 .hero-title {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500;
-  font-size: 12.5307vw; /* 187.96px / 15 */
-  line-height: 12.5307vw; /* 187.96px / 15 */
+  font-size: 12.400vw; /* 187.96px / 15 */
+  line-height: 12.400vw; /* 187.96px / 15 */
   letter-spacing: -0.04em; /* -4% letter spacing */
   white-space: nowrap;
   width: 100%;

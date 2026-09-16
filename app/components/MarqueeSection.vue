@@ -85,7 +85,7 @@ onUnmounted(() => {
 .marquee-section {
   width: 100%;
   padding-top: 5.3333vw;
-  padding-bottom: 8vw;
+  padding-bottom: 8.667vw;
   background-color: #ffffff;
   overflow: hidden;
 }

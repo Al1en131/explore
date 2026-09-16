@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const sectionRef = ref<HTMLElement | null>(null)
-const topTextRef = ref<HTMLElement | null>(null)
-const bannerRef = ref<HTMLElement | null>(null)
-const bannerImgRef = ref<HTMLElement | null>(null)
-const bottomTitleRef = ref<HTMLElement | null>(null)
+const sectionRef = ref<HTMLElement | null>(null);
+const topTextRef = ref<HTMLElement | null>(null);
+const bannerRef = ref<HTMLElement | null>(null);
+const bannerImgRef = ref<HTMLElement | null>(null);
+const bottomTitleRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
       // 1. Top text entrance reveal
@@ -23,14 +23,14 @@ onMounted(() => {
             y: 0,
             opacity: 1,
             duration: 1.2,
-            ease: 'power3.out',
+            ease: "power3.out",
             scrollTrigger: {
               trigger: topTextRef.value,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       }
 
       // 2. Middle Banner Image Parallax
@@ -42,25 +42,25 @@ onMounted(() => {
             opacity: 1,
             y: 0,
             duration: 1,
-            ease: 'power2.out',
+            ease: "power2.out",
             scrollTrigger: {
               trigger: bannerRef.value,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
 
         gsap.to(bannerImgRef.value, {
           yPercent: 8,
-          ease: 'none',
+          ease: "none",
           scrollTrigger: {
             trigger: bannerRef.value,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
-          }
-        })
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
 
       // 3. Bottom Display Title Reveal
@@ -72,18 +72,18 @@ onMounted(() => {
             y: 0,
             opacity: 1,
             duration: 1.2,
-            ease: 'power3.out',
+            ease: "power3.out",
             scrollTrigger: {
               trigger: bottomTitleRef.value,
-              start: 'top 90%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       }
     }
   }
-})
+});
 </script>
 
 <template>
@@ -91,7 +91,9 @@ onMounted(() => {
     <!-- Top Text Block (Positioned Left, width 1097px, H2 style with indent) -->
     <div class="top-text-wrapper">
       <h2 ref="topTextRef" class="h2 collective-h2">
-        <span class="indent-space"></span>Herman Miller is built on a legacy of creative partnership. In a first-of-its-kind collaboration, the Danish design house HAY
+        <span class="indent-space"></span>Herman Miller is built on a legacy of
+        creative partnership. In a first-of-its-kind collaboration, the Danish
+        design house HAY
       </h2>
     </div>
 
@@ -109,9 +111,7 @@ onMounted(() => {
 
     <!-- Bottom Display Title ("Another Collective" exact spec: 190.71px font-size/line-height, -4% letter-spacing) -->
     <div class="bottom-title-wrapper">
-      <h1 ref="bottomTitleRef" class="collective-title">
-        Another Collective
-      </h1>
+      <h1 ref="bottomTitleRef" class="collective-title">Another Collective</h1>
     </div>
   </section>
 </template>
@@ -121,8 +121,8 @@ onMounted(() => {
   width: 100%;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
-  padding-top: 9.3333vw;
-  padding-bottom: 8vw;
+  padding-top: 1.5vw;
+  padding-bottom: 4vw;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -133,24 +133,24 @@ onMounted(() => {
   width: 100%;
   display: flex;
   justify-content: flex-start; /* Aligned left as requested */
-  margin-bottom: 6vw;
+  margin-bottom: 12.067vw;
 }
 
 .collective-h2 {
-  width: 73.1333vw;
-  max-width: 73.1333vw; /* Exact requested width 1097px */
+  width: 71vw;
+  max-width: 71vw; /* Exact requested width 1097px */
   color: #000000;
   text-align: left;
 }
 
 .indent-space {
   display: inline-block;
-  width: 18.6667vw;
+  width: 22.067vw;
 }
 
 .banner-container {
   width: 100%;
-  margin-bottom: 3.3333vw;
+  margin-bottom: 4vw;
   overflow: hidden;
   border-radius: 0px;
 }
@@ -179,10 +179,10 @@ onMounted(() => {
 }
 
 .collective-title {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 12.714vw;
-  line-height: 12.714vw;
+  font-size: 12.465vw;
+  line-height: 12.465vw;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #000000;
   margin: 0;

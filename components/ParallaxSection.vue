@@ -142,7 +142,7 @@ onMounted(() => {
 
 .indent-space {
   display: inline-block;
-  width: 13.3333vw;
+  width: 15vw;
 }
 
 .nowrap-phrase {
@@ -151,10 +151,11 @@ onMounted(() => {
 }
 
 .dot-symbol {
-  display: inline;
-  font-size: 0.65em;
+  display: inline-block;
+  font-size: 0.9em;
   vertical-align: middle;
-  margin-left: 0.4vw;
+  transform: translateY(-0.1em);
+  margin-left: 0.1vw;
 }
 
 .bottom-container {

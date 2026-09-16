@@ -247,7 +247,7 @@ onUnmounted(() => {
 .gallery-section {
   width: 100%;
   padding-top: 2.6667vw;
-  padding-bottom: 8vw;
+  padding-bottom: 5.5235vw;
   background-color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -308,7 +308,7 @@ onUnmounted(() => {
   position: relative;
   overflow: hidden;
   background-color: #f5f5f5;
-  margin-bottom: 1.0667vw;
+  margin-bottom: 2.613vw;
 }
 
 .gallery-img {
@@ -340,7 +340,7 @@ onUnmounted(() => {
   padding-right: var(--section-px);
   display: flex;
   justify-content: flex-end;
-  margin-top: 3.2vw;
+  margin-top: 13.625vw;
 }
 
 /* Light Gray Line Track matching reference screenshot */

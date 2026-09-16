@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const props = defineProps({
   indent: {
     type: String,
-    default: '16.6667vw'
-  }
-})
+    default: "19vw",
+  },
+});
 
-const sectionRef = ref<HTMLElement | null>(null)
-const headingRef = ref<HTMLElement | null>(null)
-const lineRef = ref<HTMLElement | null>(null)
-const bottomRowRef = ref<HTMLElement | null>(null)
+const sectionRef = ref<HTMLElement | null>(null);
+const headingRef = ref<HTMLElement | null>(null);
+const lineRef = ref<HTMLElement | null>(null);
+const bottomRowRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.value,
-          start: 'top 75%',
-          toggleActions: 'play none none reverse'
-        }
-      })
+          start: "top 75%",
+          toggleActions: "play none none reverse",
+        },
+      });
 
       // 1. Heading Fade Up Reveal
       if (headingRef.value) {
         tl.fromTo(
           headingRef.value,
           { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }
-        )
+          { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
+        );
       }
 
       // 2. Underline Line ScaleX Reveal
@@ -42,35 +42,46 @@ onMounted(() => {
         tl.fromTo(
           lineRef.value,
           { scaleX: 0 },
-          { scaleX: 1, duration: 1, ease: 'power3.inOut' },
-          '-=0.7'
-        )
+          { scaleX: 1, duration: 1, ease: "power3.inOut" },
+          "-=0.7",
+        );
       }
 
       // 3. Bottom Row Reveal (Label & Paragraph)
       if (bottomRowRef.value) {
-        const items = bottomRowRef.value.children
+        const items = bottomRowRef.value.children;
         tl.fromTo(
           items,
           { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, stagger: 0.15, ease: 'power3.out' },
-          '-=0.5'
-        )
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+          "-=0.5",
+        );
       }
     }
   }
-})
+});
 </script>
 
 <template>
   <section ref="sectionRef" class="intro-section">
     <!-- Main Right-aligned block with exact width 1089.74658203125px -->
     <div class="intro-container">
-      
       <!-- Top Large Heading with 250px inline indent & nowrap dot phrase -->
       <div class="heading-wrapper">
         <h2 ref="headingRef" class="h2 intro-h2">
-          <span class="indent-space" :style="{ width: indent }"></span>Maréchal Verchetti is built on a legacy of creative partnership. In a first-of-its-kind collaboration, the Frankliné Jeremy design house thought fully reimagines <span class="nowrap-phrase">eight <span class="dot-symbol">●</span></span>
+          <span class="indent-space" :style="{ width: indent }"></span>Maréchal
+          Verchetti is built on a legacy of creative partnership. In a
+          first-of-its-kind collaboration, the Frankliné Jeremy design house
+          thought fully reimagines
+          <span class="nowrap-phrase"
+            >eight <span class="dot-symbol">●</span></span
+          >
         </h2>
       </div>
 
@@ -84,11 +95,12 @@ onMounted(() => {
         </div>
         <div class="bottom-right">
           <p class="body-text">
-            These chairs can be upholstered in just about any fabric you like. When upholstered, the chair's back and seat have exposed veneer on the back sides. Veneers are available in six wood.
+            These chairs can be upholstered in just about any fabric you like.
+            When upholstered, the chair's back and seat have exposed veneer on
+            the back sides. Veneers are available in six wood.
           </p>
         </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -96,7 +108,7 @@ onMounted(() => {
 <style scoped>
 .intro-section {
   width: 100%;
-  padding-top: 8vw;
+  padding-top: 3.6305vw;
   padding-bottom: 8vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
@@ -135,10 +147,11 @@ onMounted(() => {
 }
 
 .dot-symbol {
-  display: inline;
-  font-size: 0.65em;
+  display: inline-block;
+  font-size: 0.9em;
   vertical-align: middle;
-  margin-left: 0.5333vw;
+  transform: translateY(-0.1em);
+  margin-left: 0.1vw;
 }
 
 .underline-line {

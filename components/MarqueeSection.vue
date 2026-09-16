@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, onUnmounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const sectionRef = ref<HTMLElement | null>(null)
-const trackRef = ref<HTMLElement | null>(null)
-let marqueeTween: gsap.core.Tween | null = null
-let scrollTriggerInstance: ScrollTrigger | null = null
+const sectionRef = ref<HTMLElement | null>(null);
+const trackRef = ref<HTMLElement | null>(null);
+let marqueeTween: gsap.core.Tween | null = null;
+let scrollTriggerInstance: ScrollTrigger | null = null;
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     if (trackRef.value) {
       // 1. Infinite horizontal marquee loop
@@ -18,44 +18,43 @@ onMounted(() => {
         xPercent: -50,
         repeat: -1,
         duration: 25,
-        ease: 'none'
-      })
+        ease: "none",
+      });
 
       // 2. ScrollTrigger directional & velocity responsiveness
       if (sectionRef.value) {
         scrollTriggerInstance = ScrollTrigger.create({
           trigger: sectionRef.value,
-          start: 'top bottom',
-          end: 'bottom top',
+          start: "top bottom",
+          end: "bottom top",
           onUpdate: (self) => {
-            if (!marqueeTween) return
+            if (!marqueeTween) return;
             // Change direction based on scroll direction (1 = down, -1 = up)
-            const direction = self.direction || 1
-            const velocity = Math.abs(self.getVelocity()) / 300
-            const targetTimeScale = direction * (1 + velocity)
+            const direction = self.direction || 1;
+            const velocity = Math.abs(self.getVelocity()) / 300;
+            const targetTimeScale = direction * (1 + velocity);
 
             gsap.to(marqueeTween, {
               timeScale: targetTimeScale,
               duration: 0.4,
-              overwrite: 'auto',
-              ease: 'power1.out'
-            })
-          }
-        })
+              overwrite: "auto",
+              ease: "power1.out",
+            });
+          },
+        });
       }
     }
   }
-})
+});
 
 onUnmounted(() => {
-  if (marqueeTween) marqueeTween.kill()
-  if (scrollTriggerInstance) scrollTriggerInstance.kill()
-})
+  if (marqueeTween) marqueeTween.kill();
+  if (scrollTriggerInstance) scrollTriggerInstance.kill();
+});
 </script>
 
 <template>
   <section ref="sectionRef" class="marquee-section">
-    
     <!-- Infinite Horizontal Marquee Container -->
     <div class="marquee-viewport">
       <div ref="trackRef" class="marquee-track">
@@ -73,11 +72,11 @@ onUnmounted(() => {
       </div>
       <div class="bottom-right">
         <p class="body-text">
-          Fresh eyes see new possibilities for classic Eames designs, including a bold new colour palette and updated materials.
+          Fresh eyes see new possibilities for classic Eames designs, including
+          a bold new colour palette and updated materials.
         </p>
       </div>
     </div>
-
   </section>
 </template>
 
@@ -85,7 +84,7 @@ onUnmounted(() => {
 .marquee-section {
   width: 100%;
   padding-top: 5.3333vw;
-  padding-bottom: 8vw;
+  padding-bottom: 8.667vw;
   background-color: #ffffff;
   overflow: hidden;
 }
