@@ -164,9 +164,9 @@ onUnmounted(() => {
             <!-- Left Group: Quote & 2 Paragraphs -->
             <div class="craft-left-col">
               <div class="quote-badge">
-                “Recognising the need<br />
-                is the primary<br />
-                condition for design.”
+                <span class="quote-line">“Recognising the need</span>
+                <span class="quote-line">is the primary</span>
+                <span class="quote-line">condition for design.”</span>
               </div>
               <div class="craft-paragraphs">
                 <p class="craft-p">
@@ -221,9 +221,9 @@ onUnmounted(() => {
                   class="portrait-img"
                 />
                 <div class="gallery-quote-badge">
-                  “Recognising the need<br />
-                  is the primary<br />
-                  condition for design.”
+                  <span class="quote-line">“Recognising the need</span>
+                  <span class="quote-line">is the primary</span>
+                  <span class="quote-line">condition for design.”</span>
                 </div>
               </div>
             </div>
@@ -530,7 +530,7 @@ onUnmounted(() => {
 
 .legacy-img-col {
   width: 50.9333vw;
-  height: 100%;
+  height: 56.4vw;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -630,18 +630,18 @@ onUnmounted(() => {
 }
 
 .quote-badge {
-  width: 54.9102vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
   max-width: 54.9102vw;
-  background-color: #000000;
   color: #ffffff;
-  padding: 1.6vw 1.8667vw;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
   font-size: 5.3973vw;
-  line-height: 5.3973vw;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   box-sizing: border-box;
-  display: block;
 }
 
 .craft-paragraphs {
@@ -661,7 +661,7 @@ onUnmounted(() => {
   letter-spacing: -0.005em;
   color: #666666;
   margin: 0;
-  text-align: justify;
+  /* text-align: justify; */
 }
 
 .craft-right-col {
@@ -753,17 +753,32 @@ onUnmounted(() => {
   position: absolute;
   bottom: 10vw;
   right: -22.6667vw;
-  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 54.9102vw;
   color: #ffffff;
-  padding: 1.6vw 1.8667vw;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
   font-size: 5.3973vw;
-  line-height: 5.3973vw;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   box-sizing: border-box;
   z-index: 3;
-  width: 54.9102vw;
+}
+
+.quote-line {
+  background-color: #191919;
+  padding: 0.12em 0.32em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.quote-line:first-child {
+  padding-left: 0.55em;
+  padding-right: 0.55em;
+  margin-left: -0.23em;
 }
 
 .gallery-right-col {
@@ -814,7 +829,8 @@ onUnmounted(() => {
   margin: 0;
   text-align: left;
   width: 51.8294vw;
-  margin-left: -8.6667vw;
+  margin-left: -10.9vw;
+  margin-top: 4.5vw;
   position: relative;
   z-index: 2;
 }
@@ -844,7 +860,7 @@ onUnmounted(() => {
   letter-spacing: -0.005em;
   color: #777777;
   margin: 0;
-  width: 24vw;
+  width: 25vw;
 }
 
 /* ================= PANEL 5: FEATURES ================= */
@@ -883,7 +899,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.4vw;
+  gap: 2.133vw;
 }
 
 .feature-num {
@@ -895,7 +911,7 @@ onUnmounted(() => {
   justify-content: center;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 2.4vw;
+  font-size: 2vw;
   line-height: 4.2667vw;
   letter-spacing: -0.02em;
 }
@@ -913,8 +929,8 @@ onUnmounted(() => {
 .feature-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 4.2667vw;
-  line-height: 4.2667vw;
+  font-size: 4vw;
+  line-height: 4vw;
   letter-spacing: -0.02em;
   text-transform: capitalize;
   margin: 0;
