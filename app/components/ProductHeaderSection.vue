@@ -38,6 +38,45 @@ const alignRightCol = () => {
   }
 }
 
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return
+  element.style.opacity = '1'
+  element.style.perspective = '1000px'
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || ''
+      if (!text.trim() && text !== ' ') return
+      const frag = document.createDocumentFragment()
+      const parts = text.split(/(\s+)/)
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i]
+        if (!part) continue
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(' '))
+        } else {
+          const span = document.createElement('span')
+          span.className = 'word-span'
+          span.style.display = 'inline-block'
+          span.style.willChange = 'transform, opacity'
+          span.style.transformOrigin = '50% 100%'
+          span.textContent = part
+          frag.appendChild(span)
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node)
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement
+      if (el.classList.contains('indent-space')) return
+      Array.from(el.childNodes).forEach(walk)
+    }
+  }
+
+  Array.from(element.childNodes).forEach(walk)
+}
+
 onMounted(() => {
   if (import.meta.client) {
     alignRightCol()
@@ -57,14 +96,25 @@ onMounted(() => {
       )
     }
 
-    // 2. Entrance animation for Title
+    // 2. Word-by-Word Entrance animation for Title
     if (titleRef.value) {
-      tl.fromTo(
-        titleRef.value,
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-        '-=0.8'
-      )
+      splitElementWords(titleRef.value)
+      const words = titleRef.value.querySelectorAll('.word-span')
+      if (words.length > 0) {
+        tl.fromTo(
+          words,
+          { y: 30, opacity: 0, rotateX: -20 },
+          { y: 0, opacity: 1, rotateX: 0, duration: 0.6, stagger: 0.035, ease: 'power2.out' },
+          '-=0.8'
+        )
+      } else {
+        tl.fromTo(
+          titleRef.value,
+          { y: 30, opacity: 0, rotateX: -20 },
+          { y: 0, opacity: 1, rotateX: 0, duration: 0.6, ease: 'power2.out' },
+          '-=0.8'
+        )
+      }
     }
 
     // 3. Line ScaleX animation
@@ -190,6 +240,12 @@ onUnmounted(() => {
   color: #333333;
   margin: 0;
   margin-bottom: 4.6667vw;
+}
+
+.char-span {
+  display: inline-block;
+  will-change: transform, opacity;
+  perspective: 1000px;
 }
 
 .divider-line {

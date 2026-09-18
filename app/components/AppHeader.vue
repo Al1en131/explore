@@ -1,38 +1,36 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { gsap } from 'gsap'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
 
-const route = useRoute()
-const headerRef = ref<HTMLElement | null>(null)
-
-// Check if current page is /stories to apply white text styling
-const isWhiteHeader = computed(() => route.path === '/stories')
+const headerRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (headerRef.value) {
-    const items = headerRef.value.querySelectorAll('.header-text')
+    const items = headerRef.value.querySelectorAll(".header-text");
     gsap.fromTo(
       items,
       {
         y: -20,
-        opacity: 0
+        opacity: 0,
       },
       {
         y: 0,
         opacity: 1,
         duration: 1,
         stagger: 0.12,
-        ease: 'power3.out',
-        delay: 0.2
-      }
-    )
+        ease: "power3.out",
+        delay: 0.2,
+      },
+    );
   }
-})
+});
 </script>
 
 <template>
-  <header ref="headerRef" class="app-header" :class="{ 'is-white-header': isWhiteHeader }">
+  <header
+    ref="headerRef"
+    class="app-header"
+  >
     <div class="header-brand">
       <NuxtLink to="/" class="header-text nav-link brand-link">
         Franklin&Co.
@@ -67,6 +65,7 @@ onMounted(() => {
   padding-right: var(--section-px);
   background-color: transparent;
   pointer-events: none; /* Header container lets scroll pass through */
+  mix-blend-mode: difference;
 }
 
 .header-text {
@@ -74,11 +73,13 @@ onMounted(() => {
 }
 
 .nav-link {
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
-  transition: opacity 0.2s ease, color 0.3s ease;
+  transition:
+    opacity 0.2s ease,
+    color 0.3s ease;
   pointer-events: auto; /* Active links clickable */
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-size: 1.0667vw;
   line-height: 1.2vw;
 }
@@ -88,16 +89,10 @@ onMounted(() => {
 }
 
 .nav-sep {
-  color: #000000;
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  color: #ffffff;
+  font-family: "PP Neue Montreal", var(--font-family-base);
   font-size: 1.0667vw;
   transition: color 0.3s ease;
-}
-
-/* White theme styling for /stories page */
-.app-header.is-white-header .nav-link,
-.app-header.is-white-header .nav-sep {
-  color: #ffffff;
 }
 
 .header-brand {

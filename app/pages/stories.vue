@@ -6,7 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const containerRef = ref<HTMLElement | null>(null);
 const trackRef = ref<HTMLElement | null>(null);
 const heroContentRef = ref<HTMLElement | null>(null);
+const heroTitleRef = ref<HTMLElement | null>(null);
 const craftTitleRef = ref<HTMLElement | null>(null);
+const hermanQuoteRef = ref<HTMLElement | null>(null);
+const endTitleRef = ref<HTMLElement | null>(null);
 let scrollTriggerInstance: ScrollTrigger | null = null;
 
 const alignHeroContent = () => {
@@ -21,8 +24,52 @@ const alignHeroContent = () => {
   }
 };
 
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim() && text !== " ") return;
+      const frag = document.createDocumentFragment();
+      const parts = text.split(/(\s+)/);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (!part) continue;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(" "));
+        } else {
+          const span = document.createElement("span");
+          span.className = "word-span";
+          span.style.display = "inline-block";
+          span.style.willChange = "transform, opacity";
+          span.style.transformOrigin = "50% 100%";
+          span.textContent = part;
+          frag.appendChild(span);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.classList.contains("indent-space")) return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
 onMounted(() => {
   if (import.meta.client) {
+    window.scrollTo(0, 0);
+    if (trackRef.value) {
+      gsap.set(trackRef.value, { x: 0 });
+    }
+
     alignHeroContent();
     window.addEventListener("resize", alignHeroContent);
     setTimeout(alignHeroContent, 100);
@@ -30,10 +77,32 @@ onMounted(() => {
 
     gsap.registerPlugin(ScrollTrigger);
 
+    // Hero title entrance Word-by-Word motion
+    if (heroTitleRef.value) {
+      splitElementWords(heroTitleRef.value);
+      const words = heroTitleRef.value.querySelectorAll(".word-span");
+      if (words.length > 0) {
+        gsap.fromTo(
+          words,
+          { y: 30, opacity: 0, rotateX: -20 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 0.55,
+            stagger: 0.03,
+            ease: "power2.out",
+            delay: 0.1,
+          }
+        );
+      }
+    }
+
     const track = trackRef.value;
     const container = containerRef.value;
 
     if (track && container) {
+      gsap.set(track, { x: 0 });
       // Calculate horizontal movement distance
       const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
 
@@ -69,7 +138,7 @@ onMounted(() => {
               y: 0,
               opacity: 1,
               rotateX: 0,
-              duration: 1,
+              duration: 1.1,
               stagger: 0.03,
               ease: "power3.out",
               scrollTrigger: {
@@ -82,6 +151,146 @@ onMounted(() => {
           );
         }
       }
+
+      // GSAP Word-by-Word 3D rotation animation for Herman Miller Quote in panel-gallery
+      if (hermanQuoteRef.value) {
+        splitElementWords(hermanQuoteRef.value);
+        const words = hermanQuoteRef.value.querySelectorAll(".word-span");
+        if (words.length > 0) {
+          gsap.fromTo(
+            words,
+            {
+              y: 30,
+              opacity: 0,
+              rotateX: -20,
+            },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 0.55,
+              stagger: 0.03,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: hermanQuoteRef.value,
+                containerAnimation: animation,
+                start: "left 85%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        }
+      }
+
+      // GSAP SplitText ScrollTrigger animation for Fine forms, — Refined. in panel-end
+      if (endTitleRef.value) {
+        const titleEl = endTitleRef.value;
+        const chars = titleEl.querySelectorAll(".char-span");
+
+        if (chars.length > 0) {
+          gsap.fromTo(
+            chars,
+            {
+              y: 120,
+              opacity: 0,
+              rotateX: -45,
+            },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.1,
+              stagger: 0.03,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: titleEl,
+                containerAnimation: animation,
+                start: "left 85%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        }
+      }
+
+      // GSAP ScrollTrigger clip-path text reveal animation for description paragraphs in stories page
+      const descParagraphs = track.querySelectorAll(
+        ".legacy-p, .craft-p, .gallery-p, .feature-p"
+      );
+      descParagraphs.forEach((p) => {
+        gsap.fromTo(
+          p,
+          {
+            clipPath: "inset(0% 0% 100% 0%)",
+            y: 35,
+            opacity: 0,
+          },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            y: 0,
+            opacity: 1,
+            duration: 1.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: p,
+              containerAnimation: animation,
+              start: "left 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+      // Horizontal Scroll Left-to-Right Clip-Path Wipe Entrance ONLY for section right before panel end (Panel 6 Collage)
+      const entranceImgs = track.querySelectorAll(
+        ".panel-collage img, .collage-img"
+      );
+
+      entranceImgs.forEach((img) => {
+        gsap.fromTo(
+          img,
+          {
+            clipPath: "inset(0% 100% 0% 0%)",
+            opacity: 0,
+          },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            duration: 1.3,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: img.parentElement || img,
+              containerAnimation: animation,
+              start: "left 90%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+      // Horizontal Scroll Parallax on all panel images (including hero-img)
+      const panelImgs = track.querySelectorAll(
+        ".hero-img, .legacy-img-col img, .chair-img, .feature-img, .collage-img, .end-bg-img"
+      );
+
+      panelImgs.forEach((img) => {
+        gsap.fromTo(
+          img,
+          { xPercent: -10, scale: 1.12 },
+          {
+            xPercent: 10,
+            scale: 1.12,
+            ease: "none",
+            scrollTrigger: {
+              trigger: img.parentElement || img,
+              containerAnimation: animation,
+              start: "left right",
+              end: "right left",
+              scrub: true,
+            },
+          }
+        );
+      });
     }
   }
 });
@@ -114,7 +323,9 @@ onUnmounted(() => {
           <!-- Hero Content aligned horizontally with middle navbar menu -->
           <div ref="heroContentRef" class="hero-content">
             <span class="hero-tag">01 / DESIGN STORY</span>
-            <h1 class="hero-title">Eames Moulded<br />Plywood</h1>
+            <h1 ref="heroTitleRef" class="hero-title">
+              Eames Moulded<br />Plywood
+            </h1>
           </div>
         </div>
 
@@ -238,7 +449,7 @@ onUnmounted(() => {
                 />
               </div>
               <div class="gallery-text-block">
-                <h2 class="herman-quote">
+                <h2 ref="hermanQuoteRef" class="herman-quote">
                   “Herman Miller is built<br />
                   on a legacy of creative<br />
                   partnership.”
@@ -353,9 +564,26 @@ onUnmounted(() => {
           </div>
           <div class="panel-inner end-inner">
             <div class="end-content">
-              <h2 class="end-giant-title">
-                <span class="end-title-line line-1">Fine forms,</span>
-                <span class="end-title-line line-2">— Refined.</span>
+              <h2 ref="endTitleRef" class="end-giant-title">
+                <span class="end-title-line line-1">
+                  <span
+                    v-for="(char, i) in 'Fine forms,'"
+                    :key="'e1-' + i"
+                    class="char-span"
+                  >
+                    {{ char === " " ? "\u00A0" : char }}
+                  </span>
+                </span>
+                <span class="end-title-line line-2">
+                  <span
+                    v-for="(char, i) in '— Refined'"
+                    :key="'e2-' + i"
+                    class="char-span"
+                  >
+                    {{ char === " " ? "\u00A0" : char }}
+                  </span>
+                  <span class="char-span orange-dot">.</span>
+                </span>
               </h2>
               <!-- <div class="end-action">
                 <span class="end-subtitle">HERMAN MILLER COLLECTION</span>
@@ -415,6 +643,7 @@ onUnmounted(() => {
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .hero-img {
@@ -465,6 +694,7 @@ onUnmounted(() => {
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #ffffff;
   margin: 0;
+  perspective: 1000px;
 }
 
 /* ================= PANEL 2: LEGACY (FINE - FORMS) ================= */
@@ -540,6 +770,7 @@ onUnmounted(() => {
 .legacy-img-col .img-card {
   width: 50.9333vw;
   height: 100%;
+  overflow: hidden;
 }
 
 .legacy-img-col .img-card img {
@@ -797,6 +1028,7 @@ onUnmounted(() => {
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .chair-img {
@@ -833,6 +1065,7 @@ onUnmounted(() => {
   margin-top: 4.5vw;
   position: relative;
   z-index: 2;
+  perspective: 1000px;
 }
 
 .gallery-year-block {
@@ -985,6 +1218,7 @@ onUnmounted(() => {
 .collage-card {
   position: absolute;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .collage-card.card-1 {
@@ -1080,10 +1314,13 @@ onUnmounted(() => {
   margin: auto 0;
   text-align: left;
   white-space: nowrap;
+  perspective: 1000px;
 }
 
 .end-title-line {
   display: block;
+  overflow: hidden;
+  line-height: 0.88;
 }
 
 .end-title-line.line-1 {

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const router = useRouter()
 const preloaderRef = ref<HTMLElement | null>(null)
@@ -33,6 +34,9 @@ const startInitialLoad = () => {
           ease: 'power4.inOut',
           onComplete: () => {
             isInitialLoading.value = false
+            setTimeout(() => {
+              ScrollTrigger.refresh()
+            }, 100)
           }
         })
       }
@@ -50,28 +54,29 @@ const triggerPageTransition = (nextFn: () => void) => {
   progress.value = 0
   const counterObj = { val: 0 }
 
-  // 1. Wipe curtain down to cover screen
+  // Step 1: Curtain slides up from bottom (100% -> 0%) to cover screen smoothly
   gsap.fromTo(
     preloaderRef.value,
     { yPercent: 100 },
     {
       yPercent: 0,
-      duration: 0.4,
+      duration: 0.45,
       ease: 'power3.inOut',
       onComplete: () => {
-        // 2. Animate counter from 0% to 100%
+        // Step 2: Animate counter from 0% to 100%
         gsap.to(counterObj, {
           val: 100,
-          duration: 0.6,
+          duration: 0.4,
           ease: 'power2.inOut',
           onUpdate: () => {
             progress.value = counterObj.val
           },
           onComplete: () => {
-            // Change route once counter reaches 100%
+            // Change route & reset scroll position to top
             nextFn()
+            window.scrollTo(0, 0)
 
-            // 3. Short pause then wipe curtain up to reveal new page
+            // Step 3: Curtain slides up out to top (0% -> -100%) revealing new page
             setTimeout(() => {
               if (preloaderRef.value) {
                 gsap.to(preloaderRef.value, {
@@ -80,10 +85,13 @@ const triggerPageTransition = (nextFn: () => void) => {
                   ease: 'power3.inOut',
                   onComplete: () => {
                     isTransitioning.value = false
+                    setTimeout(() => {
+                      ScrollTrigger.refresh()
+                    }, 150)
                   }
                 })
               }
-            }, 80)
+            }, 60)
           }
         })
       }
@@ -97,7 +105,7 @@ onMounted(() => {
 
     // Navigation guard for every route change
     router.beforeEach((to, from, next) => {
-      if (to.path !== from.path && !isInitialLoading.value) {
+      if (to.path !== from.path && !isInitialLoading.value && !isTransitioning.value) {
         triggerPageTransition(next)
       } else {
         next()
@@ -113,7 +121,6 @@ onMounted(() => {
       <!-- Minimalist Editorial Brand Header -->
       <div ref="brandRef" class="brand-block">
         <span class="brand-name">Franklin&Co.</span>
-        <!-- <span class="brand-sub">EDITORIAL COLLECTION</span> -->
       </div>
 
       <!-- Percentage Counter & Progress Line -->
@@ -139,63 +146,50 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  pointer-events: all;
   will-change: transform;
 }
 
 .preloader-content {
   width: 100%;
-  max-width: 40vw;
-  padding: 0 4vw;
+  max-width: 1200px;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3.2vw;
-  text-align: center;
+  justify-content: center;
+  position: relative;
 }
 
 .brand-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8vw;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .brand-name {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
-  font-weight: 500;
-  font-size: 3.2vw;
-  line-height: 3.2vw;
-  letter-spacing: -0.03em;
+  font-family: 'Manuka', sans-serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  display: block;
   color: #ffffff;
-}
-
-.brand-sub {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
-  font-weight: 400;
-  font-size: 0.8vw;
-  line-height: 0.9333vw;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #888888;
 }
 
 .counter-block {
   width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2vw;
 }
 
 .counter-val {
-  font-family: 'PP Neue Montreal', var(--font-family-base);
+  font-family: 'PP Neue Montreal', sans-serif;
+  font-size: 1.25rem;
   font-weight: 500;
-  font-size: 4.8vw;
-  line-height: 4.8vw;
-  letter-spacing: -0.04em;
-  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  color: #a0a0a0;
 }
 
 .progress-track {
@@ -209,24 +203,9 @@ onMounted(() => {
 .progress-fill {
   height: 100%;
   background-color: #ffffff;
-  transition: width 0.05s linear;
-}
-
-@media (max-width: 768px) {
-  .preloader-content {
-    max-width: 80vw;
-    gap: 24px;
-  }
-  .brand-name {
-    font-size: 2rem;
-    line-height: 1;
-  }
-  .brand-sub {
-    font-size: 0.75rem;
-  }
-  .counter-val {
-    font-size: 3rem;
-    line-height: 1;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: width;
 }
 </style>

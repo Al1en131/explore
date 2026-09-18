@@ -1,162 +1,207 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { Draggable } from 'gsap/Draggable'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, onUnmounted, ref } from "vue";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const sectionRef = ref<HTMLElement | null>(null)
-const containerRef = ref<HTMLElement | null>(null)
-const trackRef = ref<HTMLElement | null>(null)
-const progressBarTrackRef = ref<HTMLElement | null>(null)
+const sectionRef = ref<HTMLElement | null>(null);
+const containerRef = ref<HTMLElement | null>(null);
+const trackRef = ref<HTMLElement | null>(null);
+const progressBarTrackRef = ref<HTMLElement | null>(null);
 
 // Scroll progress from 0 (start) to 1 (end)
-const progressRatio = ref(0)
-const thumbWidthPercent = ref(25) // Thumb width is 25% of track width
+const progressRatio = ref(0);
+const thumbWidthPercent = ref(25); // Thumb width is 25% of track width
 
-let galleryDraggable: Draggable[] = []
-let minX = 0
-let resizeObserver: ResizeObserver | null = null
+let galleryDraggable: Draggable[] = [];
+let minX = 0;
+let resizeObserver: ResizeObserver | null = null;
 
 const galleryItems = [
   {
     id: 1,
-    img: '/images/gallery-1.jpg',
-    title: 'EAMES MOULDED PLASTIC SIDE CHAIR',
-    type: 'square'
+    img: "/images/gallery-1.jpg",
+    title: "EAMES MOULDED PLASTIC SIDE CHAIR",
+    type: "square",
   },
   {
     id: 2,
-    img: '/images/gallery-2.jpg',
-    title: 'EAMES SOFA COMPACT',
-    type: 'landscape'
+    img: "/images/gallery-2.jpg",
+    title: "EAMES SOFA COMPACT",
+    type: "landscape",
   },
   {
     id: 3,
-    img: '/images/gallery-3.jpg',
-    title: 'EAMES MOULDED PLASTIC ARMCHAIR',
-    type: 'portrait'
+    img: "/images/gallery-3.jpg",
+    title: "EAMES MOULDED PLASTIC ARMCHAIR",
+    type: "portrait",
   },
   {
     id: 4,
-    img: '/images/hero-banner-original.jpg',
-    title: 'MARÉCHAL VERCHETTI LOUNGE CHAIR',
-    type: 'landscape'
+    img: "/images/hero-banner-original.jpg",
+    title: "MARÉCHAL VERCHETTI LOUNGE CHAIR",
+    type: "landscape",
   },
   {
     id: 5,
-    img: '/images/gallery-1.jpg',
-    title: 'FRANKLINÉ JEREMY EXECUTIVE DESK CHAIR',
-    type: 'square'
+    img: "/images/gallery-1.jpg",
+    title: "FRANKLINÉ JEREMY EXECUTIVE DESK CHAIR",
+    type: "square",
   },
   {
     id: 6,
-    img: '/images/gallery-3.jpg',
-    title: 'VERCHETTI EDITORIAL ACCENT STOOL',
-    type: 'portrait'
-  }
-]
+    img: "/images/gallery-3.jpg",
+    title: "VERCHETTI EDITORIAL ACCENT STOOL",
+    type: "portrait",
+  },
+];
 
 function calculateBounds() {
-  if (!containerRef.value || !trackRef.value) return 0
-  const viewportWidth = containerRef.value.clientWidth
-  const trackWidth = trackRef.value.scrollWidth
-  const computedStyle = window.getComputedStyle(containerRef.value)
-  const paddingLeft = parseFloat(computedStyle.paddingLeft) || 58.75
-  const paddingRight = parseFloat(computedStyle.paddingRight) || 58.75
+  if (!containerRef.value || !trackRef.value) return 0;
+  const viewportWidth = containerRef.value.clientWidth;
+  const trackWidth = trackRef.value.scrollWidth;
+  const computedStyle = window.getComputedStyle(containerRef.value);
+  const paddingLeft = parseFloat(computedStyle.paddingLeft) || 58.75;
+  const paddingRight = parseFloat(computedStyle.paddingRight) || 58.75;
 
-  const visibleWidth = viewportWidth - paddingLeft - paddingRight
-  const maxScroll = trackWidth - visibleWidth
-  return -Math.max(0, maxScroll)
+  const visibleWidth = viewportWidth - paddingLeft - paddingRight;
+  const maxScroll = trackWidth - visibleWidth;
+  return -Math.max(0, maxScroll);
 }
 
 function updateProgress(this: Draggable | void) {
-  if (!trackRef.value) return
-  const currentX = (this && typeof this.x === 'number')
-    ? this.x
-    : (gsap.getProperty(trackRef.value, 'x') as number || 0)
+  if (!trackRef.value) return;
+  const currentX =
+    this && typeof this.x === "number"
+      ? this.x
+      : (gsap.getProperty(trackRef.value, "x") as number) || 0;
 
   if (minX < 0) {
-    const ratio = Math.max(0, Math.min(1, Math.abs(currentX) / Math.abs(minX)))
-    progressRatio.value = isNaN(ratio) ? 0 : ratio
+    // Ratio is 0 at currentX = 0, and 1 at currentX = minX (both minX and currentX are <= 0)
+    const ratio = Math.max(0, Math.min(1, currentX / minX));
+    progressRatio.value = isNaN(ratio) ? 0 : ratio;
   } else {
-    progressRatio.value = 0
+    progressRatio.value = 0;
   }
 }
 
 function refreshBounds() {
-  minX = calculateBounds()
+  minX = calculateBounds();
   if (galleryDraggable[0]) {
-    galleryDraggable[0].applyBounds({ minX: minX, maxX: 0 })
-    updateProgress()
+    galleryDraggable[0].applyBounds({ minX: minX, maxX: 0 });
+    updateProgress();
   }
 }
 
 // When clicking anywhere on the progress bar track
 function onProgressBarClick(e: MouseEvent) {
-  if (!progressBarTrackRef.value || !trackRef.value || minX >= 0) return
-  const rect = progressBarTrackRef.value.getBoundingClientRect()
-  const clickX = e.clientX - rect.left
+  if (!progressBarTrackRef.value || !trackRef.value || minX >= 0) return;
+  const rect = progressBarTrackRef.value.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
 
   // Offset by half thumb width so click centers the thumb under cursor
-  const thumbPx = (thumbWidthPercent.value / 100) * rect.width
-  const maxThumbTravel = rect.width - thumbPx
-  const targetThumbX = Math.max(0, Math.min(maxThumbTravel, clickX - thumbPx / 2))
-  const ratio = maxThumbTravel > 0 ? targetThumbX / maxThumbTravel : 0
+  const thumbPx = (thumbWidthPercent.value / 100) * rect.width;
+  const maxThumbTravel = rect.width - thumbPx;
+  const targetThumbX = Math.max(
+    0,
+    Math.min(maxThumbTravel, clickX - thumbPx / 2),
+  );
+  const ratio = maxThumbTravel > 0 ? targetThumbX / maxThumbTravel : 0;
 
-  const targetGalleryX = -ratio * Math.abs(minX)
+  const targetGalleryX = ratio * minX;
 
   gsap.to(trackRef.value, {
     x: targetGalleryX,
     duration: 0.5,
-    ease: 'power2.out',
+    ease: "power2.out",
     onUpdate: () => {
-      updateProgress()
+      updateProgress();
       if (galleryDraggable[0]) {
-        galleryDraggable[0].update()
+        galleryDraggable[0].update();
       }
-    }
-  })
+    },
+  });
 }
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(Draggable, ScrollTrigger)
+    gsap.registerPlugin(Draggable, ScrollTrigger);
 
     const init = () => {
       if (containerRef.value && trackRef.value) {
-        minX = calculateBounds()
+        minX = calculateBounds();
 
         galleryDraggable = Draggable.create(trackRef.value, {
-          type: 'x',
+          type: "x",
           bounds: { minX: minX, maxX: 0 },
-          edgeResistance: 0.75,
-          inertia: true,
-          cursor: 'grab',
-          activeCursor: 'grabbing',
+          edgeResistance: 0.85,
+          inertia: false,
+          cursor: "grab",
+          activeCursor: "grabbing",
           onDrag: updateProgress,
-          onThrowUpdate: updateProgress,
-          onUpdate: updateProgress
-        })
+          onUpdate: updateProgress,
+          onDragEnd: function () {
+            const velX = this.getVelocity("x");
+            const currentX = this.x;
+            let target = currentX + velX * 0.25;
+            target = Math.max(minX, Math.min(0, target));
 
-        updateProgress()
+            gsap.to(trackRef.value, {
+              x: target,
+              duration: Math.min(1.0, Math.max(0.3, Math.abs(velX) / 800 + 0.3)),
+              ease: "power3.out",
+              overwrite: "auto",
+              onUpdate: () => {
+                updateProgress();
+                if (galleryDraggable[0]) galleryDraggable[0].update();
+              },
+            });
+          },
+        });
 
-        // Observe element size changes (e.g. image loads or screen resize)
-        if (typeof ResizeObserver !== 'undefined') {
-          resizeObserver = new ResizeObserver(() => {
-            refreshBounds()
-          })
-          resizeObserver.observe(trackRef.value)
+        // Touchpad / horizontal scroll wheel support (deltaX only)
+        const onWheel = (e: WheelEvent) => {
+          if (!trackRef.value) return;
+          if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 3) {
+            const currentX = (gsap.getProperty(trackRef.value, "x") as number) || 0;
+            const target = Math.max(minX, Math.min(0, currentX - e.deltaX * 1.5));
+
+            gsap.to(trackRef.value, {
+              x: target,
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: "auto",
+              onUpdate: () => {
+                updateProgress();
+                if (galleryDraggable[0]) galleryDraggable[0].update();
+              },
+            });
+          }
+        };
+
+        if (containerRef.value) {
+          containerRef.value.addEventListener("wheel", onWheel, { passive: true });
         }
 
-        window.addEventListener('resize', refreshBounds)
+        updateProgress();
+
+        // Observe element size changes (e.g. image loads or screen resize)
+        if (typeof ResizeObserver !== "undefined") {
+          resizeObserver = new ResizeObserver(() => {
+            refreshBounds();
+          });
+          resizeObserver.observe(trackRef.value);
+        }
+
+        window.addEventListener("resize", refreshBounds);
 
         // Attach image load listeners to ensure exact bounds after image downloads
-        const imgs = trackRef.value.querySelectorAll('img')
+        const imgs = trackRef.value.querySelectorAll("img");
         imgs.forEach((img) => {
           if (!img.complete) {
-            img.addEventListener('load', refreshBounds, { once: true })
+            img.addEventListener("load", refreshBounds, { once: true });
           }
-        })
+        });
 
         // ScrollTrigger Entrance Reveal
         if (sectionRef.value) {
@@ -168,35 +213,35 @@ onMounted(() => {
               opacity: 1,
               duration: 1.2,
               stagger: 0.15,
-              ease: 'power3.out',
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: sectionRef.value,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-              }
-            }
-          )
+                start: "top 80%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
         }
       }
-    }
+    };
 
     // Run init immediately and after tick
-    init()
-    setTimeout(refreshBounds, 300)
+    init();
+    setTimeout(refreshBounds, 300);
   }
-})
+});
 
 onUnmounted(() => {
   if (galleryDraggable.length) {
-    galleryDraggable[0].kill()
+    galleryDraggable[0].kill();
   }
   if (resizeObserver) {
-    resizeObserver.disconnect()
+    resizeObserver.disconnect();
   }
   if (import.meta.client) {
-    window.removeEventListener('resize', refreshBounds)
+    window.removeEventListener("resize", refreshBounds);
   }
-})
+});
 </script>
 
 <template>
@@ -204,7 +249,6 @@ onUnmounted(() => {
     <!-- Draggable Viewport Container -->
     <div ref="containerRef" class="gallery-viewport">
       <div ref="trackRef" class="gallery-track">
-        
         <!-- Gallery Items matching reference image layout -->
         <div
           v-for="item in galleryItems"
@@ -212,13 +256,17 @@ onUnmounted(() => {
           :class="['gallery-item', `type-${item.type}`]"
         >
           <div class="image-wrapper">
-            <img :src="item.img" :alt="item.title" class="gallery-img" draggable="false" />
+            <img
+              :src="item.img"
+              :alt="item.title"
+              class="gallery-img"
+              draggable="false"
+            />
           </div>
           <div class="item-meta">
             <span class="label item-title">{{ item.title }}</span>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -235,7 +283,7 @@ onUnmounted(() => {
           class="progress-bar-thumb"
           :style="{
             width: `${thumbWidthPercent}%`,
-            left: `${progressRatio * (100 - thumbWidthPercent)}%`
+            left: `${progressRatio * (100 - thumbWidthPercent)}%`,
           }"
         ></div>
       </div>
@@ -355,7 +403,7 @@ onUnmounted(() => {
 
 /* Visible crisp gray track line */
 .progress-bar-track::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;

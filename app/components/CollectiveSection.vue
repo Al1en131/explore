@@ -1,89 +1,201 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const sectionRef = ref<HTMLElement | null>(null)
-const topTextRef = ref<HTMLElement | null>(null)
-const bannerRef = ref<HTMLElement | null>(null)
-const bannerImgRef = ref<HTMLElement | null>(null)
-const bottomTitleRef = ref<HTMLElement | null>(null)
+const sectionRef = ref<HTMLElement | null>(null);
+const topTextRef = ref<HTMLElement | null>(null);
+const bannerRef = ref<HTMLElement | null>(null);
+const bannerImgRef = ref<HTMLElement | null>(null);
+const bottomTitleRef = ref<HTMLElement | null>(null);
+
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim()) return;
+      const frag = document.createDocumentFragment();
+      const parts = text.split(/(\s+)/);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (!part) continue;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+        } else {
+          const span = document.createElement("span");
+          span.className = "word-span";
+          span.style.display = "inline-block";
+          span.style.willChange = "transform, opacity";
+          span.style.transformOrigin = "50% 100%";
+          span.textContent = part;
+          frag.appendChild(span);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.classList.contains("indent-space") || el.tagName === "BR") return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
+const splitElementChars = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim()) return;
+      const frag = document.createDocumentFragment();
+      const words = text.split(/(\s+)/);
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        if (!word) continue;
+        if (/^\s+$/.test(word)) {
+          frag.appendChild(document.createTextNode(word));
+        } else {
+          const wordSpan = document.createElement("span");
+          wordSpan.style.display = "inline-block";
+          wordSpan.style.whiteSpace = "nowrap";
+          for (let j = 0; j < word.length; j++) {
+            const charSpan = document.createElement("span");
+            charSpan.className = "char-span";
+            charSpan.style.display = "inline-block";
+            charSpan.style.willChange = "transform, opacity";
+            charSpan.textContent = word[j];
+            wordSpan.appendChild(charSpan);
+          }
+          frag.appendChild(wordSpan);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
-      // 1. Top text entrance reveal
+      // 1. Top text Word-by-Word Motion (subtle y: 30)
       if (topTextRef.value) {
-        gsap.fromTo(
-          topTextRef.value,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: topTextRef.value,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+        splitElementWords(topTextRef.value);
+        const words = topTextRef.value.querySelectorAll(".word-span");
+        if (words.length > 0) {
+          gsap.fromTo(
+            words,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 0.75,
+              stagger: 0.035,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: topTextRef.value,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        }
       }
 
-      // 2. Middle Banner Image Parallax
+      // 2. Middle Banner Image Clip-Path Curtain Reveal & Parallax
       if (bannerRef.value && bannerImgRef.value) {
         gsap.fromTo(
           bannerRef.value,
-          { opacity: 0, y: 30 },
           {
+            clipPath: "inset(100% 0% 0% 0%)",
+            opacity: 0,
+          },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
             opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power2.out',
+            duration: 1.4,
+            ease: "power3.inOut",
             scrollTrigger: {
               trigger: bannerRef.value,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
+
+        gsap.fromTo(
+          bannerImgRef.value,
+          { scale: 1.15 },
+          {
+            scale: 1.0,
+            duration: 1.4,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: bannerRef.value,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
 
         gsap.to(bannerImgRef.value, {
           yPercent: 8,
-          ease: 'none',
+          ease: "none",
           scrollTrigger: {
             trigger: bannerRef.value,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true
-          }
-        })
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
 
-      // 3. Bottom Display Title Reveal
+      // 3. Bottom Single-Line Title Per-Character Motion (subtle y: 30)
       if (bottomTitleRef.value) {
-        gsap.fromTo(
-          bottomTitleRef.value,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: bottomTitleRef.value,
-              start: 'top 90%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
+        splitElementChars(bottomTitleRef.value);
+        const chars = bottomTitleRef.value.querySelectorAll(".char-span");
+        if (chars.length > 0) {
+          gsap.fromTo(
+            chars,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.2,
+              stagger: 0.045,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: bottomTitleRef.value,
+                start: "top 90%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        }
       }
     }
   }
-})
+});
 </script>
 
 <template>
@@ -137,8 +249,8 @@ onMounted(() => {
 }
 
 .collective-h2 {
-  width: 71vw;
-  max-width: 71vw; /* Exact requested width 1097px */
+  width: 76vw;
+  max-width: 76vw; /* Slightly widened to 76vw to comfortably fit 4 lines without awkward line wrap */
   color: #000000;
   text-align: left;
 }
@@ -186,6 +298,11 @@ onMounted(() => {
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #000000;
   margin: 0;
+}
+
+.char-span {
+  display: inline-block;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 1200px) {

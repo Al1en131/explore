@@ -15,53 +15,138 @@ const headingRef = ref<HTMLElement | null>(null);
 const lineRef = ref<HTMLElement | null>(null);
 const bottomRowRef = ref<HTMLElement | null>(null);
 
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim() && text !== " ") return;
+      const frag = document.createDocumentFragment();
+      const parts = text.split(/(\s+)/);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (!part) continue;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(" "));
+        } else {
+          const span = document.createElement("span");
+          span.className = "word-span";
+          span.style.display = "inline-block";
+          span.style.willChange = "transform, opacity";
+          span.style.transformOrigin = "50% 100%";
+          span.textContent = part;
+          frag.appendChild(span);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.classList.contains("indent-space")) return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
 onMounted(() => {
   if (import.meta.client) {
     gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.value,
-          start: "top 75%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      // 1. Heading Fade Up Reveal
+      // 1. Heading Word-by-Word Motion (subtle y: 30)
       if (headingRef.value) {
-        tl.fromTo(
-          headingRef.value,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
-        );
+        splitElementWords(headingRef.value);
+        const words = headingRef.value.querySelectorAll(".word-span");
+        if (words.length > 0) {
+          gsap.fromTo(
+            words,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 0.75,
+              stagger: 0.035,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: headingRef.value,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
       }
 
       // 2. Underline Line ScaleX Reveal
       if (lineRef.value) {
-        tl.fromTo(
+        gsap.fromTo(
           lineRef.value,
           { scaleX: 0 },
-          { scaleX: 1, duration: 1, ease: "power3.inOut" },
-          "-=0.7",
+          {
+            scaleX: 1,
+            duration: 1.2,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: lineRef.value,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
         );
       }
 
-      // 3. Bottom Row Reveal (Label & Paragraph)
+      // 3. Bottom Row Reveal (Label & Paragraph Clip-Path Curtain Motion)
       if (bottomRowRef.value) {
-        const items = bottomRowRef.value.children;
-        tl.fromTo(
-          items,
-          { y: 25, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            stagger: 0.15,
-            ease: "power3.out",
-          },
-          "-=0.5",
-        );
+        const labelEl = bottomRowRef.value.querySelector(".bottom-left");
+        const pEl = bottomRowRef.value.querySelector(".body-text");
+
+        if (labelEl) {
+          gsap.fromTo(
+            labelEl,
+            { y: 25, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.9,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: labelEl,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+
+        if (pEl) {
+          gsap.fromTo(
+            pEl,
+            {
+              clipPath: "inset(0% 0% 100% 0%)",
+              y: 35,
+              opacity: 0,
+            },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              y: 0,
+              opacity: 1,
+              duration: 1.1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: pEl,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
       }
     }
   }
@@ -133,7 +218,6 @@ onMounted(() => {
 .intro-h2 {
   color: #000000;
   margin: 0;
-  opacity: 0; /* Animated by GSAP */
   will-change: transform, opacity;
 }
 
@@ -178,6 +262,17 @@ onMounted(() => {
 
 .bottom-right {
   max-width: 33.0667vw;
+  will-change: transform, opacity;
+}
+
+.line-reveal {
+  display: block;
+  overflow: hidden;
+  text-indent: 0;
+}
+
+.line-content {
+  display: block;
   will-change: transform, opacity;
 }
 

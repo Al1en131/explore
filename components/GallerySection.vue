@@ -77,7 +77,8 @@ function updateProgress(this: Draggable | void) {
       : (gsap.getProperty(trackRef.value, "x") as number) || 0;
 
   if (minX < 0) {
-    const ratio = Math.max(0, Math.min(1, Math.abs(currentX) / Math.abs(minX)));
+    // Ratio is 0 at currentX = 0, and 1 at currentX = minX (both minX and currentX are <= 0)
+    const ratio = Math.max(0, Math.min(1, currentX / minX));
     progressRatio.value = isNaN(ratio) ? 0 : ratio;
   } else {
     progressRatio.value = 0;
@@ -107,7 +108,7 @@ function onProgressBarClick(e: MouseEvent) {
   );
   const ratio = maxThumbTravel > 0 ? targetThumbX / maxThumbTravel : 0;
 
-  const targetGalleryX = -ratio * Math.abs(minX);
+  const targetGalleryX = ratio * minX;
 
   gsap.to(trackRef.value, {
     x: targetGalleryX,
@@ -133,14 +134,54 @@ onMounted(() => {
         galleryDraggable = Draggable.create(trackRef.value, {
           type: "x",
           bounds: { minX: minX, maxX: 0 },
-          edgeResistance: 0.75,
-          inertia: true,
+          edgeResistance: 0.85,
+          inertia: false,
           cursor: "grab",
           activeCursor: "grabbing",
           onDrag: updateProgress,
-          onThrowUpdate: updateProgress,
           onUpdate: updateProgress,
+          onDragEnd: function () {
+            const velX = this.getVelocity("x");
+            const currentX = this.x;
+            let target = currentX + velX * 0.25;
+            target = Math.max(minX, Math.min(0, target));
+
+            gsap.to(trackRef.value, {
+              x: target,
+              duration: Math.min(1.0, Math.max(0.3, Math.abs(velX) / 800 + 0.3)),
+              ease: "power3.out",
+              overwrite: "auto",
+              onUpdate: () => {
+                updateProgress();
+                if (galleryDraggable[0]) galleryDraggable[0].update();
+              },
+            });
+          },
         });
+
+        // Touchpad / horizontal scroll wheel support (deltaX only)
+        const onWheel = (e: WheelEvent) => {
+          if (!trackRef.value) return;
+          if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 3) {
+            const currentX = (gsap.getProperty(trackRef.value, "x") as number) || 0;
+            const target = Math.max(minX, Math.min(0, currentX - e.deltaX * 1.5));
+
+            gsap.to(trackRef.value, {
+              x: target,
+              duration: 0.4,
+              ease: "power2.out",
+              overwrite: "auto",
+              onUpdate: () => {
+                updateProgress();
+                if (galleryDraggable[0]) galleryDraggable[0].update();
+              },
+            });
+          }
+        };
+
+        if (containerRef.value) {
+          containerRef.value.addEventListener("wheel", onWheel, { passive: true });
+        }
 
         updateProgress();
 

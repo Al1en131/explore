@@ -72,6 +72,45 @@ onMounted(() => {
           )
         }
       })
+
+      // Image Clip-Path Curtain Entrance & Parallax
+      const imageBoxes = sectionRef.value.querySelectorAll('.image-box')
+      imageBoxes.forEach((box) => {
+        gsap.fromTo(
+          box,
+          { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 },
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            opacity: 1,
+            duration: 1.3,
+            ease: 'power3.inOut',
+            scrollTrigger: {
+              trigger: box,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        )
+
+        const img = box.querySelector('.card-img')
+        if (img) {
+          gsap.fromTo(
+            img,
+            { yPercent: -20, scale: 1.25 },
+            {
+              yPercent: 20,
+              scale: 1.25,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: box,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          )
+        }
+      })
     }
   }
 })
@@ -302,11 +341,10 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.gallery-card:hover .card-img {
-  transform: scale(1.03);
+.gallery-card:hover .image-box {
+  opacity: 0.95;
 }
 
 .card-label {

@@ -26,6 +26,12 @@ export default defineNuxtPlugin(() => {
 
     gsap.ticker.lagSmoothing(0)
 
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 200)
+    })
+
     return {
       provide: {
         gsap,

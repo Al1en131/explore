@@ -8,6 +8,45 @@ const imageRef = ref<HTMLElement | null>(null)
 const headingRef = ref<HTMLElement | null>(null)
 const textRef = ref<HTMLElement | null>(null)
 
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = '1';
+  element.style.perspective = '1000px';
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || '';
+      if (!text.trim() && text !== ' ') return;
+      const frag = document.createDocumentFragment();
+      const parts = text.split(/(\s+)/);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (!part) continue;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(' '));
+        } else {
+          const span = document.createElement('span');
+          span.className = 'word-span';
+          span.style.display = 'inline-block';
+          span.style.willChange = 'transform, opacity';
+          span.style.transformOrigin = '50% 100%';
+          span.textContent = part;
+          frag.appendChild(span);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.classList.contains('indent-space')) return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
 onMounted(() => {
   if (import.meta.client) {
     gsap.registerPlugin(ScrollTrigger)
@@ -26,30 +65,52 @@ onMounted(() => {
       })
     }
 
-    // 2. Text Reveal Entrance Fade Up
+    // 2. Text Reveal Entrance Word-by-Word Motion (subtle y: 30)
     if (sectionRef.value) {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.value,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse'
-        }
-      })
-
       if (headingRef.value) {
-        tl.fromTo(
-          headingRef.value,
-          { y: 50, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' }
-        )
+        splitElementWords(headingRef.value)
+        const words = headingRef.value.querySelectorAll('.word-span')
+        if (words.length > 0) {
+          gsap.fromTo(
+            words,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 0.75,
+              stagger: 0.035,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: headingRef.value,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+              }
+            }
+          )
+        }
       }
 
       if (textRef.value) {
-        tl.fromTo(
+        gsap.fromTo(
           textRef.value,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-          '-=0.7'
+          {
+            clipPath: 'inset(0% 0% 100% 0%)',
+            y: 35,
+            opacity: 0
+          },
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            y: 0,
+            opacity: 1,
+            duration: 1.1,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: textRef.value,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse'
+            }
+          }
         )
       }
     }
@@ -81,7 +142,8 @@ onMounted(() => {
         <!-- Bottom Right Paragraph Container (exact width 238px) -->
         <div class="bottom-container">
           <p ref="textRef" class="body-text parallax-text">
-            Fresh eyes see new possibilities for classic Eames designs, including a bold new colour palette and updated materials.
+            Fresh eyes see new possibilities for classic Eames designs,
+            including a bold new colour palette and updated materials.
           </p>
         </div>
       </div>
@@ -140,6 +202,11 @@ onMounted(() => {
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
 }
 
+.char-span {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 .indent-space {
   display: inline-block;
   width: 15vw;
@@ -170,6 +237,17 @@ onMounted(() => {
   line-height: 1.6vw;
   margin: 0;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+.line-reveal {
+  display: block;
+  overflow: hidden;
+  text-indent: 0;
+}
+
+.line-content {
+  display: block;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 1024px) {

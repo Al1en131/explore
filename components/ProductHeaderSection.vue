@@ -192,6 +192,12 @@ onUnmounted(() => {
   margin-bottom: 4.6667vw;
 }
 
+.char-span {
+  display: inline-block;
+  will-change: transform, opacity;
+  perspective: 1000px;
+}
+
 .divider-line {
   width: 100%;
   height: 1px;

@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { onMounted, ref } from 'vue'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const sectionRef = ref<HTMLElement | null>(null);
-const card1Ref = ref<HTMLElement | null>(null);
-const card2Ref = ref<HTMLElement | null>(null);
-const card3Ref = ref<HTMLElement | null>(null);
-const card4Ref = ref<HTMLElement | null>(null);
+const sectionRef = ref<HTMLElement | null>(null)
+const card1Ref = ref<HTMLElement | null>(null)
+const card2Ref = ref<HTMLElement | null>(null)
+const card3Ref = ref<HTMLElement | null>(null)
+const card4Ref = ref<HTMLElement | null>(null)
 
 // Part 2 Refs
-const textBlockRef = ref<HTMLElement | null>(null);
-const card5Ref = ref<HTMLElement | null>(null);
-const card6Ref = ref<HTMLElement | null>(null);
-const card7Ref = ref<HTMLElement | null>(null);
-const card8Ref = ref<HTMLElement | null>(null);
-const card9Ref = ref<HTMLElement | null>(null);
+const textBlockRef = ref<HTMLElement | null>(null)
+const card5Ref = ref<HTMLElement | null>(null)
+const card6Ref = ref<HTMLElement | null>(null)
+const card7Ref = ref<HTMLElement | null>(null)
+const card8Ref = ref<HTMLElement | null>(null)
+const card9Ref = ref<HTMLElement | null>(null)
 
 // Part 3 Refs
-const card10Ref = ref<HTMLElement | null>(null);
-const card11Ref = ref<HTMLElement | null>(null);
-const card12Ref = ref<HTMLElement | null>(null);
-const card13Ref = ref<HTMLElement | null>(null);
+const card10Ref = ref<HTMLElement | null>(null)
+const card11Ref = ref<HTMLElement | null>(null)
+const card12Ref = ref<HTMLElement | null>(null)
+const card13Ref = ref<HTMLElement | null>(null)
 
 // Part 4 Refs
-const ultricesTextBlockRef = ref<HTMLElement | null>(null);
-const card14Ref = ref<HTMLElement | null>(null);
-const card15Ref = ref<HTMLElement | null>(null);
+const ultricesTextBlockRef = ref<HTMLElement | null>(null)
+const card14Ref = ref<HTMLElement | null>(null)
+const card15Ref = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger)
 
     if (sectionRef.value) {
       const elements = [
@@ -50,9 +50,9 @@ onMounted(() => {
         card13Ref.value,
         ultricesTextBlockRef.value,
         card14Ref.value,
-        card15Ref.value,
-      ];
-
+        card15Ref.value
+      ]
+      
       elements.forEach((el) => {
         if (el) {
           gsap.fromTo(
@@ -62,45 +62,77 @@ onMounted(() => {
               y: 0,
               opacity: 1,
               duration: 1.2,
-              ease: "power3.out",
+              ease: 'power3.out',
               scrollTrigger: {
                 trigger: el,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
+                start: 'top 85%',
+                toggleActions: 'play none none reverse'
+              }
+            }
+          )
         }
-      });
+      })
+
+      // Image Clip-Path Curtain Entrance & Parallax
+      const imageBoxes = sectionRef.value.querySelectorAll('.image-box')
+      imageBoxes.forEach((box) => {
+        gsap.fromTo(
+          box,
+          { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 },
+          {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            opacity: 1,
+            duration: 1.3,
+            ease: 'power3.inOut',
+            scrollTrigger: {
+              trigger: box,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        )
+
+        const img = box.querySelector('.card-img')
+        if (img) {
+          gsap.fromTo(
+            img,
+            { yPercent: -20, scale: 1.25 },
+            {
+              yPercent: 20,
+              scale: 1.25,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: box,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          )
+        }
+      })
     }
   }
-});
+})
 </script>
 
 <template>
   <section ref="sectionRef" class="overview-gallery-section">
     <div class="gallery-container">
+      
       <!-- ================= PART 1 ================= -->
       <!-- Row 1: Small Card Left + Wide Close-up Right -->
       <div class="gallery-row row-1">
         <div ref="card1Ref" class="gallery-card card-small-left">
           <div class="image-box">
-            <img
-              src="/images/overview-1.jpg"
-              alt="Eames Chair Rear Angle"
-              class="card-img"
-            />
+            <img src="/images/overview-1.jpg" alt="Eames Chair Rear Angle" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card2Ref" class="gallery-card card-wide-right">
           <div class="image-box">
-            <img
-              src="/images/overview-2.jpg"
-              alt="Eames Chair Wood Grain Detail"
-              class="card-img"
-            />
+            <img src="/images/overview-2.jpg" alt="Eames Chair Wood Grain Detail" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -110,22 +142,14 @@ onMounted(() => {
       <div class="gallery-row row-2">
         <div ref="card3Ref" class="gallery-card card-wide-left">
           <div class="image-box">
-            <img
-              src="/images/overview-3.jpg"
-              alt="Eames Chairs Studio Pair"
-              class="card-img"
-            />
+            <img src="/images/overview-3.jpg" alt="Eames Chairs Studio Pair" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card4Ref" class="gallery-card card-small-right">
           <div class="image-box">
-            <img
-              src="/images/overview-4.jpg"
-              alt="Eames Chair Side Profile"
-              class="card-img"
-            />
+            <img src="/images/overview-4.jpg" alt="Eames Chair Side Profile" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -139,8 +163,10 @@ onMounted(() => {
           <span class="year-text">1946</span>
           <h3 class="distinctive-title">DISTINCTIVE DESIGN</h3>
           <ul class="text-list">
-            Tristique mollis metus Pulvinar pellent Mauris nisl senectus
-            Tincidunt nunc
+            <li>Tristique mollis metus</li>
+            <li>Pulvinar pellent</li>
+            <li>Mauris nisl senectus</li>
+            <li>Tincidunt nunc</li>
           </ul>
         </div>
 
@@ -148,22 +174,14 @@ onMounted(() => {
         <div class="row-3-cards">
           <div ref="card5Ref" class="gallery-card card-5">
             <div class="image-box">
-              <img
-                src="/images/overview-5.jpg"
-                alt="Eames Chair Seat Curve Detail"
-                class="card-img"
-              />
+              <img src="/images/overview-5.jpg" alt="Eames Chair Seat Curve Detail" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
           <div ref="card6Ref" class="gallery-card card-6">
             <div class="image-box">
-              <img
-                src="/images/overview-6.jpg"
-                alt="Eames Chair Front Studio"
-                class="card-img"
-              />
+              <img src="/images/overview-6.jpg" alt="Eames Chair Front Studio" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
@@ -176,38 +194,25 @@ onMounted(() => {
         <div class="row-4-left">
           <div ref="card7Ref" class="gallery-card card-7">
             <div class="image-box">
-              <img
-                src="/images/overview-7.jpg"
-                alt="Eames Chair Small Back View"
-                class="card-img"
-              />
-            </div>
-            <span class="card-label">PULVINAR PELLENT</span>
-          </div>
-        </div>
-        <div class="row-4-left">
-          <div ref="card8Ref" class="gallery-card card-8">
-            <div class="image-box">
-              <img
-                src="/images/overview-8.jpg"
-                alt="Eames Chair Backrest Detail"
-                class="card-img"
-              />
+              <img src="/images/overview-7.jpg" alt="Eames Chair Small Back View" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
-          <!-- Right Card: Card 9 (Wide Rear View) -->
-          <div ref="card9Ref" class="gallery-card card-9">
+          <div ref="card8Ref" class="gallery-card card-8">
             <div class="image-box">
-              <img
-                src="/images/overview-9.jpg"
-                alt="Eames Chair Side Rear View"
-                class="card-img"
-              />
+              <img src="/images/overview-8.jpg" alt="Eames Chair Backrest Detail" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
+        </div>
+
+        <!-- Right Card: Card 9 (Wide Rear View) -->
+        <div ref="card9Ref" class="gallery-card card-9">
+          <div class="image-box">
+            <img src="/images/overview-9.jpg" alt="Eames Chair Side Rear View" class="card-img" />
+          </div>
+          <span class="card-label">PULVINAR PELLENT</span>
         </div>
       </div>
 
@@ -216,22 +221,14 @@ onMounted(() => {
       <div class="gallery-row row-5">
         <div ref="card10Ref" class="gallery-card card-10">
           <div class="image-box">
-            <img
-              src="/images/overview-10.jpg"
-              alt="Eames Chair Architectural Setting"
-              class="card-img"
-            />
+            <img src="/images/overview-10.jpg" alt="Eames Chair Architectural Setting" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card11Ref" class="gallery-card card-11">
           <div class="image-box">
-            <img
-              src="/images/overview-11.jpg"
-              alt="Eames Chair Metal Frame Profile"
-              class="card-img"
-            />
+            <img src="/images/overview-11.jpg" alt="Eames Chair Metal Frame Profile" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -242,22 +239,14 @@ onMounted(() => {
         <div class="row-6-center">
           <div ref="card12Ref" class="gallery-card card-12">
             <div class="image-box">
-              <img
-                src="/images/overview-12.jpg"
-                alt="Eames Chair Interior Living Setting"
-                class="card-img"
-              />
+              <img src="/images/overview-12.jpg" alt="Eames Chair Interior Living Setting" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
           <div ref="card13Ref" class="gallery-card card-13">
             <div class="image-box">
-              <img
-                src="/images/overview-13.jpg"
-                alt="Eames Chair Shell Profile Detail"
-                class="card-img"
-              />
+              <img src="/images/overview-13.jpg" alt="Eames Chair Shell Profile Detail" class="card-img" />
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
@@ -281,26 +270,19 @@ onMounted(() => {
       <div class="gallery-row row-7-images">
         <div ref="card14Ref" class="gallery-card card-14">
           <div class="image-box">
-            <img
-              src="/images/overview-14.jpg"
-              alt="Eames Chair Frame Detail Studio"
-              class="card-img"
-            />
+            <img src="/images/overview-14.jpg" alt="Eames Chair Frame Detail Studio" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card15Ref" class="gallery-card card-15">
           <div class="image-box">
-            <img
-              src="/images/overview-15.jpg"
-              alt="Eames Chairs Living Window Setting"
-              class="card-img"
-            />
+            <img src="/images/overview-15.jpg" alt="Eames Chairs Living Window Setting" class="card-img" />
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
       </div>
+
     </div>
   </section>
 </template>
@@ -359,11 +341,10 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.gallery-card:hover .card-img {
-  transform: scale(1.03);
+.gallery-card:hover .image-box {
+  opacity: 0.95;
 }
 
 .card-label {
