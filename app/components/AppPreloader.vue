@@ -3,8 +3,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { usePreloader } from '~/composables/usePreloader'
 
 const router = useRouter()
+const { markPreloaderDone } = usePreloader()
 const preloaderRef = ref<HTMLElement | null>(null)
 const brandRef = ref<HTMLElement | null>(null)
 const counterRef = ref<HTMLElement | null>(null)
@@ -26,6 +28,9 @@ const startInitialLoad = () => {
       progress.value = counterObj.val
     },
     onComplete: () => {
+      // Mark preloader done so entrance reveal animations trigger right as curtain lifts
+      markPreloaderDone()
+
       // Reveal page with curtain slide up
       if (preloaderRef.value) {
         gsap.to(preloaderRef.value, {

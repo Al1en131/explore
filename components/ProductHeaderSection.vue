@@ -2,8 +2,10 @@
 import { onMounted, ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
+import { usePreloader } from '~/composables/usePreloader'
 
 const router = useRouter()
+const { onPreloaderComplete } = usePreloader()
 const sectionRef = ref<HTMLElement | null>(null)
 const numberRef = ref<HTMLElement | null>(null)
 const rightColRef = ref<HTMLElement | null>(null)
@@ -38,6 +40,89 @@ const alignRightCol = () => {
   }
 }
 
+const splitElementWords = (element: HTMLElement) => {
+  if (!element) return
+  element.style.opacity = '1'
+  element.style.perspective = '1000px'
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || ''
+      if (!text.trim() && text !== ' ') return
+      const frag = document.createDocumentFragment()
+      const parts = text.split(/(\s+)/)
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i]
+        if (!part) continue
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(' '))
+        } else {
+          const span = document.createElement('span')
+          span.className = 'word-span'
+          span.style.display = 'inline-block'
+          span.style.willChange = 'transform, opacity'
+          span.style.transformOrigin = '50% 100%'
+          span.textContent = part
+          frag.appendChild(span)
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node)
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement
+      if (el.classList.contains('indent-space')) return
+      Array.from(el.childNodes).forEach(walk)
+    }
+  }
+
+  Array.from(element.childNodes).forEach(walk)
+}
+
+const splitElementChars = (element: HTMLElement) => {
+  if (!element) return
+  element.style.opacity = '1'
+  element.style.perspective = '1000px'
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || ''
+      if (!text.trim()) return
+      const frag = document.createDocumentFragment()
+      const words = text.split(/(\s+)/)
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i]
+        if (!word) continue
+        if (/^\s+$/.test(word)) {
+          frag.appendChild(document.createTextNode(word))
+        } else {
+          const wordSpan = document.createElement('span')
+          wordSpan.style.display = 'inline-block'
+          wordSpan.style.whiteSpace = 'nowrap'
+          for (let j = 0; j < word.length; j++) {
+            const charSpan = document.createElement('span')
+            charSpan.className = 'char-span'
+            charSpan.style.display = 'inline-block'
+            charSpan.style.willChange = 'transform, opacity'
+            charSpan.textContent = word[j]
+            wordSpan.appendChild(charSpan)
+          }
+          frag.appendChild(wordSpan)
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node)
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement
+      if (el.tagName === 'BR' || el.classList.contains('indent-space')) return
+      Array.from(el.childNodes).forEach(walk)
+    }
+  }
+
+  Array.from(element.childNodes).forEach(walk)
+}
+
 onMounted(() => {
   if (import.meta.client) {
     alignRightCol()
@@ -46,47 +131,60 @@ onMounted(() => {
     setTimeout(alignRightCol, 300)
     setTimeout(alignRightCol, 600)
 
-    const tl = gsap.timeline({ delay: 0.1 })
+    onPreloaderComplete(() => {
+      const tl = gsap.timeline({ delay: 0.1 })
 
-    // 1. Entrance animation for Number 18
-    if (numberRef.value) {
-      tl.fromTo(
-        numberRef.value,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }
-      )
-    }
+      // 1. Entrance animation for Number 18
+      if (numberRef.value) {
+        tl.fromTo(
+          numberRef.value,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }
+        )
+      }
 
-    // 2. Entrance animation for Title
-    if (titleRef.value) {
-      tl.fromTo(
-        titleRef.value,
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' },
-        '-=0.8'
-      )
-    }
+      // 2. Per-Character Entrance animation for Title (Matching HeroBanner specs)
+      if (titleRef.value) {
+        splitElementChars(titleRef.value)
+        const chars = titleRef.value.querySelectorAll('.char-span')
+        if (chars.length > 0) {
+          tl.fromTo(
+            chars,
+            { y: 30, opacity: 0, rotateX: -20 },
+            { y: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.045, ease: 'power2.out' },
+            '-=0.8'
+          )
+        } else {
+          tl.fromTo(
+            titleRef.value,
+            { y: 30, opacity: 0, rotateX: -20 },
+            { y: 0, opacity: 1, rotateX: 0, duration: 1.2, ease: 'power2.out' },
+            '-=0.8'
+          )
+        }
+      }
 
-    // 3. Line ScaleX animation
-    if (lineRef.value) {
-      tl.fromTo(
-        lineRef.value,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 1, ease: 'power3.inOut' },
-        '-=0.7'
-      )
-    }
+      // 3. Line ScaleX animation
+      if (lineRef.value) {
+        tl.fromTo(
+          lineRef.value,
+          { scaleX: 0 },
+          { scaleX: 1, duration: 1, ease: 'power3.inOut' },
+          '-=0.7'
+        )
+      }
 
-    // 4. Stagger animation for Tabs
-    if (tabsRef.value) {
-      const children = tabsRef.value.children
-      tl.fromTo(
-        children,
-        { y: 15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' },
-        '-=0.4'
-      )
-    }
+      // 4. Stagger animation for Tabs
+      if (tabsRef.value) {
+        const children = tabsRef.value.children
+        tl.fromTo(
+          children,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' },
+          '-=0.4'
+        )
+      }
+    })
   }
 })
 

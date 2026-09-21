@@ -2,7 +2,9 @@
 import { onMounted, ref, onUnmounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "~/composables/usePreloader";
 
+const { onPreloaderComplete } = usePreloader();
 const containerRef = ref<HTMLElement | null>(null);
 const trackRef = ref<HTMLElement | null>(null);
 const heroContentRef = ref<HTMLElement | null>(null);
@@ -63,6 +65,50 @@ const splitElementWords = (element: HTMLElement) => {
   Array.from(element.childNodes).forEach(walk);
 };
 
+const splitElementChars = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim()) return;
+      const frag = document.createDocumentFragment();
+      const words = text.split(/(\s+)/);
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        if (!word) continue;
+        if (/^\s+$/.test(word)) {
+          frag.appendChild(document.createTextNode(word));
+        } else {
+          const wordSpan = document.createElement("span");
+          wordSpan.style.display = "inline-block";
+          wordSpan.style.whiteSpace = "nowrap";
+          for (let j = 0; j < word.length; j++) {
+            const charSpan = document.createElement("span");
+            charSpan.className = "char-span";
+            charSpan.style.display = "inline-block";
+            charSpan.style.willChange = "transform, opacity";
+            charSpan.textContent = word[j];
+            wordSpan.appendChild(charSpan);
+          }
+          frag.appendChild(wordSpan);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.tagName === "BR" || el.classList.contains("indent-space")) return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
 onMounted(() => {
   if (import.meta.client) {
     window.scrollTo(0, 0);
@@ -77,26 +123,28 @@ onMounted(() => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero title entrance Word-by-Word motion
-    if (heroTitleRef.value) {
-      splitElementWords(heroTitleRef.value);
-      const words = heroTitleRef.value.querySelectorAll(".word-span");
-      if (words.length > 0) {
-        gsap.fromTo(
-          words,
-          { y: 30, opacity: 0, rotateX: -20 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 0.55,
-            stagger: 0.03,
-            ease: "power2.out",
-            delay: 0.1,
-          }
-        );
+    onPreloaderComplete(() => {
+      // Hero title entrance Per-Character Motion (Matching HeroBanner specs)
+      if (heroTitleRef.value) {
+        splitElementChars(heroTitleRef.value);
+        const chars = heroTitleRef.value.querySelectorAll(".char-span");
+        if (chars.length > 0) {
+          gsap.fromTo(
+            chars,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.2,
+              stagger: 0.045,
+              ease: "power2.out",
+              delay: 0.1,
+            }
+          );
+        }
       }
-    }
+    });
 
     const track = trackRef.value;
     const container = containerRef.value;
@@ -121,35 +169,26 @@ onMounted(() => {
 
       scrollTriggerInstance = animation.scrollTrigger;
 
-      // GSAP SplitText ScrollTrigger animation for Fine Forms, — Refined.
+      // GSAP Random Exploding Character Entrance for Fine Forms, — Refined. in Panel 3
       if (craftTitleRef.value) {
         const titleEl = craftTitleRef.value;
         const chars = titleEl.querySelectorAll(".char-span");
 
-        if (chars.length > 0) {
-          gsap.fromTo(
-            chars,
-            {
-              y: 120,
-              opacity: 0,
-              rotateX: -45,
+        chars.forEach((char) => {
+          gsap.from(char, {
+            yPercent: "random(-200, 200)",
+            rotation: "random(-20, 20)",
+            opacity: 0,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: char,
+              containerAnimation: animation,
+              start: "left 100%",
+              end: "left 35%",
+              scrub: 1,
             },
-            {
-              y: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: 1.1,
-              stagger: 0.03,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: titleEl,
-                containerAnimation: animation,
-                start: "left 85%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        }
+          });
+        });
       }
 
       // GSAP Word-by-Word 3D rotation animation for Herman Miller Quote in panel-gallery
@@ -182,35 +221,26 @@ onMounted(() => {
         }
       }
 
-      // GSAP SplitText ScrollTrigger animation for Fine forms, — Refined. in panel-end
+      // GSAP Random Exploding Character Entrance for Fine forms, — Refined. in Panel 7
       if (endTitleRef.value) {
         const titleEl = endTitleRef.value;
         const chars = titleEl.querySelectorAll(".char-span");
 
-        if (chars.length > 0) {
-          gsap.fromTo(
-            chars,
-            {
-              y: 120,
-              opacity: 0,
-              rotateX: -45,
+        chars.forEach((char) => {
+          gsap.from(char, {
+            yPercent: "random(-200, 200)",
+            rotation: "random(-20, 20)",
+            opacity: 0,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: char,
+              containerAnimation: animation,
+              start: "left 100%",
+              end: "left 35%",
+              scrub: 1,
             },
-            {
-              y: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: 1.1,
-              stagger: 0.03,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: titleEl,
-                containerAnimation: animation,
-                start: "left 85%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        }
+          });
+        });
       }
 
       // GSAP ScrollTrigger clip-path text reveal animation for description paragraphs in stories page
@@ -666,7 +696,7 @@ onUnmounted(() => {
 /* Align left edge of title dynamically with middle menu (Products link) in AppHeader */
 .hero-content {
   position: absolute;
-  bottom: 5.3333vw;
+  bottom: clamp(32px, 4.5vw, 70px);
   left: calc(var(--section-px) + 6.4667vw + 25.0833vw);
   width: 62.5333vw;
   max-width: calc(100vw - var(--section-px) - 2.6667vw);
@@ -917,7 +947,7 @@ onUnmounted(() => {
 
 .title-line {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   line-height: 0.88;
 }
 
@@ -1319,7 +1349,7 @@ onUnmounted(() => {
 
 .end-title-line {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   line-height: 0.88;
 }
 

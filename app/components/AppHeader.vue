@@ -1,27 +1,31 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { gsap } from "gsap";
+import { usePreloader } from "~/composables/usePreloader";
 
+const { onPreloaderComplete } = usePreloader();
 const headerRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (headerRef.value) {
     const items = headerRef.value.querySelectorAll(".header-text");
-    gsap.fromTo(
-      items,
-      {
-        y: -20,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.12,
-        ease: "power3.out",
-        delay: 0.2,
-      },
-    );
+    onPreloaderComplete(() => {
+      gsap.fromTo(
+        items,
+        {
+          y: -20,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.12,
+          ease: "power3.out",
+          delay: 0.2,
+        },
+      );
+    });
   }
 });
 </script>

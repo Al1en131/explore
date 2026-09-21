@@ -33,65 +33,36 @@ onMounted(() => {
     gsap.registerPlugin(ScrollTrigger)
 
     if (sectionRef.value) {
-      const elements = [
-        card1Ref.value,
-        card2Ref.value,
-        card3Ref.value,
-        card4Ref.value,
-        textBlockRef.value,
-        card5Ref.value,
-        card6Ref.value,
-        card7Ref.value,
-        card8Ref.value,
-        card9Ref.value,
-        card10Ref.value,
-        card11Ref.value,
-        card12Ref.value,
-        card13Ref.value,
-        ultricesTextBlockRef.value,
-        card14Ref.value,
-        card15Ref.value
-      ]
-      
-      elements.forEach((el) => {
-        if (el) {
-          gsap.fromTo(
-            el,
-            { y: 50, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1.2,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse'
+      // 1. Staggered Image Entrance Clip-Path & Lift Reveal (NO opacity fade, distinct staggered cascade)
+      const rows = sectionRef.value.querySelectorAll('.gallery-row')
+      rows.forEach((row) => {
+        const cards = row.querySelectorAll('.gallery-card')
+        cards.forEach((card, index) => {
+          const imageBox = card.querySelector('.image-box')
+          if (imageBox) {
+            gsap.fromTo(
+              imageBox,
+              { clipPath: 'inset(100% 0% 0% 0%)', y: 40 },
+              {
+                clipPath: 'inset(0% 0% 0% 0%)',
+                y: 0,
+                duration: 1.2,
+                delay: index * 0.18, // Distinct staggered delay for side-by-side images
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: card,
+                  start: 'top 88%',
+                  toggleActions: 'play none none reverse'
+                }
               }
-            }
-          )
-        }
+            )
+          }
+        })
       })
 
-      // Image Clip-Path Curtain Entrance & Parallax
-      const imageBoxes = sectionRef.value.querySelectorAll('.image-box')
-      imageBoxes.forEach((box) => {
-        gsap.fromTo(
-          box,
-          { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0 },
-          {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            opacity: 1,
-            duration: 1.3,
-            ease: 'power3.inOut',
-            scrollTrigger: {
-              trigger: box,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse'
-            }
-          }
-        )
-
+      // 2. Image Parallax Scroll Effect (Pure vertical movement, zero opacity alteration)
+      const imageBoxesAll = sectionRef.value.querySelectorAll('.image-box')
+      imageBoxesAll.forEach((box) => {
         const img = box.querySelector('.card-img')
         if (img) {
           gsap.fromTo(
@@ -110,6 +81,51 @@ onMounted(() => {
             }
           )
         }
+      })
+
+      // 3. Deep Scrubbed Opacity & Motion ONLY for the Big Text Blocks (1946 / DISTINCTIVE DESIGN & ULTRICES)
+      const bigTextBlocks = sectionRef.value.querySelectorAll('.text-block, .ultrices-text-block')
+      bigTextBlocks.forEach((block) => {
+        const children = block.children
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: block,
+            start: 'top 92%',
+            end: 'bottom 8%',
+            scrub: 1
+          }
+        })
+
+        // Phase 1: Deep Entrance Fade-IN (opacity 0 -> 1, y: 60 -> 0)
+        tl.fromTo(
+          children,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.35,
+            stagger: 0.08,
+            ease: 'power2.out'
+          },
+          0
+        )
+
+        // Phase 2: Active Focus State (100% crystal clear in center viewing zone)
+        tl.to(children, { opacity: 1, y: 0, duration: 0.3 }, '>+=0.1')
+
+        // Phase 3: Deep Exit Fade-OUT (opacity 1 -> 0, y: 0 -> -60) as text scrolls off top
+        tl.to(
+          children,
+          {
+            opacity: 0,
+            y: -60,
+            duration: 0.35,
+            stagger: 0.05,
+            ease: 'power2.in'
+          },
+          '>'
+        )
       })
     }
   }
@@ -334,6 +350,8 @@ onMounted(() => {
   background-color: #e5e7e9;
   position: relative;
   margin-bottom: 1.6vw;
+  border-radius: 0px;
+  transition: border-radius 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
 }
 
 .card-img {
@@ -341,10 +359,18 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.gallery-card:hover .image-box {
-  opacity: 0.95;
+.gallery-card:hover .image-box,
+.image-box:hover {
+  border-radius: clamp(12px, 1.5vw, 24px);
+  opacity: 0.96;
+}
+
+.gallery-card:hover .card-img,
+.image-box:hover .card-img {
+  transform: scale(1.04);
 }
 
 .card-label {

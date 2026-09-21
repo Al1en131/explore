@@ -2,7 +2,9 @@
 import { onMounted, ref } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePreloader } from "~/composables/usePreloader";
 
+const { onPreloaderComplete } = usePreloader();
 const heroSectionRef = ref<HTMLElement | null>(null);
 const titleRef = ref<HTMLElement | null>(null);
 const imageRef = ref<HTMLElement | null>(null);
@@ -54,57 +56,59 @@ onMounted(() => {
   if (import.meta.client) {
     gsap.registerPlugin(ScrollTrigger);
 
-    // 1. Single-line Hero Title Reveal Per-Character Motion (subtle y: 30)
-    if (titleRef.value) {
-      splitElementChars(titleRef.value);
-      const chars = titleRef.value.querySelectorAll(".char-span");
-      if (chars.length > 0) {
-        gsap.fromTo(
-          chars,
-          { y: 30, opacity: 0, rotateX: -20 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 1.2,
-            stagger: 0.045,
-            ease: "power2.out",
-            delay: 0.1,
-          }
-        );
+    onPreloaderComplete(() => {
+      // 1. Single-line Hero Title Reveal Per-Character Motion (subtle y: 30)
+      if (titleRef.value) {
+        splitElementChars(titleRef.value);
+        const chars = titleRef.value.querySelectorAll(".char-span");
+        if (chars.length > 0) {
+          gsap.fromTo(
+            chars,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.2,
+              stagger: 0.045,
+              ease: "power2.out",
+              delay: 0.1,
+            }
+          );
+        }
       }
-    }
 
-    // 2. Hero Image Entrance Clip-Path Curtain Reveal & Scroll Parallax
-    if (imageRef.value) {
-      gsap.fromTo(
-        imageRef.value,
-        {
-          clipPath: "inset(100% 0% 0% 0%)",
-          scale: 1.15,
-          opacity: 0,
-        },
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-          scale: 1.0,
-          opacity: 1,
-          duration: 1.4,
-          delay: 0.2,
-          ease: "power3.inOut",
-        },
-      );
+      // 2. Hero Image Entrance Clip-Path Curtain Reveal & Scroll Parallax
+      if (imageRef.value) {
+        gsap.fromTo(
+          imageRef.value,
+          {
+            clipPath: "inset(100% 0% 0% 0%)",
+            scale: 1.15,
+            opacity: 0,
+          },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            scale: 1.0,
+            opacity: 1,
+            duration: 1.4,
+            delay: 0.2,
+            ease: "power3.inOut",
+          },
+        );
 
-      gsap.to(imageRef.value, {
-        yPercent: 10,
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroSectionRef.value,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }
+        gsap.to(imageRef.value, {
+          yPercent: 10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroSectionRef.value,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+    });
   }
 });
 </script>
