@@ -490,8 +490,8 @@ onUnmounted(() => {
 .item-title {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 1.0711vw;
-  line-height: 1.0711vw;
+  font-size: clamp(12px, 1.0711vw, 16px);
+  line-height: 1.2;
   letter-spacing: -0.005em;
   text-transform: uppercase;
   color: #000000;
@@ -504,13 +504,13 @@ onUnmounted(() => {
   padding-right: var(--section-px);
   display: flex;
   justify-content: flex-end;
-  margin-top: 13.625vw;
+  margin-top: clamp(24px, 8vw, 120px);
 }
 
 /* Light Gray Line Track matching reference screenshot */
 .progress-bar-track {
   width: 33.7999vw;
-  height: 1.3333vw;
+  height: clamp(24px, 1.3333vw, 32px);
   position: relative;
   cursor: pointer;
   display: flex;
@@ -543,38 +543,39 @@ onUnmounted(() => {
 
 @media (max-width: 900px) {
   .gallery-track {
-    gap: 32px;
+    gap: 24px;
   }
 
   .type-square {
-    width: 320px;
+    width: clamp(220px, 70vw, 320px);
   }
   .type-square .image-wrapper {
-    height: 300px;
+    height: clamp(200px, 65vw, 300px);
   }
 
   .type-landscape {
-    width: 280px;
+    width: clamp(200px, 60vw, 280px);
   }
   .type-landscape .image-wrapper {
-    height: 180px;
+    height: clamp(140px, 45vw, 180px);
   }
 
   .type-portrait {
-    width: 340px;
+    width: clamp(240px, 75vw, 340px);
   }
   .type-portrait .image-wrapper {
-    height: 380px;
+    height: clamp(260px, 75vw, 380px);
   }
 
   .progress-bar-track {
-    width: 200px;
+    width: clamp(140px, 40vw, 200px);
   }
 }
 
 @media (max-width: 768px) {
   .gallery-section {
-    padding-bottom: 60px;
+    padding-top: 32px;
+    padding-bottom: 48px;
   }
 }
 </style>

@@ -163,7 +163,7 @@ onMounted(() => {
 
 .parallax-viewport {
   width: 100%;
-  height: 93vw; /* Exact height requested by user */
+  height: clamp(380px, 93vw, 1395px); /* Fluid height matching aspect on all screens */
   position: relative;
   overflow: hidden;
 }
@@ -233,8 +233,8 @@ onMounted(() => {
 
 .parallax-text {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.0667vw;
-  line-height: 1.6vw;
+  font-size: clamp(14px, 1.0667vw, 18px);
+  line-height: 1.5;
   margin: 0;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }
@@ -251,27 +251,28 @@ onMounted(() => {
 }
 
 @media (max-width: 1024px) {
-  .parallax-viewport {
-    height: 900px;
-  }
   .heading-container {
     width: 100%;
     max-width: 90%;
   }
   .indent-space {
-    width: 100px;
+    width: clamp(40px, 10vw, 100px);
   }
 }
 
 @media (max-width: 768px) {
   .parallax-section {
-    padding-bottom: 60px;
+    padding-bottom: 48px;
   }
   .parallax-viewport {
-    height: 650px;
+    height: clamp(360px, 80vh, 550px);
   }
   .overlay-content {
-    padding: 24px;
+    padding: 32px var(--section-px);
+  }
+  .heading-container {
+    width: 100%;
+    max-width: 100%;
   }
   .bottom-container {
     width: 100%;

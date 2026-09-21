@@ -293,8 +293,8 @@ onMounted(() => {
 .collective-title {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500;
-  font-size: 12.465vw;
-  line-height: 12.465vw;
+  font-size: clamp(2.2rem, 12.465vw, 190px);
+  line-height: 1.0;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #000000;
   margin: 0;
@@ -307,41 +307,41 @@ onMounted(() => {
 
 @media (max-width: 1200px) {
   .collective-section {
-    padding-top: 100px;
-    padding-bottom: 80px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
   .banner-viewport {
-    height: clamp(450px, 65vw, 875.76513671875px);
+    height: clamp(320px, 58.3843vw, 875px);
   }
   .collective-h2 {
     width: 100%;
     max-width: 100%;
   }
   .collective-title {
-    font-size: clamp(3.5rem, 13vw, 190.71px);
+    font-size: clamp(2.5rem, 11vw, 190px);
     line-height: 1;
   }
   .indent-space {
-    width: 120px;
+    width: clamp(40px, 12vw, 120px);
   }
 }
 
 @media (max-width: 768px) {
   .collective-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 48px;
   }
   .top-text-wrapper {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
   .indent-space {
     display: none;
   }
   .banner-viewport {
-    height: 380px;
+    height: clamp(240px, 60vw, 380px);
   }
   .collective-title {
-    font-size: clamp(2.5rem, 11vw, 100px);
+    font-size: clamp(1.8rem, 9.5vw, 90px);
     line-height: 1;
   }
 }

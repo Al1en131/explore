@@ -7,6 +7,7 @@ const containerRef = ref<HTMLElement | null>(null);
 const trackRef = ref<HTMLElement | null>(null);
 const heroContentRef = ref<HTMLElement | null>(null);
 const heroTitleRef = ref<HTMLElement | null>(null);
+const heroPanelRef = ref<HTMLElement | null>(null);
 const craftTitleRef = ref<HTMLElement | null>(null);
 const hermanQuoteRef = ref<HTMLElement | null>(null);
 const endTitleRef = ref<HTMLElement | null>(null);
@@ -63,6 +64,50 @@ const splitElementWords = (element: HTMLElement) => {
   Array.from(element.childNodes).forEach(walk);
 };
 
+const splitElementChars = (element: HTMLElement) => {
+  if (!element) return;
+  element.style.opacity = "1";
+  element.style.perspective = "1000px";
+
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      if (!text.trim()) return;
+      const frag = document.createDocumentFragment();
+      const words = text.split(/(\s+)/);
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i];
+        if (!word) continue;
+        if (/^\s+$/.test(word)) {
+          frag.appendChild(document.createTextNode(word));
+        } else {
+          const wordSpan = document.createElement("span");
+          wordSpan.style.display = "inline-block";
+          wordSpan.style.whiteSpace = "nowrap";
+          for (let j = 0; j < word.length; j++) {
+            const charSpan = document.createElement("span");
+            charSpan.className = "char-span";
+            charSpan.style.display = "inline-block";
+            charSpan.style.willChange = "transform, opacity";
+            charSpan.textContent = word[j];
+            wordSpan.appendChild(charSpan);
+          }
+          frag.appendChild(wordSpan);
+        }
+      }
+      if (frag.childNodes.length > 0) {
+        node.parentNode?.replaceChild(frag, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (el.tagName === "BR" || el.classList.contains("indent-space")) return;
+      Array.from(el.childNodes).forEach(walk);
+    }
+  };
+
+  Array.from(element.childNodes).forEach(walk);
+};
+
 onMounted(() => {
   if (import.meta.client) {
     window.scrollTo(0, 0);
@@ -77,26 +122,28 @@ onMounted(() => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero title entrance Word-by-Word motion
-    if (heroTitleRef.value) {
-      splitElementWords(heroTitleRef.value);
-      const words = heroTitleRef.value.querySelectorAll(".word-span");
-      if (words.length > 0) {
-        gsap.fromTo(
-          words,
-          { y: 30, opacity: 0, rotateX: -20 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 0.55,
-            stagger: 0.03,
-            ease: "power2.out",
-            delay: 0.1,
-          }
-        );
+    onPreloaderComplete(() => {
+      // Hero title entrance Per-Character Motion (Matching HeroBanner specs)
+      if (heroTitleRef.value) {
+        splitElementChars(heroTitleRef.value);
+        const chars = heroTitleRef.value.querySelectorAll(".char-span");
+        if (chars.length > 0) {
+          gsap.fromTo(
+            chars,
+            { y: 30, opacity: 0, rotateX: -20 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.2,
+              stagger: 0.045,
+              ease: "power2.out",
+              delay: 0.1,
+            }
+          );
+        }
       }
-    }
+    });
 
     const track = trackRef.value;
     const container = containerRef.value;
@@ -121,35 +168,42 @@ onMounted(() => {
 
       scrollTriggerInstance = animation.scrollTrigger;
 
-      // GSAP SplitText ScrollTrigger animation for Fine Forms, — Refined.
+      // Depth push-back animation for Panel 1 (Hero) as Panel 2 slides OVER it
+      if (heroPanelRef.value) {
+        gsap.to(heroPanelRef.value, {
+          scale: 0.9,
+          opacity: 0,
+          filter: "brightness(0.3)",
+          ease: "none",
+          scrollTrigger: {
+            trigger: container,
+            start: "top top",
+            end: () => `+=${window.innerWidth}`,
+            scrub: true,
+          },
+        });
+      }
+
+      // GSAP Random Exploding Character Entrance for Fine Forms, — Refined. in Panel 3
       if (craftTitleRef.value) {
         const titleEl = craftTitleRef.value;
         const chars = titleEl.querySelectorAll(".char-span");
 
-        if (chars.length > 0) {
-          gsap.fromTo(
-            chars,
-            {
-              y: 120,
-              opacity: 0,
-              rotateX: -45,
+        chars.forEach((char) => {
+          gsap.from(char, {
+            yPercent: "random(-200, 200)",
+            rotation: "random(-20, 20)",
+            opacity: 0,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: char,
+              containerAnimation: animation,
+              start: "left 100%",
+              end: "left 35%",
+              scrub: 1,
             },
-            {
-              y: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: 1.1,
-              stagger: 0.03,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: titleEl,
-                containerAnimation: animation,
-                start: "left 85%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        }
+          });
+        });
       }
 
       // GSAP Word-by-Word 3D rotation animation for Herman Miller Quote in panel-gallery
@@ -182,35 +236,26 @@ onMounted(() => {
         }
       }
 
-      // GSAP SplitText ScrollTrigger animation for Fine forms, — Refined. in panel-end
+      // GSAP Random Exploding Character Entrance for Fine forms, — Refined. in Panel 7
       if (endTitleRef.value) {
         const titleEl = endTitleRef.value;
         const chars = titleEl.querySelectorAll(".char-span");
 
-        if (chars.length > 0) {
-          gsap.fromTo(
-            chars,
-            {
-              y: 120,
-              opacity: 0,
-              rotateX: -45,
+        chars.forEach((char) => {
+          gsap.from(char, {
+            yPercent: "random(-200, 200)",
+            rotation: "random(-20, 20)",
+            opacity: 0,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: char,
+              containerAnimation: animation,
+              start: "left 100%",
+              end: "left 35%",
+              scrub: 1,
             },
-            {
-              y: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: 1.1,
-              stagger: 0.03,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: titleEl,
-                containerAnimation: animation,
-                start: "left 85%",
-                toggleActions: "play none none reverse",
-              },
-            },
-          );
-        }
+          });
+        });
       }
 
       // GSAP ScrollTrigger clip-path text reveal animation for description paragraphs in stories page
@@ -309,26 +354,27 @@ onUnmounted(() => {
   <div class="stories-page-root">
     <!-- Pinned Horizontal Scroll Section -->
     <section ref="containerRef" class="horizontal-scroll-container">
-      <div ref="trackRef" class="horizontal-track">
-        <!-- Panel 1: Hero Cover (Matching reference image) -->
-        <div class="story-panel panel-hero">
-          <div class="hero-bg-overlay">
-            <img
-              src="/images/stories-hero.jpg"
-              alt="Eames Moulded Plywood Hero Dummy"
-              class="hero-img"
-            />
-            <div class="dark-gradient"></div>
-          </div>
-          <!-- Hero Content aligned horizontally with middle navbar menu -->
-          <div ref="heroContentRef" class="hero-content">
-            <span class="hero-tag">01 / DESIGN STORY</span>
-            <h1 ref="heroTitleRef" class="hero-title">
-              Eames Moulded<br />Plywood
-            </h1>
-          </div>
+      <!-- Panel 1: Hero Cover (Fixed Backdrop sitting behind moving track) -->
+      <div ref="heroPanelRef" class="story-panel panel-hero">
+        <div class="hero-bg-overlay">
+          <img
+            src="/images/stories-hero.jpg"
+            alt="Eames Moulded Plywood Hero Dummy"
+            class="hero-img"
+          />
+          <div class="dark-gradient"></div>
         </div>
+        <!-- Hero Content aligned horizontally with middle navbar menu -->
+        <div ref="heroContentRef" class="hero-content">
+          <span class="hero-tag">01 / DESIGN STORY</span>
+          <h1 ref="heroTitleRef" class="hero-title">
+            Eames Moulded<br />Plywood
+          </h1>
+        </div>
+      </div>
 
+      <!-- Moving Track for Panels 2 -> 7 -->
+      <div ref="trackRef" class="horizontal-track">
         <!-- Panel 2: Fine - Forms (Legacy Panel) -->
         <div class="story-panel panel-legacy">
           <div class="panel-inner">
@@ -620,6 +666,8 @@ onUnmounted(() => {
   width: fit-content;
   height: 100vh;
   will-change: transform;
+  position: relative;
+  z-index: 2;
 }
 
 .story-panel {
@@ -632,10 +680,17 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-/* ================= PANEL 1: HERO ================= */
+/* ================= PANEL 1: HERO (FIXED BACKDROP) ================= */
 .panel-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
+  height: 100vh;
+  z-index: 1;
   background-color: #000000;
+  will-change: transform, opacity, filter;
+  transform-origin: center center;
 }
 
 .hero-bg-overlay {
@@ -666,7 +721,7 @@ onUnmounted(() => {
 /* Align left edge of title dynamically with middle menu (Products link) in AppHeader */
 .hero-content {
   position: absolute;
-  bottom: 5.3333vw;
+  bottom: clamp(32px, 4.5vw, 70px);
   left: calc(var(--section-px) + 6.4667vw + 25.0833vw);
   width: 62.5333vw;
   max-width: calc(100vw - var(--section-px) - 2.6667vw);
@@ -677,8 +732,8 @@ onUnmounted(() => {
 .hero-tag {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 0.9333vw;
-  line-height: 1.2vw;
+  font-size: clamp(12px, 0.9333vw, 15px);
+  line-height: 1.2;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #e0e0e0;
@@ -689,15 +744,15 @@ onUnmounted(() => {
 .hero-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 8.5333vw;
-  line-height: 7.6vw;
+  font-size: clamp(2.5rem, 8.5333vw, 128px);
+  line-height: 1.05;
   letter-spacing: -0.04em; /* -4% letter spacing */
   color: #ffffff;
   margin: 0;
   perspective: 1000px;
 }
 
-/* ================= PANEL 2: LEGACY (FINE - FORMS) ================= */
+/* ================= PANEL 2: LEGACY (FINE - FORMS OVERLAY) ================= */
 .panel-legacy {
   width: 109.3333vw;
   min-width: 109.3333vw;
@@ -709,6 +764,9 @@ onUnmounted(() => {
   padding-right: 4.5333vw;
   background-color: #191919;
   box-sizing: border-box;
+  margin-left: 100vw; /* Offsets Panel 2 so Panel 1 is initially visible on full screen */
+  position: relative;
+  z-index: 2;
 }
 
 .panel-legacy .panel-inner {
@@ -730,8 +788,8 @@ onUnmounted(() => {
 .legacy-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 8.5333vw;
-  line-height: 8.5333vw;
+  font-size: clamp(2.5rem, 8.5333vw, 128px);
+  line-height: 1.05;
   letter-spacing: -0.04em;
   color: #ffffff;
   margin: 0 0 3.6vw 0;
@@ -749,8 +807,8 @@ onUnmounted(() => {
 .legacy-p {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400;
-  font-size: 1.3333vw;
-  line-height: 2vw;
+  font-size: clamp(14px, 1.3333vw, 20px);
+  line-height: 1.6;
   letter-spacing: -0.005em;
   color: #cccccc;
   margin: 0;
@@ -795,8 +853,8 @@ onUnmounted(() => {
 .card-caption {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 0.8vw;
-  line-height: 0.9333vw;
+  font-size: clamp(11px, 0.8vw, 14px);
+  line-height: 1.2;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #888888;
@@ -812,6 +870,7 @@ onUnmounted(() => {
   background-color: #ffffff;
   color: #000000;
   position: relative;
+  z-index: 3;
   box-sizing: border-box;
   padding: 5.3333vw 8vw;
   overflow: hidden;
@@ -869,7 +928,7 @@ onUnmounted(() => {
   color: #ffffff;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 5.3973vw;
+  font-size: clamp(1.4rem, 5.3973vw, 80px);
   line-height: 1.08;
   letter-spacing: -0.02em;
   box-sizing: border-box;
@@ -887,12 +946,11 @@ onUnmounted(() => {
   flex-shrink: 0;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 1.3333vw;
-  line-height: 2vw;
+  font-size: clamp(14px, 1.3333vw, 20px);
+  line-height: 1.6;
   letter-spacing: -0.005em;
   color: #666666;
   margin: 0;
-  /* text-align: justify; */
 }
 
 .craft-right-col {
@@ -905,7 +963,7 @@ onUnmounted(() => {
 .craft-giant-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 23.8667vw;
+  font-size: clamp(3rem, 23.8667vw, 350px);
   line-height: 0.88;
   letter-spacing: -0.04em;
   color: #000000;
@@ -917,7 +975,7 @@ onUnmounted(() => {
 
 .title-line {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   line-height: 0.88;
 }
 
@@ -992,7 +1050,7 @@ onUnmounted(() => {
   color: #ffffff;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 5.3973vw;
+  font-size: clamp(1.4rem, 5.3973vw, 80px);
   line-height: 1.08;
   letter-spacing: -0.02em;
   box-sizing: border-box;
@@ -1054,8 +1112,8 @@ onUnmounted(() => {
 .herman-quote {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 5.4667vw;
-  line-height: 5.4667vw;
+  font-size: clamp(1.8rem, 5.4667vw, 82px);
+  line-height: 1.05;
   letter-spacing: -0.03em;
   color: #000000;
   margin: 0;
@@ -1078,8 +1136,8 @@ onUnmounted(() => {
 .gallery-year {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 6.4vw;
-  line-height: 6.7053vw;
+  font-size: clamp(2.5rem, 6.4vw, 96px);
+  line-height: 1.05;
   letter-spacing: -0.02em;
   color: #f05a24;
   display: block;
@@ -1088,8 +1146,8 @@ onUnmounted(() => {
 .gallery-p {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 1.3333vw;
-  line-height: 2vw;
+  font-size: clamp(14px, 1.3333vw, 20px);
+  line-height: 1.6;
   letter-spacing: -0.005em;
   color: #777777;
   margin: 0;
@@ -1136,16 +1194,16 @@ onUnmounted(() => {
 }
 
 .feature-num {
-  width: 4.8vw;
-  height: 4.8vw;
+  width: clamp(36px, 4.8vw, 72px);
+  height: clamp(36px, 4.8vw, 72px);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 2vw;
-  line-height: 4.2667vw;
+  font-size: clamp(1rem, 2vw, 30px);
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
@@ -1162,8 +1220,8 @@ onUnmounted(() => {
 .feature-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 4vw;
-  line-height: 4vw;
+  font-size: clamp(1.8rem, 4vw, 60px);
+  line-height: 1.05;
   letter-spacing: -0.02em;
   text-transform: capitalize;
   margin: 0;
@@ -1194,8 +1252,8 @@ onUnmounted(() => {
 .feature-p {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400;
-  font-size: 1.3333vw;
-  line-height: 2vw;
+  font-size: clamp(14px, 1.3333vw, 20px);
+  line-height: 1.6;
   letter-spacing: -0.005em;
   margin: 0;
 }
@@ -1212,6 +1270,7 @@ onUnmounted(() => {
   height: 100vh;
   background-color: #ffffff;
   position: relative;
+  z-index: 6;
   box-sizing: border-box;
 }
 
@@ -1258,6 +1317,7 @@ onUnmounted(() => {
   background-color: #000000;
   color: #ffffff;
   position: relative;
+  z-index: 7;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1307,7 +1367,7 @@ onUnmounted(() => {
 .end-giant-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 21.3333vw;
+  font-size: clamp(3rem, 21.3333vw, 320px);
   line-height: 0.88;
   letter-spacing: -0.04em;
   color: #ffffff;
@@ -1319,7 +1379,7 @@ onUnmounted(() => {
 
 .end-title-line {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   line-height: 0.88;
 }
 
@@ -1343,7 +1403,7 @@ onUnmounted(() => {
 .end-subtitle {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 0.9333vw;
+  font-size: clamp(12px, 0.9333vw, 16px);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #888888;
@@ -1353,7 +1413,7 @@ onUnmounted(() => {
   display: inline-block;
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 1vw;
+  font-size: clamp(13px, 1vw, 16px);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #ffffff;
@@ -1372,30 +1432,18 @@ onUnmounted(() => {
 }
 
 @media (max-width: 1024px) {
-  .hero-left-spacer {
-    display: none;
-  }
   .hero-content {
+    left: var(--section-px);
     width: 100%;
     max-width: 100%;
   }
   .hero-title {
-    font-size: clamp(3.5rem, 10vw, 8.5333vw);
-    line-height: 1;
+    font-size: clamp(2.5rem, 9vw, 8.5333vw);
+    line-height: 1.05;
   }
-  .panel-legacy,
-  .panel-craft,
-  .panel-gallery {
-    width: 100vw;
-    padding: 0 40px;
-  }
-  .legacy-year {
-    font-size: clamp(6rem, 15vw, 12.9333vw);
-    line-height: 1;
-  }
-  .end-title {
-    font-size: clamp(2.5rem, 6vw, 4.8vw);
-    line-height: 1;
+  .legacy-title {
+    font-size: clamp(2.5rem, 9vw, 8.5333vw);
+    line-height: 1.05;
   }
 }
 </style>

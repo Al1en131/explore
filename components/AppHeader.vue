@@ -65,12 +65,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  padding-top: 4.333vw;
-  padding-bottom: 1.0667vw;
+  padding-top: clamp(20px, 4.333vw, 65px);
+  padding-bottom: clamp(10px, 1.0667vw, 16px);
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   background-color: transparent;
   pointer-events: none; /* Header container lets scroll pass through */
+  mix-blend-mode: difference;
 }
 
 .header-text {
@@ -78,15 +79,15 @@ onMounted(() => {
 }
 
 .nav-link {
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
   transition:
     opacity 0.2s ease,
     color 0.3s ease;
   pointer-events: auto; /* Active links clickable */
   font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: 1.0667vw;
-  line-height: 1.2vw;
+  font-size: clamp(13px, 1.0667vw, 16px);
+  line-height: 1.2;
 }
 
 .nav-link:hover {
@@ -94,16 +95,10 @@ onMounted(() => {
 }
 
 .nav-sep {
-  color: #000000;
-  font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: 1.0667vw;
-  transition: color 0.3s ease;
-}
-
-/* White theme styling for /stories page */
-.app-header.is-white-header .nav-link,
-.app-header.is-white-header .nav-sep {
   color: #ffffff;
+  font-family: "PP Neue Montreal", var(--font-family-base);
+  font-size: clamp(13px, 1.0667vw, 16px);
+  transition: color 0.3s ease;
 }
 
 .header-brand {
@@ -138,10 +133,10 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .app-header {
-    padding-left: 1.3333vw;
-    padding-right: 1.3333vw;
-    padding-top: 1.6vw;
-    padding-bottom: 0.8vw;
+    padding-left: var(--section-px);
+    padding-right: var(--section-px);
+    padding-top: 20px;
+    padding-bottom: 12px;
   }
   .header-nav {
     display: none;

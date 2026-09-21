@@ -135,8 +135,8 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
-  padding-top: 13vw;
-  padding-bottom: 3.6305vw;
+  padding-top: clamp(80px, 13vw, 195px);
+  padding-bottom: clamp(24px, 3.6305vw, 55px);
   padding-left: var(--section-px);
   padding-right: var(--section-px);
   display: flex;
@@ -184,16 +184,29 @@ onMounted(() => {
   will-change: transform, opacity;
 }
 
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: clamp(2.5rem, 10vw, 12vw);
+    line-height: 1.05;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-section {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: var(--section-px);
+    padding-right: var(--section-px);
     padding-bottom: 24px;
   }
   
   .heading-wrapper {
     margin-top: 12px;
     margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 8.5vw, 10vw);
+    line-height: 1.08;
+    white-space: normal;
   }
 }
 </style>

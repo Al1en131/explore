@@ -141,14 +141,18 @@ onMounted(() => {
       <div class="gallery-row row-1">
         <div ref="card1Ref" class="gallery-card card-small-left">
           <div class="image-box">
-            <img src="/images/overview-1.jpg" alt="Eames Chair Rear Angle" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-1.jpg" alt="Eames Chair Rear Angle" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card2Ref" class="gallery-card card-wide-right">
           <div class="image-box">
-            <img src="/images/overview-2.jpg" alt="Eames Chair Wood Grain Detail" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-2.jpg" alt="Eames Chair Wood Grain Detail" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -158,14 +162,18 @@ onMounted(() => {
       <div class="gallery-row row-2">
         <div ref="card3Ref" class="gallery-card card-wide-left">
           <div class="image-box">
-            <img src="/images/overview-3.jpg" alt="Eames Chairs Studio Pair" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-3.jpg" alt="Eames Chairs Studio Pair" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card4Ref" class="gallery-card card-small-right">
           <div class="image-box">
-            <img src="/images/overview-4.jpg" alt="Eames Chair Side Profile" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-4.jpg" alt="Eames Chair Side Profile" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -190,14 +198,18 @@ onMounted(() => {
         <div class="row-3-cards">
           <div ref="card5Ref" class="gallery-card card-5">
             <div class="image-box">
-              <img src="/images/overview-5.jpg" alt="Eames Chair Seat Curve Detail" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-5.jpg" alt="Eames Chair Seat Curve Detail" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
           <div ref="card6Ref" class="gallery-card card-6">
             <div class="image-box">
-              <img src="/images/overview-6.jpg" alt="Eames Chair Front Studio" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-6.jpg" alt="Eames Chair Front Studio" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
@@ -210,14 +222,18 @@ onMounted(() => {
         <div class="row-4-left">
           <div ref="card7Ref" class="gallery-card card-7">
             <div class="image-box">
-              <img src="/images/overview-7.jpg" alt="Eames Chair Small Back View" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-7.jpg" alt="Eames Chair Small Back View" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
           <div ref="card8Ref" class="gallery-card card-8">
             <div class="image-box">
-              <img src="/images/overview-8.jpg" alt="Eames Chair Backrest Detail" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-8.jpg" alt="Eames Chair Backrest Detail" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
@@ -226,7 +242,9 @@ onMounted(() => {
         <!-- Right Card: Card 9 (Wide Rear View) -->
         <div ref="card9Ref" class="gallery-card card-9">
           <div class="image-box">
-            <img src="/images/overview-9.jpg" alt="Eames Chair Side Rear View" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-9.jpg" alt="Eames Chair Side Rear View" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -237,14 +255,18 @@ onMounted(() => {
       <div class="gallery-row row-5">
         <div ref="card10Ref" class="gallery-card card-10">
           <div class="image-box">
-            <img src="/images/overview-10.jpg" alt="Eames Chair Architectural Setting" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-10.jpg" alt="Eames Chair Architectural Setting" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card11Ref" class="gallery-card card-11">
           <div class="image-box">
-            <img src="/images/overview-11.jpg" alt="Eames Chair Metal Frame Profile" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-11.jpg" alt="Eames Chair Metal Frame Profile" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -255,14 +277,18 @@ onMounted(() => {
         <div class="row-6-center">
           <div ref="card12Ref" class="gallery-card card-12">
             <div class="image-box">
-              <img src="/images/overview-12.jpg" alt="Eames Chair Interior Living Setting" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-12.jpg" alt="Eames Chair Interior Living Setting" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
 
           <div ref="card13Ref" class="gallery-card card-13">
             <div class="image-box">
-              <img src="/images/overview-13.jpg" alt="Eames Chair Shell Profile Detail" class="card-img" />
+              <div class="img-wrapper">
+                <img src="/images/overview-13.jpg" alt="Eames Chair Shell Profile Detail" class="card-img" />
+              </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
           </div>
@@ -286,14 +312,18 @@ onMounted(() => {
       <div class="gallery-row row-7-images">
         <div ref="card14Ref" class="gallery-card card-14">
           <div class="image-box">
-            <img src="/images/overview-14.jpg" alt="Eames Chair Frame Detail Studio" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-14.jpg" alt="Eames Chair Frame Detail Studio" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
 
         <div ref="card15Ref" class="gallery-card card-15">
           <div class="image-box">
-            <img src="/images/overview-15.jpg" alt="Eames Chairs Living Window Setting" class="card-img" />
+            <div class="img-wrapper">
+              <img src="/images/overview-15.jpg" alt="Eames Chairs Living Window Setting" class="card-img" />
+            </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
@@ -354,30 +384,37 @@ onMounted(() => {
   transition: border-radius 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
 }
 
+.img-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 .card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .gallery-card:hover .image-box,
 .image-box:hover {
   border-radius: clamp(12px, 1.5vw, 24px);
-  opacity: 0.96;
+  opacity: 0.98;
 }
 
-.gallery-card:hover .card-img,
-.image-box:hover .card-img {
-  transform: scale(1.04);
+.gallery-card:hover .img-wrapper,
+.image-box:hover .img-wrapper {
+  transform: scale(1.1);
 }
 
 .card-label {
   font-family: var(--font-family-base);
   font-weight: 500;
-  font-size: 0.8667vw;
-  line-height: 0.9333vw;
+  font-size: clamp(11px, 0.8667vw, 15px);
+  line-height: 1.2;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #333333;
@@ -453,8 +490,8 @@ onMounted(() => {
 .distinctive-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500; /* Medium weight */
-  font-size: 2vw;
-  line-height: 2vw;
+  font-size: clamp(20px, 2vw, 32px);
+  line-height: 1.1;
   letter-spacing: -0.05em; /* -5% letter spacing */
   text-transform: uppercase;
   color: #000000;
@@ -469,16 +506,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.2667vw;
-}
-
-.text-list {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 400; /* Book weight */
-  font-size: 0.9333vw;
-  line-height: 1.2vw;
+  font-size: clamp(12px, 0.9333vw, 16px);
+  line-height: 1.4;
   letter-spacing: -0.005em; /* -0.5% letter spacing */
   text-transform: uppercase;
-  width: 11.338vw;
+  width: auto;
+  max-width: 20vw;
   color: #777777;
 }
 
@@ -608,8 +643,8 @@ onMounted(() => {
 .ultrices-title {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-weight: 500;
-  font-size: 2.1333vw;
-  line-height: 2.1333vw;
+  font-size: clamp(22px, 2.1333vw, 34px);
+  line-height: 1.1;
   letter-spacing: -0.05em;
   text-transform: uppercase;
   color: #000000;
@@ -655,6 +690,9 @@ onMounted(() => {
   .text-block {
     margin-left: 40px;
   }
+  .text-list {
+    max-width: 100%;
+  }
   .row-6-center,
   .row-7-text {
     margin-left: 80px;
@@ -675,10 +713,10 @@ onMounted(() => {
 @media (max-width: 768px) {
   .overview-gallery-section {
     padding-top: 40px;
-    padding-bottom: 80px;
+    padding-bottom: 60px;
   }
   .gallery-container {
-    gap: 40px;
+    gap: 48px;
   }
   .gallery-row,
   .row-3-cards,
@@ -686,7 +724,7 @@ onMounted(() => {
   .row-6-center,
   .row-7-images {
     flex-direction: column;
-    gap: 40px;
+    gap: 36px;
   }
   .text-block,
   .row-7-text {
@@ -697,8 +735,17 @@ onMounted(() => {
     margin-left: 0;
   }
   .year-text {
-    font-size: clamp(6rem, 20vw, 194px);
+    font-size: clamp(5rem, 18vw, 120px);
     line-height: 1;
+  }
+  .distinctive-title,
+  .ultrices-title {
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+  .text-list {
+    width: 100%;
+    max-width: 100%;
   }
   .card-small-left,
   .card-wide-right,
@@ -720,7 +767,7 @@ onMounted(() => {
     margin-top: 0;
   }
   .image-box {
-    height: 300px !important;
+    height: clamp(220px, 65vw, 360px) !important;
   }
 }
 </style>

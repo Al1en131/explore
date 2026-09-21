@@ -160,13 +160,17 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .marquee-section {
-    padding-top: 40px;
-    padding-bottom: 60px;
+    padding-top: 36px;
+    padding-bottom: 48px;
+  }
+
+  .marquee-viewport {
+    margin-bottom: 24px;
   }
 
   .marquee-bottom-row {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .bottom-right {

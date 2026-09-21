@@ -278,16 +278,20 @@ onMounted(() => {
 
 @media (max-width: 1024px) {
   .indent-space {
-    width: 100px !important;
+    width: clamp(40px, 10vw, 100px) !important;
   }
 }
 
 @media (max-width: 768px) {
   .intro-section {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-left: var(--section-px);
+    padding-right: var(--section-px);
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .intro-container {
+    max-width: 100%;
   }
 
   .indent-space {
@@ -296,7 +300,7 @@ onMounted(() => {
 
   .bottom-row {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
   .bottom-right {

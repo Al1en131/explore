@@ -317,8 +317,8 @@ onUnmounted(() => {
   padding: 0;
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 400;
-  font-size: 1.0667vw;
-  line-height: 1.2vw;
+  font-size: clamp(13px, 1.0667vw, 16px);
+  line-height: 1.4;
   letter-spacing: -0.005em; /* -0.5% */
   color: #a0a0a0;
   cursor: pointer;
@@ -332,8 +332,8 @@ onUnmounted(() => {
 .nav-tab.active {
   font-family: 'PP Neue Montreal', var(--font-family-base);
   font-weight: 500; /* Medium weight */
-  font-size: 1.0667vw;
-  line-height: 1.2vw;
+  font-size: clamp(13px, 1.0667vw, 16px);
+  line-height: 1.4;
   letter-spacing: -0.005em; /* -0.5% */
   color: #000000;
 }
@@ -345,35 +345,36 @@ onUnmounted(() => {
     max-width: 100%;
   }
   .product-number {
-    font-size: clamp(6rem, 15vw, 194px);
+    font-size: clamp(4.5rem, 12.9333vw, 194px);
     line-height: 1;
   }
   .product-title {
-    font-size: clamp(3.5rem, 9vw, 128px);
+    font-size: clamp(2.5rem, 8.5333vw, 128px);
     line-height: 1.02;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
 }
 
 @media (max-width: 768px) {
   .product-header-section {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 80px;
+    padding-bottom: 32px;
   }
   .left-col {
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
   .right-col {
     margin-left: 0 !important;
   }
   .product-title {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+    font-size: clamp(2rem, 8.5vw, 64px);
   }
   .sub-nav {
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 12px 20px;
   }
 }
 </style>
