@@ -109,16 +109,52 @@ function onProgressBarClick(e: MouseEvent) {
   const ratio = maxThumbTravel > 0 ? targetThumbX / maxThumbTravel : 0;
 
   const targetGalleryX = ratio * minX;
+  const currentX = (gsap.getProperty(trackRef.value, "x") as number) || 0;
+  const delta = targetGalleryX - currentX;
+
+  // Calculate skew based on distance & direction of progress bar jump
+  const skewAmount = Math.max(-5, Math.min(5, delta * 0.005));
+
+  const wrappers = trackRef.value.querySelectorAll(".image-wrapper");
+  const imgs = trackRef.value.querySelectorAll(".gallery-img");
+
+  // Tilt cards in direction of jump motion + subtle scale lift
+  gsap.to(wrappers, {
+    skewX: skewAmount,
+    duration: 0.25,
+    ease: "power1.out",
+    overwrite: "auto",
+  });
+  gsap.to(imgs, {
+    scale: 1.05,
+    duration: 0.3,
+    ease: "power2.out",
+    overwrite: "auto",
+  });
 
   gsap.to(trackRef.value, {
     x: targetGalleryX,
-    duration: 0.5,
-    ease: "power2.out",
+    duration: 0.75,
+    ease: "power3.out",
+    overwrite: "auto",
     onUpdate: () => {
       updateProgress();
       if (galleryDraggable[0]) {
         galleryDraggable[0].update();
       }
+    },
+    onComplete: () => {
+      // Smoothly straighten cards and reset scale back to normal
+      gsap.to(wrappers, {
+        skewX: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      gsap.to(imgs, {
+        scale: 1.0,
+        duration: 0.6,
+        ease: "power2.out",
+      });
     },
   });
 }
@@ -138,13 +174,78 @@ onMounted(() => {
           inertia: false,
           cursor: "grab",
           activeCursor: "grabbing",
-          onDrag: updateProgress,
+          onPress: function () {
+            // Zoom/lift image effect when pressing/dragging
+            if (trackRef.value) {
+              const imgs = trackRef.value.querySelectorAll(".gallery-img");
+              gsap.to(imgs, {
+                scale: 1.06,
+                duration: 0.4,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          },
+          onDrag: function () {
+            updateProgress.call(this);
+
+            // Dynamic velocity skew effect based on drag speed
+            const velX = this.deltaX * 30;
+            const skew = Math.max(-5, Math.min(5, -velX * 0.08));
+
+            if (trackRef.value) {
+              const wrappers = trackRef.value.querySelectorAll(".image-wrapper");
+              gsap.to(wrappers, {
+                skewX: skew,
+                duration: 0.25,
+                ease: "power1.out",
+                overwrite: "auto",
+              });
+            }
+          },
           onUpdate: updateProgress,
+          onRelease: function () {
+            // Smoothly straighten skew and return scale to normal on mouse/touch release
+            if (trackRef.value) {
+              const wrappers = trackRef.value.querySelectorAll(".image-wrapper");
+              const imgs = trackRef.value.querySelectorAll(".gallery-img");
+              gsap.to(wrappers, {
+                skewX: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+              gsap.to(imgs, {
+                scale: 1.0,
+                duration: 0.6,
+                ease: "power2.out",
+                overwrite: "auto",
+              });
+            }
+          },
           onDragEnd: function () {
             const velX = this.getVelocity("x");
             const currentX = this.x;
             let target = currentX + velX * 0.25;
             target = Math.max(minX, Math.min(0, target));
+
+            // Dynamic skew during inertia throw
+            const skewEnd = Math.max(-6, Math.min(6, -velX * 0.004));
+            if (trackRef.value) {
+              const wrappers = trackRef.value.querySelectorAll(".image-wrapper");
+              gsap.to(wrappers, {
+                skewX: skewEnd,
+                duration: 0.2,
+                ease: "power1.out",
+                onComplete: () => {
+                  gsap.to(wrappers, {
+                    skewX: 0,
+                    duration: 0.6,
+                    ease: "power2.out",
+                  });
+                },
+              });
+            }
 
             gsap.to(trackRef.value, {
               x: target,
@@ -165,6 +266,18 @@ onMounted(() => {
           if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 3) {
             const currentX = (gsap.getProperty(trackRef.value, "x") as number) || 0;
             const target = Math.max(minX, Math.min(0, currentX - e.deltaX * 1.5));
+
+            const skewWheel = Math.max(-5, Math.min(5, -e.deltaX * 0.15));
+            const wrappers = trackRef.value.querySelectorAll(".image-wrapper");
+
+            gsap.to(wrappers, {
+              skewX: skewWheel,
+              duration: 0.2,
+              ease: "power1.out",
+              onComplete: () => {
+                gsap.to(wrappers, { skewX: 0, duration: 0.5, ease: "power2.out" });
+              },
+            });
 
             gsap.to(trackRef.value, {
               x: target,
@@ -357,6 +470,8 @@ onUnmounted(() => {
   overflow: hidden;
   background-color: #f5f5f5;
   margin-bottom: 2.613vw;
+  will-change: transform;
+  transform-origin: 50% 100%;
 }
 
 .gallery-img {
@@ -365,6 +480,7 @@ onUnmounted(() => {
   object-fit: cover;
   display: block;
   pointer-events: none;
+  will-change: transform;
 }
 
 .item-meta {

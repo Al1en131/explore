@@ -274,9 +274,18 @@ onMounted(() => {
     width: 100%;
     max-width: 100%;
   }
+
+  .heading-container h3 {
+    width: 340px;
+    font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+  }
   .bottom-container {
     width: 100%;
     max-width: 100%;
+  }
+
+  .bottom-container p {
+    width: 280px;
   }
   .indent-space {
     display: none;

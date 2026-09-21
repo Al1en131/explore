@@ -59,12 +59,20 @@ onMounted(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.value,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
       // 1. Heading Word-by-Word Motion (subtle y: 30)
       if (headingRef.value) {
         splitElementWords(headingRef.value);
         const words = headingRef.value.querySelectorAll(".word-span");
         if (words.length > 0) {
-          gsap.fromTo(
+          tl.fromTo(
             words,
             { y: 30, opacity: 0, rotateX: -20 },
             {
@@ -74,59 +82,46 @@ onMounted(() => {
               duration: 0.75,
               stagger: 0.035,
               ease: "power2.out",
-              scrollTrigger: {
-                trigger: headingRef.value,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
+            },
           );
         }
       }
 
-      // 2. Underline Line ScaleX Reveal
+      // 2. Underline Line ScaleX Reveal (FIRST before bottom row <p> text)
       if (lineRef.value) {
-        gsap.fromTo(
+        tl.fromTo(
           lineRef.value,
           { scaleX: 0 },
           {
             scaleX: 1,
-            duration: 1.2,
+            duration: 0.9,
             ease: "power3.inOut",
-            scrollTrigger: {
-              trigger: lineRef.value,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
+          },
+          "-=0.3",
         );
       }
 
-      // 3. Bottom Row Reveal (Label & Paragraph Clip-Path Curtain Motion)
+      // 3. Bottom Row Reveal (Label & Paragraph <p> reveal AFTER the line is drawn)
       if (bottomRowRef.value) {
         const labelEl = bottomRowRef.value.querySelector(".bottom-left");
         const pEl = bottomRowRef.value.querySelector(".body-text");
 
         if (labelEl) {
-          gsap.fromTo(
+          tl.fromTo(
             labelEl,
             { y: 25, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.9,
+              duration: 0.6,
               ease: "power2.out",
-              scrollTrigger: {
-                trigger: labelEl,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
+            },
+            "-=0.2",
           );
         }
 
         if (pEl) {
-          gsap.fromTo(
+          tl.fromTo(
             pEl,
             {
               clipPath: "inset(0% 0% 100% 0%)",
@@ -137,14 +132,10 @@ onMounted(() => {
               clipPath: "inset(0% 0% 0% 0%)",
               y: 0,
               opacity: 1,
-              duration: 1.1,
+              duration: 0.9,
               ease: "power2.out",
-              scrollTrigger: {
-                trigger: pEl,
-                start: "top 85%",
-                toggleActions: "play none none reverse",
-              },
-            }
+            },
+            "-=0.4",
           );
         }
       }
@@ -306,5 +297,13 @@ onMounted(() => {
   .bottom-right {
     max-width: 100%;
   }
+
+  .bottom-right p {
+    width: 320px;
+  }
+
+  /* .intro-h2 {
+    width: 380px;
+  } */
 }
 </style>

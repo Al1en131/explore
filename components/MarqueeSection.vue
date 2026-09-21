@@ -43,6 +43,29 @@ onMounted(() => {
           },
         });
       }
+
+      // 3. Text Reveal Entrance for description paragraph (fast reveal for page /)
+      if (sectionRef.value) {
+        const pEl = sectionRef.value.querySelector(".body-text");
+        if (pEl) {
+          gsap.fromTo(
+            pEl,
+            { clipPath: "inset(0% 0% 100% 0%)", y: 35, opacity: 0 },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              y: 0,
+              opacity: 1,
+              duration: 1.0,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: pEl,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            }
+          );
+        }
+      }
     }
   }
 });
@@ -153,6 +176,10 @@ onUnmounted(() => {
   .bottom-right {
     padding-right: 0;
     max-width: 100%;
+  }
+
+  .bottom-right p {
+    width: 320px;
   }
 }
 </style>

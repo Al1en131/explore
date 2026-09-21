@@ -328,7 +328,7 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .collective-section {
-    padding-top: 40px;
+    padding-top: 10px;
     padding-bottom: 48px;
   }
   .top-text-wrapper {
@@ -343,6 +343,10 @@ onMounted(() => {
   .collective-title {
     font-size: clamp(1.8rem, 9.5vw, 90px);
     line-height: 1;
+  }
+
+  .top-text-wrapper {
+    width: 340px;
   }
 }
 </style>

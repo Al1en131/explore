@@ -177,5 +177,9 @@ onUnmounted(() => {
     padding-right: 0;
     max-width: 100%;
   }
+
+  .bottom-right p {
+    width: 320px;
+  }
 }
 </style>

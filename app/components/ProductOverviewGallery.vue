@@ -33,21 +33,55 @@ onMounted(() => {
     gsap.registerPlugin(ScrollTrigger)
 
     if (sectionRef.value) {
-      // 1. Staggered Image Entrance Clip-Path & Lift Reveal (NO opacity fade, distinct staggered cascade)
-      const rows = sectionRef.value.querySelectorAll('.gallery-row')
-      rows.forEach((row) => {
-        const cards = row.querySelectorAll('.gallery-card')
-        cards.forEach((card, index) => {
+      // 1. Staggered Image Entrance Clip-Path & Corner Reveal (Bottom-right corner for right cards, bottom-left for left cards on mobile)
+      const mm = gsap.matchMedia()
+
+      mm.add("(min-width: 769px)", () => {
+        const rows = sectionRef.value?.querySelectorAll('.gallery-row')
+        rows?.forEach((row) => {
+          const cards = row.querySelectorAll('.gallery-card')
+          cards.forEach((card, index) => {
+            const imageBox = card.querySelector('.image-box')
+            if (imageBox) {
+              gsap.fromTo(
+                imageBox,
+                { clipPath: 'inset(100% 0% 0% 0%)', y: 40, x: 0 },
+                {
+                  clipPath: 'inset(0% 0% 0% 0%)',
+                  y: 0,
+                  x: 0,
+                  duration: 1.2,
+                  delay: index * 0.18,
+                  ease: 'power3.out',
+                  scrollTrigger: {
+                    trigger: card,
+                    start: 'top 88%',
+                    toggleActions: 'play none none reverse'
+                  }
+                }
+              )
+            }
+          })
+        })
+      })
+
+      mm.add("(max-width: 768px)", () => {
+        const cards = sectionRef.value?.querySelectorAll('.gallery-card')
+        cards?.forEach((card) => {
           const imageBox = card.querySelector('.image-box')
           if (imageBox) {
+            const isRightCard = card.matches('.card-small-left, .card-wide-left, .card-5, .card-7, .card-9, .card-11, .card-13, .card-15')
+            const initialClip = isRightCard ? 'inset(100% 0% 0% 100%)' : 'inset(100% 100% 0% 0%)'
+            const initialX = isRightCard ? 35 : -35
+
             gsap.fromTo(
               imageBox,
-              { clipPath: 'inset(100% 0% 0% 0%)', y: 40 },
+              { clipPath: initialClip, y: 40, x: initialX },
               {
                 clipPath: 'inset(0% 0% 0% 0%)',
                 y: 0,
-                duration: 1.2,
-                delay: index * 0.18, // Distinct staggered delay for side-by-side images
+                x: 0,
+                duration: 1.25,
                 ease: 'power3.out',
                 scrollTrigger: {
                   trigger: card,
@@ -716,23 +750,23 @@ onMounted(() => {
     padding-bottom: 60px;
   }
   .gallery-container {
-    gap: 48px;
+    gap: 120px;
   }
   .gallery-row,
   .row-3-cards,
   .row-4-left,
   .row-6-center,
   .row-7-images {
+    display: flex;
     flex-direction: column;
-    gap: 36px;
+    width: 100% !important;
+    margin-left: 0 !important;
+    gap: 76px;
   }
   .text-block,
   .row-7-text {
     width: 100%;
-    margin-left: 0;
-  }
-  .row-6-center {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
   .year-text {
     font-size: clamp(5rem, 18vw, 120px);
@@ -762,12 +796,35 @@ onMounted(() => {
   .card-13,
   .card-14,
   .card-15 {
-    width: 100%;
-    max-width: 100%;
-    margin-top: 0;
+    width: 78% !important;
+    max-width: 340px !important;
+    margin-top: 0 !important;
+  }
+  .card-small-left,
+  .card-wide-left,
+  .card-5,
+  .card-7,
+  .card-9,
+  .card-11,
+  .card-13,
+  .card-15 {
+    align-self: flex-end !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+  .card-wide-right,
+  .card-small-right,
+  .card-6,
+  .card-8,
+  .card-10,
+  .card-12,
+  .card-14 {
+    align-self: flex-start !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
   .image-box {
-    height: clamp(220px, 65vw, 360px) !important;
+    height: clamp(220px, 60vw, 280px) !important;
   }
 }
 </style>

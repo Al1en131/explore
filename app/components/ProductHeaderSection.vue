@@ -374,7 +374,7 @@ onUnmounted(() => {
   }
   .sub-nav {
     flex-wrap: wrap;
-    gap: 12px 20px;
+    gap: 12px 14px;
   }
 }
 </style>

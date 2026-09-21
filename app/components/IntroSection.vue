@@ -82,7 +82,7 @@ onMounted(() => {
               duration: 0.75,
               stagger: 0.035,
               ease: "power2.out",
-            }
+            },
           );
         }
       }
@@ -97,7 +97,7 @@ onMounted(() => {
             duration: 0.9,
             ease: "power3.inOut",
           },
-          "-=0.3"
+          "-=0.3",
         );
       }
 
@@ -116,7 +116,7 @@ onMounted(() => {
               duration: 0.6,
               ease: "power2.out",
             },
-            "-=0.2"
+            "-=0.2",
           );
         }
 
@@ -135,7 +135,7 @@ onMounted(() => {
               duration: 0.9,
               ease: "power2.out",
             },
-            "-=0.4"
+            "-=0.4",
           );
         }
       }
@@ -297,5 +297,13 @@ onMounted(() => {
   .bottom-right {
     max-width: 100%;
   }
+
+  .bottom-right p {
+    width: 320px;
+  }
+
+  /* .intro-h2 {
+    width: 380px;
+  } */
 }
 </style>

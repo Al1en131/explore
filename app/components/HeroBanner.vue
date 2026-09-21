@@ -195,7 +195,7 @@ onMounted(() => {
   .hero-section {
     padding-left: var(--section-px);
     padding-right: var(--section-px);
-    padding-bottom: 24px;
+    padding-bottom: 2px;
   }
   
   .heading-wrapper {
@@ -204,7 +204,7 @@ onMounted(() => {
   }
 
   .hero-title {
-    font-size: clamp(1.8rem, 8.5vw, 10vw);
+    font-size: clamp(3.1rem, 8.5vw, 10vw);
     line-height: 1.08;
     white-space: normal;
   }
