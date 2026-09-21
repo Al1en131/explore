@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, nextTick } from "vue";
+import { onMounted, onUnmounted, ref, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { gsap } from "gsap";
 import { usePreloader } from "~/composables/usePreloader";
@@ -10,104 +10,173 @@ const headerRef = ref<HTMLElement | null>(null);
 const overlayRef = ref<HTMLElement | null>(null);
 
 const isMenuOpen = ref(false);
-const isAnimating = ref(false);
+const isDarkTheme = ref(false);
+let activeTl: gsap.core.Timeline | null = null;
+
+// Dynamic Header Color Detection on Scroll: ensures menu text is WHITE on dark/gray backgrounds
+const checkHeaderTheme = () => {
+  if (!import.meta.client || !headerRef.value) return;
+
+  const rect = headerRef.value.getBoundingClientRect();
+  const checkX = window.innerWidth / 2;
+  const checkY = Math.max(10, rect.top + rect.height / 2);
+
+  const el = document.elementFromPoint(checkX, checkY);
+  if (!el) return;
+
+  let current: HTMLElement | null = el as HTMLElement;
+  let bg = "rgb(255, 255, 255)";
+
+  while (current && current !== document.body) {
+    const style = window.getComputedStyle(current);
+    const bgColor = style.backgroundColor;
+    if (bgColor && bgColor !== "rgba(0, 0, 0, 0)" && bgColor !== "transparent") {
+      bg = bgColor;
+      break;
+    }
+    current = current.parentElement;
+  }
+
+  if (!current || current === document.body) {
+    bg = window.getComputedStyle(document.body).backgroundColor || "rgb(255, 255, 255)";
+  }
+
+  const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (match) {
+    const r = parseInt(match[1], 10);
+    const g = parseInt(match[2], 10);
+    const b = parseInt(match[3], 10);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    if (luminance < 0.85 || (r < 235 && g < 235 && b < 235 && Math.abs(r - g) < 25 && Math.abs(g - b) < 25)) {
+      isDarkTheme.value = true;
+    } else {
+      isDarkTheme.value = false;
+    }
+  }
+};
+
+const lockScroll = () => {
+  if (import.meta.client) {
+    document.body.style.overflow = "hidden";
+  }
+};
+
+const unlockScroll = () => {
+  if (import.meta.client) {
+    document.body.style.overflow = "";
+  }
+};
 
 const openMenu = () => {
-  if (isAnimating.value) return;
-  isAnimating.value = true;
+  if (activeTl) activeTl.kill();
   isMenuOpen.value = true;
+  lockScroll();
 
   nextTick(() => {
     if (!overlayRef.value) return;
     const overlay = overlayRef.value;
-    const links = overlay.querySelectorAll(".popup-link");
+    const chars = overlay.querySelectorAll(".popup-char");
+    const nums = overlay.querySelectorAll(".popup-link-num");
     const headerEl = overlay.querySelector(".menu-popup-header");
     const footerEl = overlay.querySelector(".popup-footer");
 
-    const tl = gsap.timeline({
+    activeTl = gsap.timeline({
       onComplete: () => {
-        isAnimating.value = false;
+        activeTl = null;
       },
     });
 
-    tl.fromTo(
-      overlay,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: "power2.out" }
-    );
+    gsap.set(overlay, { opacity: 0 });
+    activeTl.to(overlay, { opacity: 1, duration: 0.35, ease: "power2.out" });
 
     if (headerEl) {
-      tl.fromTo(
+      gsap.set(headerEl, { opacity: 0 });
+      activeTl.to(
         headerEl,
-        { y: -15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
-        "-=0.3"
-      );
-    }
-
-    if (links.length > 0) {
-      tl.fromTo(
-        links,
-        { y: 45, opacity: 0, rotateX: -15 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 0.75,
-          stagger: 0.08,
-          ease: "power3.out",
-        },
+        { opacity: 1, duration: 0.3, ease: "power2.out" },
         "-=0.2"
       );
     }
 
+    // Pure per-character opacity reveal WITHOUT any Y translation (no lifting, no stuttering)
+    if (chars.length > 0) {
+      gsap.set(chars, { opacity: 0 });
+      activeTl.to(
+        chars,
+        {
+          opacity: 1,
+          duration: 0.3,
+          stagger: 0.025,
+          ease: "power2.out",
+        },
+        "-=0.15"
+      );
+    }
+
+    if (nums.length > 0) {
+      gsap.set(nums, { opacity: 0 });
+      activeTl.to(
+        nums,
+        {
+          opacity: 1,
+          duration: 0.3,
+          stagger: 0.06,
+          ease: "power2.out",
+        },
+        "-=0.3"
+      );
+    }
+
     if (footerEl) {
-      tl.fromTo(
+      gsap.set(footerEl, { opacity: 0 });
+      activeTl.to(
         footerEl,
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
-        "-=0.5"
+        { opacity: 1, duration: 0.3, ease: "power2.out" },
+        "-=0.2"
       );
     }
   });
 };
 
 const closeMenu = () => {
-  if (!isMenuOpen.value || isAnimating.value) return;
+  if (!isMenuOpen.value) return;
+  if (activeTl) activeTl.kill();
+
   if (!overlayRef.value) {
     isMenuOpen.value = false;
+    unlockScroll();
     return;
   }
 
-  isAnimating.value = true;
   const overlay = overlayRef.value;
-  const links = overlay.querySelectorAll(".popup-link");
+  const chars = overlay.querySelectorAll(".popup-char");
 
-  const tl = gsap.timeline({
+  activeTl = gsap.timeline({
     onComplete: () => {
       isMenuOpen.value = false;
-      isAnimating.value = false;
+      unlockScroll();
+      activeTl = null;
     },
   });
 
-  if (links.length > 0) {
-    tl.to(links, {
-      y: -20,
+  if (chars.length > 0) {
+    activeTl.to(chars, {
       opacity: 0,
-      duration: 0.25,
-      stagger: 0.04,
+      duration: 0.15,
+      stagger: 0.015,
       ease: "power2.in",
     });
   }
 
-  tl.to(
+  activeTl.to(
     overlay,
     {
       opacity: 0,
-      duration: 0.35,
+      duration: 0.2,
       ease: "power2.inOut",
     },
-    "-=0.15"
+    "-=0.08"
   );
 };
 
@@ -119,42 +188,61 @@ const toggleMenu = () => {
   }
 };
 
-// Close mobile menu pop-up on route change
 watch(
   () => route.path,
   () => {
     if (isMenuOpen.value) {
       closeMenu();
     }
+    setTimeout(checkHeaderTheme, 100);
   }
 );
 
 onMounted(() => {
-  if (headerRef.value) {
-    const items = headerRef.value.querySelectorAll(".header-text");
-    onPreloaderComplete(() => {
-      gsap.fromTo(
-        items,
-        {
-          y: -20,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.12,
-          ease: "power3.out",
-          delay: 0.2,
-        }
-      );
-    });
+  if (import.meta.client) {
+    window.addEventListener("scroll", checkHeaderTheme, { passive: true });
+    window.addEventListener("resize", checkHeaderTheme, { passive: true });
+    setTimeout(checkHeaderTheme, 100);
+    setTimeout(checkHeaderTheme, 500);
+
+    if (headerRef.value) {
+      const items = headerRef.value.querySelectorAll(".header-text");
+      onPreloaderComplete(() => {
+        gsap.fromTo(
+          items,
+          {
+            y: -20,
+            opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: 0.12,
+            ease: "power3.out",
+            delay: 0.2,
+          }
+        );
+      });
+    }
+  }
+});
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener("scroll", checkHeaderTheme);
+    window.removeEventListener("resize", checkHeaderTheme);
+    unlockScroll();
   }
 });
 </script>
 
 <template>
-  <header ref="headerRef" class="app-header">
+  <header
+    ref="headerRef"
+    class="app-header"
+    :class="{ 'is-dark-theme': isDarkTheme, 'is-light-theme': !isDarkTheme }"
+  >
     <div class="header-brand">
       <NuxtLink to="/" class="header-text nav-link brand-link" @click="closeMenu">
         Franklin&Co.
@@ -179,7 +267,7 @@ onMounted(() => {
     </div>
   </header>
 
-  <!-- Responsive Navigation Pop-up Overlay Modal -->
+  <!-- Responsive Navigation Pop-up Floating Card Modal -->
   <Teleport to="body">
     <div
       v-if="isMenuOpen"
@@ -200,22 +288,30 @@ onMounted(() => {
         <nav class="popup-nav-links">
           <NuxtLink to="/" class="popup-link" @click="closeMenu">
             <span class="popup-link-num">01</span>
-            <span class="popup-link-text">Home</span>
+            <span class="popup-link-text">
+              <span v-for="(char, i) in 'Home'" :key="'h-' + i" class="popup-char">{{ char }}</span>
+            </span>
           </NuxtLink>
 
           <NuxtLink to="/product" class="popup-link" @click="closeMenu">
             <span class="popup-link-num">02</span>
-            <span class="popup-link-text">Products</span>
+            <span class="popup-link-text">
+              <span v-for="(char, i) in 'Products'" :key="'p-' + i" class="popup-char">{{ char }}</span>
+            </span>
           </NuxtLink>
 
           <div class="popup-link static-item">
             <span class="popup-link-num">03</span>
-            <span class="popup-link-text">Solutions</span>
+            <span class="popup-link-text">
+              <span v-for="(char, i) in 'Solutions'" :key="'s-' + i" class="popup-char">{{ char }}</span>
+            </span>
           </div>
 
           <NuxtLink to="/stories" class="popup-link" @click="closeMenu">
             <span class="popup-link-num">04</span>
-            <span class="popup-link-text">Stories</span>
+            <span class="popup-link-text">
+              <span v-for="(char, i) in 'Stories'" :key="'st-' + i" class="popup-char">{{ char }}</span>
+            </span>
           </NuxtLink>
         </nav>
 
@@ -244,7 +340,29 @@ onMounted(() => {
   padding-right: var(--section-px);
   background-color: transparent;
   pointer-events: none;
-  mix-blend-mode: difference;
+  transition: color 0.3s ease;
+}
+
+.app-header.is-dark-theme {
+  mix-blend-mode: normal !important;
+}
+
+.app-header.is-dark-theme .nav-link,
+.app-header.is-dark-theme .nav-sep,
+.app-header.is-dark-theme .menu-toggle-btn,
+.app-header.is-dark-theme .brand-link {
+  color: #ffffff !important;
+}
+
+.app-header.is-light-theme {
+  mix-blend-mode: normal !important;
+}
+
+.app-header.is-light-theme .nav-link,
+.app-header.is-light-theme .nav-sep,
+.app-header.is-light-theme .menu-toggle-btn,
+.app-header.is-light-theme .brand-link {
+  color: #000000 !important;
 }
 
 .header-text {
@@ -306,29 +424,39 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Responsive Menu Overlay Styles */
+/* Responsive Floating Card Modal Overlay (Sleek & Elegant, Not Full Frame) */
 .mobile-menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background-color: rgba(10, 10, 10, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 32px);
+  box-sizing: border-box;
   will-change: opacity;
-  transform: translate3d(0, 0, 0);
 }
 
 .popup-container {
   width: 100%;
-  height: 100%;
+  max-width: 960px;
+  max-height: calc(100vh - 48px);
+  height: auto;
+  min-height: 480px;
+  background: rgba(18, 18, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: clamp(20px, 2.5vw, 32px);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.65);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(20px, 4.333vw, 65px) var(--section-px) clamp(24px, 4vw, 50px) var(--section-px);
+  padding: clamp(24px, 4vw, 48px);
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 .menu-popup-header {
@@ -336,7 +464,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  will-change: transform, opacity;
+  will-change: opacity;
 }
 
 .popup-brand {
@@ -366,11 +494,10 @@ onMounted(() => {
 .popup-nav-links {
   display: flex;
   flex-direction: column;
-  gap: clamp(20px, 4vw, 44px);
+  gap: clamp(16px, 3vw, 36px);
   margin-top: auto;
   margin-bottom: auto;
-  padding: 8vw 0;
-  perspective: 1000px;
+  padding: 4vw 0;
 }
 
 .popup-link {
@@ -379,15 +506,12 @@ onMounted(() => {
   gap: clamp(12px, 3vw, 24px);
   text-decoration: none;
   color: #ffffff;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.25s ease;
   width: fit-content;
-  will-change: transform, opacity;
-  transform-origin: 0% 100%;
 }
 
 .popup-link:hover {
   opacity: 0.7;
-  transform: translateX(12px);
 }
 
 .popup-link.static-item {
@@ -396,22 +520,34 @@ onMounted(() => {
 }
 
 .popup-link.static-item:hover {
-  transform: none;
+  opacity: 0.4;
 }
 
 .popup-link-num {
   font-family: "PP Neue Montreal", var(--font-family-base);
   font-size: clamp(12px, 1vw, 15px);
-  color: #f05a24;
+  color: rgba(255, 255, 255, 0.45);
   font-weight: 500;
+  transition: color 0.25s ease;
+  will-change: opacity;
+}
+
+.popup-link:hover .popup-link-num {
+  color: #ffffff;
 }
 
 .popup-link-text {
   font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: clamp(2.2rem, 7vw, 68px);
+  font-size: clamp(2rem, 6vw, 60px);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.03em;
+  display: inline-flex;
+}
+
+.popup-char {
+  display: inline-block;
+  will-change: opacity;
 }
 
 .popup-footer {
@@ -426,7 +562,7 @@ onMounted(() => {
   color: #888888;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  will-change: transform, opacity;
+  will-change: opacity;
 }
 
 @media (max-width: 1024px) {
@@ -444,6 +580,10 @@ onMounted(() => {
   }
   .header-nav {
     display: none;
+  }
+  .popup-container {
+    min-height: 420px;
+    padding: 24px;
   }
 }
 </style>

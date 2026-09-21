@@ -1,103 +1,107 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, ref } from "vue";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const sectionRef = ref<HTMLElement | null>(null)
-const card1Ref = ref<HTMLElement | null>(null)
-const card2Ref = ref<HTMLElement | null>(null)
-const card3Ref = ref<HTMLElement | null>(null)
-const card4Ref = ref<HTMLElement | null>(null)
+const sectionRef = ref<HTMLElement | null>(null);
+const card1Ref = ref<HTMLElement | null>(null);
+const card2Ref = ref<HTMLElement | null>(null);
+const card3Ref = ref<HTMLElement | null>(null);
+const card4Ref = ref<HTMLElement | null>(null);
 
 // Part 2 Refs
-const textBlockRef = ref<HTMLElement | null>(null)
-const card5Ref = ref<HTMLElement | null>(null)
-const card6Ref = ref<HTMLElement | null>(null)
-const card7Ref = ref<HTMLElement | null>(null)
-const card8Ref = ref<HTMLElement | null>(null)
-const card9Ref = ref<HTMLElement | null>(null)
+const textBlockRef = ref<HTMLElement | null>(null);
+const card5Ref = ref<HTMLElement | null>(null);
+const card6Ref = ref<HTMLElement | null>(null);
+const card7Ref = ref<HTMLElement | null>(null);
+const card8Ref = ref<HTMLElement | null>(null);
+const card9Ref = ref<HTMLElement | null>(null);
 
 // Part 3 Refs
-const card10Ref = ref<HTMLElement | null>(null)
-const card11Ref = ref<HTMLElement | null>(null)
-const card12Ref = ref<HTMLElement | null>(null)
-const card13Ref = ref<HTMLElement | null>(null)
+const card10Ref = ref<HTMLElement | null>(null);
+const card11Ref = ref<HTMLElement | null>(null);
+const card12Ref = ref<HTMLElement | null>(null);
+const card13Ref = ref<HTMLElement | null>(null);
 
 // Part 4 Refs
-const ultricesTextBlockRef = ref<HTMLElement | null>(null)
-const card14Ref = ref<HTMLElement | null>(null)
-const card15Ref = ref<HTMLElement | null>(null)
+const ultricesTextBlockRef = ref<HTMLElement | null>(null);
+const card14Ref = ref<HTMLElement | null>(null);
+const card15Ref = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (import.meta.client) {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     if (sectionRef.value) {
       // 1. Staggered Image Entrance Clip-Path & Corner Reveal (Bottom-right corner for right cards, bottom-left for left cards on mobile)
-      const mm = gsap.matchMedia()
+      const mm = gsap.matchMedia();
 
       mm.add("(min-width: 769px)", () => {
-        const rows = sectionRef.value?.querySelectorAll('.gallery-row')
+        const rows = sectionRef.value?.querySelectorAll(".gallery-row");
         rows?.forEach((row) => {
-          const cards = row.querySelectorAll('.gallery-card')
+          const cards = row.querySelectorAll(".gallery-card");
           cards.forEach((card, index) => {
-            const imageBox = card.querySelector('.image-box')
+            const imageBox = card.querySelector(".image-box");
             if (imageBox) {
               gsap.fromTo(
                 imageBox,
-                { clipPath: 'inset(100% 0% 0% 0%)', y: 40, x: 0 },
+                { clipPath: "inset(100% 0% 0% 0%)", y: 40, x: 0 },
                 {
-                  clipPath: 'inset(0% 0% 0% 0%)',
+                  clipPath: "inset(0% 0% 0% 0%)",
                   y: 0,
                   x: 0,
                   duration: 1.2,
                   delay: index * 0.18,
-                  ease: 'power3.out',
+                  ease: "power3.out",
                   scrollTrigger: {
                     trigger: card,
-                    start: 'top 88%',
-                    toggleActions: 'play none none reverse'
-                  }
-                }
-              )
+                    start: "top 88%",
+                    toggleActions: "play none none reverse",
+                  },
+                },
+              );
             }
-          })
-        })
-      })
+          });
+        });
+      });
 
       mm.add("(max-width: 768px)", () => {
-        const cards = sectionRef.value?.querySelectorAll('.gallery-card')
+        const cards = sectionRef.value?.querySelectorAll(".gallery-card");
         cards?.forEach((card) => {
-          const imageBox = card.querySelector('.image-box')
+          const imageBox = card.querySelector(".image-box");
           if (imageBox) {
-            const isRightCard = card.matches('.card-small-left, .card-wide-left, .card-5, .card-7, .card-9, .card-11, .card-13, .card-15')
-            const initialClip = isRightCard ? 'inset(100% 0% 0% 100%)' : 'inset(100% 100% 0% 0%)'
-            const initialX = isRightCard ? 35 : -35
+            const isRightCard = card.matches(
+              ".card-small-left, .card-wide-left, .card-5, .card-7, .card-9, .card-11, .card-13, .card-15",
+            );
+            const initialClip = isRightCard
+              ? "inset(100% 0% 0% 100%)"
+              : "inset(100% 100% 0% 0%)";
+            const initialX = isRightCard ? 35 : -35;
 
             gsap.fromTo(
               imageBox,
               { clipPath: initialClip, y: 40, x: initialX },
               {
-                clipPath: 'inset(0% 0% 0% 0%)',
+                clipPath: "inset(0% 0% 0% 0%)",
                 y: 0,
                 x: 0,
                 duration: 1.25,
-                ease: 'power3.out',
+                ease: "power3.out",
                 scrollTrigger: {
                   trigger: card,
-                  start: 'top 88%',
-                  toggleActions: 'play none none reverse'
-                }
-              }
-            )
+                  start: "top 88%",
+                  toggleActions: "play none none reverse",
+                },
+              },
+            );
           }
-        })
-      })
+        });
+      });
 
       // 2. Image Parallax Scroll Effect (Pure vertical movement, zero opacity alteration)
-      const imageBoxesAll = sectionRef.value.querySelectorAll('.image-box')
+      const imageBoxesAll = sectionRef.value.querySelectorAll(".image-box");
       imageBoxesAll.forEach((box) => {
-        const img = box.querySelector('.card-img')
+        const img = box.querySelector(".card-img");
         if (img) {
           gsap.fromTo(
             img,
@@ -105,31 +109,33 @@ onMounted(() => {
             {
               yPercent: 20,
               scale: 1.25,
-              ease: 'none',
+              ease: "none",
               scrollTrigger: {
                 trigger: box,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-              }
-            }
-          )
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            },
+          );
         }
-      })
+      });
 
       // 3. Deep Scrubbed Opacity & Motion ONLY for the Big Text Blocks (1946 / DISTINCTIVE DESIGN & ULTRICES)
-      const bigTextBlocks = sectionRef.value.querySelectorAll('.text-block, .ultrices-text-block')
+      const bigTextBlocks = sectionRef.value.querySelectorAll(
+        ".text-block, .ultrices-text-block",
+      );
       bigTextBlocks.forEach((block) => {
-        const children = block.children
+        const children = block.children;
 
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: block,
-            start: 'top 92%',
-            end: 'bottom 8%',
-            scrub: 1
-          }
-        })
+            start: "top 92%",
+            end: "bottom 8%",
+            scrub: 1,
+          },
+        });
 
         // Phase 1: Deep Entrance Fade-IN (opacity 0 -> 1, y: 60 -> 0)
         tl.fromTo(
@@ -140,13 +146,13 @@ onMounted(() => {
             y: 0,
             duration: 0.35,
             stagger: 0.08,
-            ease: 'power2.out'
+            ease: "power2.out",
           },
-          0
-        )
+          0,
+        );
 
         // Phase 2: Active Focus State (100% crystal clear in center viewing zone)
-        tl.to(children, { opacity: 1, y: 0, duration: 0.3 }, '>+=0.1')
+        tl.to(children, { opacity: 1, y: 0, duration: 0.3 }, ">+=0.1");
 
         // Phase 3: Deep Exit Fade-OUT (opacity 1 -> 0, y: 0 -> -60) as text scrolls off top
         tl.to(
@@ -156,27 +162,30 @@ onMounted(() => {
             y: -60,
             duration: 0.35,
             stagger: 0.05,
-            ease: 'power2.in'
+            ease: "power2.in",
           },
-          '>'
-        )
-      })
+          ">",
+        );
+      });
     }
   }
-})
+});
 </script>
 
 <template>
   <section ref="sectionRef" class="overview-gallery-section">
     <div class="gallery-container">
-      
       <!-- ================= PART 1 ================= -->
       <!-- Row 1: Small Card Left + Wide Close-up Right -->
       <div class="gallery-row row-1">
         <div ref="card1Ref" class="gallery-card card-small-left">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-1.jpg" alt="Eames Chair Rear Angle" class="card-img" />
+              <img
+                src="/images/overview-1.jpg"
+                alt="Eames Chair Rear Angle"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -185,7 +194,11 @@ onMounted(() => {
         <div ref="card2Ref" class="gallery-card card-wide-right">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-2.jpg" alt="Eames Chair Wood Grain Detail" class="card-img" />
+              <img
+                src="/images/overview-2.jpg"
+                alt="Eames Chair Wood Grain Detail"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -197,7 +210,11 @@ onMounted(() => {
         <div ref="card3Ref" class="gallery-card card-wide-left">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-3.jpg" alt="Eames Chairs Studio Pair" class="card-img" />
+              <img
+                src="/images/overview-3.jpg"
+                alt="Eames Chairs Studio Pair"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -206,7 +223,11 @@ onMounted(() => {
         <div ref="card4Ref" class="gallery-card card-small-right">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-4.jpg" alt="Eames Chair Side Profile" class="card-img" />
+              <img
+                src="/images/overview-4.jpg"
+                alt="Eames Chair Side Profile"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -233,7 +254,11 @@ onMounted(() => {
           <div ref="card5Ref" class="gallery-card card-5">
             <div class="image-box">
               <div class="img-wrapper">
-                <img src="/images/overview-5.jpg" alt="Eames Chair Seat Curve Detail" class="card-img" />
+                <img
+                  src="/images/overview-5.jpg"
+                  alt="Eames Chair Seat Curve Detail"
+                  class="card-img"
+                />
               </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
@@ -242,7 +267,11 @@ onMounted(() => {
           <div ref="card6Ref" class="gallery-card card-6">
             <div class="image-box">
               <div class="img-wrapper">
-                <img src="/images/overview-6.jpg" alt="Eames Chair Front Studio" class="card-img" />
+                <img
+                  src="/images/overview-6.jpg"
+                  alt="Eames Chair Front Studio"
+                  class="card-img"
+                />
               </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
@@ -257,16 +286,11 @@ onMounted(() => {
           <div ref="card7Ref" class="gallery-card card-7">
             <div class="image-box">
               <div class="img-wrapper">
-                <img src="/images/overview-7.jpg" alt="Eames Chair Small Back View" class="card-img" />
-              </div>
-            </div>
-            <span class="card-label">PULVINAR PELLENT</span>
-          </div>
-
-          <div ref="card8Ref" class="gallery-card card-8">
-            <div class="image-box">
-              <div class="img-wrapper">
-                <img src="/images/overview-8.jpg" alt="Eames Chair Backrest Detail" class="card-img" />
+                <img
+                  src="/images/overview-7.jpg"
+                  alt="Eames Chair Small Back View"
+                  class="card-img"
+                />
               </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
@@ -274,13 +298,32 @@ onMounted(() => {
         </div>
 
         <!-- Right Card: Card 9 (Wide Rear View) -->
-        <div ref="card9Ref" class="gallery-card card-9">
-          <div class="image-box">
-            <div class="img-wrapper">
-              <img src="/images/overview-9.jpg" alt="Eames Chair Side Rear View" class="card-img" />
+
+        <div class="row-4-left">
+          <div ref="card8Ref" class="gallery-card card-8">
+            <div class="image-box">
+              <div class="img-wrapper">
+                <img
+                  src="/images/overview-8.jpg"
+                  alt="Eames Chair Backrest Detail"
+                  class="card-img"
+                />
+              </div>
             </div>
+            <span class="card-label">PULVINAR PELLENT</span>
           </div>
-          <span class="card-label">PULVINAR PELLENT</span>
+          <div ref="card9Ref" class="gallery-card card-9">
+            <div class="image-box">
+              <div class="img-wrapper">
+                <img
+                  src="/images/overview-9.jpg"
+                  alt="Eames Chair Side Rear View"
+                  class="card-img"
+                />
+              </div>
+            </div>
+            <span class="card-label">PULVINAR PELLENT</span>
+          </div>
         </div>
       </div>
 
@@ -290,7 +333,11 @@ onMounted(() => {
         <div ref="card10Ref" class="gallery-card card-10">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-10.jpg" alt="Eames Chair Architectural Setting" class="card-img" />
+              <img
+                src="/images/overview-10.jpg"
+                alt="Eames Chair Architectural Setting"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -299,7 +346,11 @@ onMounted(() => {
         <div ref="card11Ref" class="gallery-card card-11">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-11.jpg" alt="Eames Chair Metal Frame Profile" class="card-img" />
+              <img
+                src="/images/overview-11.jpg"
+                alt="Eames Chair Metal Frame Profile"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -312,7 +363,11 @@ onMounted(() => {
           <div ref="card12Ref" class="gallery-card card-12">
             <div class="image-box">
               <div class="img-wrapper">
-                <img src="/images/overview-12.jpg" alt="Eames Chair Interior Living Setting" class="card-img" />
+                <img
+                  src="/images/overview-12.jpg"
+                  alt="Eames Chair Interior Living Setting"
+                  class="card-img"
+                />
               </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
@@ -321,7 +376,11 @@ onMounted(() => {
           <div ref="card13Ref" class="gallery-card card-13">
             <div class="image-box">
               <div class="img-wrapper">
-                <img src="/images/overview-13.jpg" alt="Eames Chair Shell Profile Detail" class="card-img" />
+                <img
+                  src="/images/overview-13.jpg"
+                  alt="Eames Chair Shell Profile Detail"
+                  class="card-img"
+                />
               </div>
             </div>
             <span class="card-label">PULVINAR PELLENT</span>
@@ -347,7 +406,11 @@ onMounted(() => {
         <div ref="card14Ref" class="gallery-card card-14">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-14.jpg" alt="Eames Chair Frame Detail Studio" class="card-img" />
+              <img
+                src="/images/overview-14.jpg"
+                alt="Eames Chair Frame Detail Studio"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
@@ -356,13 +419,16 @@ onMounted(() => {
         <div ref="card15Ref" class="gallery-card card-15">
           <div class="image-box">
             <div class="img-wrapper">
-              <img src="/images/overview-15.jpg" alt="Eames Chairs Living Window Setting" class="card-img" />
+              <img
+                src="/images/overview-15.jpg"
+                alt="Eames Chairs Living Window Setting"
+                class="card-img"
+              />
             </div>
           </div>
           <span class="card-label">PULVINAR PELLENT</span>
         </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -374,7 +440,7 @@ onMounted(() => {
   padding-bottom: 5.4vw;
   padding-left: var(--section-px);
   padding-right: var(--section-px);
-  background-color: #ffffff;
+  background-color: transparent;
   box-sizing: border-box;
 }
 
@@ -415,7 +481,9 @@ onMounted(() => {
   position: relative;
   margin-bottom: 1.6vw;
   border-radius: 0px;
-  transition: border-radius 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  transition:
+    border-radius 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.3s ease;
 }
 
 .img-wrapper {
