@@ -76,10 +76,9 @@ const openMenu = () => {
   nextTick(() => {
     if (!overlayRef.value) return;
     const overlay = overlayRef.value;
+    const container = overlay.querySelector(".popup-container");
     const chars = overlay.querySelectorAll(".popup-char");
     const nums = overlay.querySelectorAll(".popup-link-num");
-    const headerEl = overlay.querySelector(".menu-popup-header");
-    const footerEl = overlay.querySelector(".popup-footer");
 
     activeTl = gsap.timeline({
       onComplete: () => {
@@ -87,53 +86,57 @@ const openMenu = () => {
       },
     });
 
+    // 1. Overlay Backdrop Fade-In
     gsap.set(overlay, { opacity: 0 });
-    activeTl.to(overlay, { opacity: 1, duration: 0.35, ease: "power2.out" });
+    activeTl.to(overlay, {
+      opacity: 1,
+      duration: 0.4,
+      ease: "power2.out",
+    });
 
-    if (headerEl) {
-      gsap.set(headerEl, { opacity: 0 });
+    // 2. Pop-up Panel Clip-Path Wipes Down from TOP (inset(0% 0% 100% 0%) -> inset(0% 0% 0% 0%))
+    if (container) {
+      gsap.set(container, { clipPath: "inset(0% 0% 100% 0%)" });
       activeTl.to(
-        headerEl,
-        { opacity: 1, duration: 0.3, ease: "power2.out" },
-        "-=0.2"
+        container,
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.65,
+          ease: "power3.inOut",
+        },
+        "-=0.35"
       );
     }
 
-    // Pure per-character opacity reveal WITHOUT any Y translation (no lifting, no stuttering)
+    // 3. Per-Character Text Reveal Cascade
     if (chars.length > 0) {
-      gsap.set(chars, { opacity: 0 });
+      gsap.set(chars, { opacity: 0, y: 10 });
       activeTl.to(
         chars,
         {
           opacity: 1,
-          duration: 0.3,
-          stagger: 0.025,
-          ease: "power2.out",
+          y: 0,
+          duration: 0.5,
+          stagger: 0.015,
+          ease: "power3.out",
         },
-        "-=0.15"
+        "-=0.35"
       );
     }
 
+    // 4. Link Numbers Reveal
     if (nums.length > 0) {
-      gsap.set(nums, { opacity: 0 });
+      gsap.set(nums, { opacity: 0, y: 8 });
       activeTl.to(
         nums,
         {
           opacity: 1,
-          duration: 0.3,
-          stagger: 0.06,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.05,
           ease: "power2.out",
         },
-        "-=0.3"
-      );
-    }
-
-    if (footerEl) {
-      gsap.set(footerEl, { opacity: 0 });
-      activeTl.to(
-        footerEl,
-        { opacity: 1, duration: 0.3, ease: "power2.out" },
-        "-=0.2"
+        "-=0.4"
       );
     }
   });
@@ -150,6 +153,7 @@ const closeMenu = () => {
   }
 
   const overlay = overlayRef.value;
+  const container = overlay.querySelector(".popup-container");
   const chars = overlay.querySelectorAll(".popup-char");
 
   activeTl = gsap.timeline({
@@ -160,23 +164,39 @@ const closeMenu = () => {
     },
   });
 
+  // 1. Text Characters Fade Out
   if (chars.length > 0) {
     activeTl.to(chars, {
       opacity: 0,
-      duration: 0.15,
-      stagger: 0.015,
+      y: -8,
+      duration: 0.18,
+      stagger: 0.008,
       ease: "power2.in",
     });
   }
 
+  // 2. Pop-up Panel Clip-Path Wipes UP back to TOP
+  if (container) {
+    activeTl.to(
+      container,
+      {
+        clipPath: "inset(0% 0% 100% 0%)",
+        duration: 0.45,
+        ease: "power3.inOut",
+      },
+      "-=0.1"
+    );
+  }
+
+  // 3. Overlay Backdrop Fade Out
   activeTl.to(
     overlay,
     {
       opacity: 0,
-      duration: 0.2,
+      duration: 0.3,
       ease: "power2.inOut",
     },
-    "-=0.08"
+    "-=0.2"
   );
 };
 
@@ -241,7 +261,11 @@ onUnmounted(() => {
   <header
     ref="headerRef"
     class="app-header"
-    :class="{ 'is-dark-theme': isDarkTheme, 'is-light-theme': !isDarkTheme }"
+    :class="{
+      'is-dark-theme': isDarkTheme || isMenuOpen,
+      'is-light-theme': !isDarkTheme && !isMenuOpen,
+      'is-menu-open': isMenuOpen
+    }"
   >
     <div class="header-brand">
       <NuxtLink to="/" class="header-text nav-link brand-link" @click="closeMenu">
@@ -267,7 +291,7 @@ onUnmounted(() => {
     </div>
   </header>
 
-  <!-- Responsive Navigation Pop-up Floating Card Modal -->
+  <!-- Responsive Top Drawer Pop-up Modal (Single Header Instance on Top) -->
   <Teleport to="body">
     <div
       v-if="isMenuOpen"
@@ -276,15 +300,6 @@ onUnmounted(() => {
       @click.self="closeMenu"
     >
       <div class="popup-container">
-        <div class="menu-popup-header">
-          <NuxtLink to="/" class="popup-brand" @click="closeMenu">
-            Franklin&Co.
-          </NuxtLink>
-          <button type="button" class="popup-close-btn" @click="closeMenu">
-            Close ✕
-          </button>
-        </div>
-
         <nav class="popup-nav-links">
           <NuxtLink to="/" class="popup-link" @click="closeMenu">
             <span class="popup-link-num">01</span>
@@ -330,7 +345,7 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100000; /* Stays above overlay at 99999 so main header text IS the pop up header */
   display: flex;
   align-items: center;
   width: 100%;
@@ -343,25 +358,26 @@ onUnmounted(() => {
   transition: color 0.3s ease;
 }
 
-.app-header.is-dark-theme {
+.app-header.is-dark-theme,
+.app-header.is-menu-open {
   mix-blend-mode: normal !important;
 }
 
 .app-header.is-dark-theme .nav-link,
 .app-header.is-dark-theme .nav-sep,
 .app-header.is-dark-theme .menu-toggle-btn,
-.app-header.is-dark-theme .brand-link {
+.app-header.is-dark-theme .brand-link,
+.app-header.is-menu-open .nav-link,
+.app-header.is-menu-open .nav-sep,
+.app-header.is-menu-open .menu-toggle-btn,
+.app-header.is-menu-open .brand-link {
   color: #ffffff !important;
 }
 
-.app-header.is-light-theme {
-  mix-blend-mode: normal !important;
-}
-
-.app-header.is-light-theme .nav-link,
-.app-header.is-light-theme .nav-sep,
-.app-header.is-light-theme .menu-toggle-btn,
-.app-header.is-light-theme .brand-link {
+.app-header.is-light-theme:not(.is-menu-open) .nav-link,
+.app-header.is-light-theme:not(.is-menu-open) .nav-sep,
+.app-header.is-light-theme:not(.is-menu-open) .menu-toggle-btn,
+.app-header.is-light-theme:not(.is-menu-open) .brand-link {
   color: #000000 !important;
 }
 
@@ -424,80 +440,50 @@ onUnmounted(() => {
   font-weight: 500;
 }
 
-/* Responsive Floating Card Modal Overlay (Sleek & Elegant, Not Full Frame) */
+/* Backdrop Overlay: Smooth Blur & Opacity Fade */
 .mobile-menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(16px, 3vw, 32px);
+  flex-direction: column;
+  justify-content: flex-start;
   box-sizing: border-box;
   will-change: opacity;
 }
 
+/* Pop-up Panel: Setengah dari frame, Sharp Edges (border-radius: 0), Clip-Path Motion */
 .popup-container {
   width: 100%;
-  max-width: 960px;
-  max-height: calc(100vh - 48px);
-  height: auto;
-  min-height: 480px;
-  background: rgba(18, 18, 18, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: clamp(20px, 2.5vw, 32px);
-  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.65);
+  min-height: 55vh;
+  max-height: 85vh;
+  background: #121212;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0 !important;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(24px, 4vw, 48px);
+  padding-top: clamp(90px, 12vw, 145px); /* Room for main app-header sitting on top */
+  padding-bottom: clamp(24px, 3vw, 40px);
+  padding-left: var(--section-px);
+  padding-right: var(--section-px);
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
-}
-
-.menu-popup-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  will-change: opacity;
-}
-
-.popup-brand {
-  font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: clamp(14px, 1.2vw, 18px);
-  font-weight: 500;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.popup-close-btn {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: clamp(13px, 1.1vw, 16px);
-  font-weight: 500;
-  cursor: pointer;
-  padding: 4px 0;
-  transition: opacity 0.2s ease;
-}
-
-.popup-close-btn:hover {
-  opacity: 0.7;
+  will-change: clip-path;
 }
 
 .popup-nav-links {
   display: flex;
   flex-direction: column;
-  gap: clamp(16px, 3vw, 36px);
+  gap: clamp(16px, 3vw, 32px);
   margin-top: auto;
   margin-bottom: auto;
-  padding: 4vw 0;
+  padding: 3vw 0;
 }
 
 .popup-link {
@@ -529,7 +515,7 @@ onUnmounted(() => {
   color: rgba(255, 255, 255, 0.45);
   font-weight: 500;
   transition: color 0.25s ease;
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 .popup-link:hover .popup-link-num {
@@ -538,7 +524,7 @@ onUnmounted(() => {
 
 .popup-link-text {
   font-family: "PP Neue Montreal", var(--font-family-base);
-  font-size: clamp(2rem, 6vw, 60px);
+  font-size: clamp(2rem, 5.5vw, 56px);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -547,7 +533,7 @@ onUnmounted(() => {
 
 .popup-char {
   display: inline-block;
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 .popup-footer {
@@ -562,7 +548,7 @@ onUnmounted(() => {
   color: #888888;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  will-change: opacity;
+  will-change: opacity, transform;
 }
 
 @media (max-width: 1024px) {
@@ -582,8 +568,11 @@ onUnmounted(() => {
     display: none;
   }
   .popup-container {
-    min-height: 420px;
-    padding: 24px;
+    min-height: 60vh;
+    padding-top: 80px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 </style>
